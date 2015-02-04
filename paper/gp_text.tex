@@ -256,6 +256,7 @@ it has been empirically shown to be quite effective when dependencies exist.
 %
 Next, using all $p_{h=1}^{(n)},\dots, p_H^{(n)}$ approximated marginal posterior probabilities from the affinity function $\vec{f}(\vec{y}^{(n)})$, we define 
  $\gamma(\vec{p}^{(n)})$ to sort the indices in descending order and \textit{reduce} the sorted set to $H' << H$ 
+To ensure that there is a non-zero probability of choosing each state per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen at random.
 %
 %of the indices $I$ corresponding
 %to the highest probability states that $\vec{s}^{(n)}=1$ 
@@ -359,7 +360,8 @@ In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec
 in each subsequent EM iteration, the true expecations w.r.t. the $\Kn-$truncated posterior $q(\vec{s})$ are used. 
 
 % TODO details here why XXX
-We compute the predictive mean for of the predictive probability defined by the GPregression model \comment{(???)} by using
+We do this because.... 
+We compute the predictive mean for of the predictive probability defined by the GP regression model \comment{(???)} by using
 leave-one-out (LOO) prediction -- the training set consists of $n= 1, \dots,N \backslash n'$ for all $n'=1,\dots, N$.
 In each latent variable $h$ and each data point $n$, the LOO predictive mean is
 %
@@ -421,8 +423,9 @@ We call this entire process \textit{GP-select}, for which an outline is shown in
 per EM iteration $t=1,\dots,T$\\
 per data point $n=1,\dots, N$\\
 1. assess importance of all latent variables, affinity\\
-\quad 1.1. GP LOO for affinity
+    1.1. GP LOO for affinity
 2. sort and reduce indices to $H'$\\
+    2.2. include uniformly chosen indices\\
 3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
 4. compute posterior $q(\vec{s})$ on reduced $\Kn$ in E-step\\
 5. update model parameters in M-step\\ 
