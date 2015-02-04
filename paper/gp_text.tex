@@ -45,7 +45,8 @@ in graphical models, which restricts the inference performed during the E-step
 to an ``interesting'' subset of states of the latent variables,  %The subset is
 chosen per data point according to a \emph{selection function}.
 In previous work, functions to select states of high posterior mass were hand-crafted to model the properties of the graphical model of interest, using intuition from noiseless limits or upper-bound results specific to the model \citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,SheikhEtAl2014}.
-The crucial underlying assumption remains that the posterior mass is finally concentrated in small volumes of the latent state space.\footnote{Approaches using sparse priors (i.e. automatic relevance determination (ARD) prior) find sparse subsets of states across all observations in a final model, whereas ours provides relevant features for each observation (often different between observations), to guide EM iterations towards regions of high posterior probability in any model.}
+The crucial underlying assumption remains that the posterior mass is finally concentrated in small volumes of the latent state space.
+%\footnote{Approaches using sparse priors (i.e. automatic relevance determination (ARD) prior) find sparse subsets of states across all observations in a final model, whereas ours provides relevant features for each observation (often different between observations), to guide EM iterations towards regions of high posterior probability in any model.}
 % (a property exploited by earlier ET approaches).
 This property is observed to hold in many visual data and general pattern recognition settings.
 
@@ -137,12 +138,13 @@ to implement and having a far lower computational cost.
 \textbf{Notation.}
 %Notation throughout the paper will be as follows.
 We denote the observed data by the matrix $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where each vector $\vec{y}^{(n)} = ( y_1^{(n)}, \dots, y_D^{(n)})^\mathrm{T}$ is the $n$th observation 
-in a $D-$dimensional space.
+in a $D$-dimensional space.
 Similarly we define corresponding 
 binary latent variables\footnote{We restrict ourselves to binary latent variables here, though
 discrete variables with higher cardinality can easily be used by
 converting them into binary variables.} 
-by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{N \times H}$ with $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ a the $H-$dimensional latent space,
+by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{N \times H}$ 
+where each $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ is the $n$th vector in the $H$-dimensional latent space,
 and for each individual hidden variable $h$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
 %
 We denote the prior distribution over the latent variables with $p(\vec{s} | \theta)$ 
@@ -156,10 +158,12 @@ Using these expressions, the posteror distribution over latent variables is
 p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}
 {\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}.
 \end{equation}
+
 \subsection{Expectation Maximization}
+Expectation Maximization (EM) is an iterative algorithm to optimize the model parameters of a given graphical model.
 EM iteratively optimizes a lower bound on the data likelihood by inferring the
 posterior distribution over hidden variables given the current parameters (the
-E-step), and then adjusting the parameters to maximize the likelihood of the
+E-step), and then adjusts the parameters to maximize the likelihood of the
 data averaged over this posterior (the M-step).
 %
 When the number of latent states to consider is large (e.g.\ exponential in the
@@ -168,15 +172,9 @@ the E-step becomes intractable and approximations are required.
 
 %(also, depending on the model at hand, it can suffice to compute the
 %expectations of some functions of the latent variables with respect to the
-%posterior, such as the expected latent mean or variance). % can leave out
-%(or an approximation thereof) is required for inference in the E-step, or,
-%depending on the model, at least the expectations of some functions of the
-%latent variables $\langle g(s) \rangle_{posterior}$ with respect to the
-%posterior are required for parameter update equations in the M-step.
+%posterior, such as the expected latent mean or variance).
 %
 % From JL: Note that Zhenwen's y entries are not necessarily in R. Also corrected s notation.
-%
-
 %
 
 \subsection{Selection with Expectation Truncation}
@@ -185,18 +183,18 @@ the E-step becomes intractable and approximations are required.
 %%%%%%%%%
 %
 Expectation truncation (ET) is an extension of the expectation maximization (EM) algorithm (e.g. \citep{DempsterEtAl1977,
-NealHinton1998}) to optimize the model parameters of a given graphical model.
+NealHinton1998}).
 %
 The main idea underlying ET is that for a given observation $\vec{y}^{(n)}$
 only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant, meaning
 that the marginal posterior probability $p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)$
 exceeds some threshold. 
 % TODO want some reference to a graphical nmodel here?
-The selection function is used to identify this subset
-of variables, which in turn is used to define a subset $\mathcal{K}_n$ of the space 
-where all non-relevant variables are fixed to 0.
+A selection function is used to identify this subset
+of variables, which in turn is used to define a subset $\mathcal{K}_n$ of the space. 
+Variables not in this set (non-relevant variables) are fixed to 0.
 %
-The posterior distribution~\eqref{eq:post} can be approximated by a truncated posterior distribution, computed on reduced support $\mathcal{K}_n$:
+The posterior distribution~\eqref{eq:post} can then be approximated by a truncated posterior distribution, computed on reduced support:
 %
 %\small
 \vspace{-.1cm}
@@ -205,14 +203,16 @@ The posterior distribution~\eqref{eq:post} can be approximated by a truncated po
 p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
 &\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\delta(\vec{s}^{(n)}\in\hspace{-.05mm}\Kn)}
    %{\ disS\hspace{-1.5mm}\int_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-8mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)\,d\vec{s}\Prime^{(n)}}
-{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-3mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)}
+{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-3mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)},
 \end{align}
 \normalsize
 %\vspace{-.2cm}
 %
-where $\Kn$ denotes the reduced set of relevant latent states for data point
-$\vec{y}^{(n)}$ and $\delta(\vec{s}\in\mathcal{K}_n)=1$ if
+where $\Kn$ contains the indices of relevant latent states for data point
+$\vec{y}^{(n)}$, and $\delta(\vec{s}\in\mathcal{K}_n)=1$ if
 $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
+Note that $\Kn$ is not an arbitrary set of the possible states, but is axis aligned according to the latent states that are zero, which is more challenging. \comment{Jan, what did you mean here?}
+%FIXME 
 
 %%%%
 %Describe selection function in general, what it looks like and does, and define functions $f$, $\Ih$
@@ -228,10 +228,11 @@ $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
 %S_h takes y^(n) and produces a K_n
 
 
-
+\subsection{ET with affinity} % TODO can remove when structure is stand-alone
 %%%%%%
 One way of constructing a selection function $\mathcal{S}^{(n)}$ is by
-ranking the latent variables according to an \emph{affinity function} $f_h(\vec{y}^{(n)})$
+ranking the latent variables according to an 
+\emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}^{+}$
 which directly reflects the relevance of latent variable $s_h$. A natural choice
 for such a function is one that approximates the marginal posterior probability,
 e.g.\ we try to learn $f$ such that $f_h(\vec{y}^{(n)}) \approx p^{(n)}_h$.
@@ -240,12 +241,13 @@ e.g.\ we try to learn $f$ such that $f_h(\vec{y}^{(n)}) \approx p^{(n)}_h$.
 %THERE NEEDS TO BE A BIT MORE TEXT HERE TO LINK THESE TWO.
 % ************ XXX -----------------------------------
 When the $H$ latent variables in the marginal posterior probability $p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
-That said, 
+%
 Even when this strong assumption does not hold in practice, which is often the case, 
 the affinity can still highlight relevant variables; 
-It's been empirically shown to be effective when dependencies exist.
+it has been empirically shown to be quite effective when dependencies exist.
 
-%
+% TODO REMOVE REDUNANCY XXX
+FIX REDUNDANCY\\ 
 Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
 First, we define $f_h(\vec{y}^{(n)})$ as a function that takes the input of a single data
 point $\vec{y}^{(n)}$ and predicts the probability that the latent variable
@@ -273,20 +275,29 @@ Using $f_h$, $\Ih$ and $\gamma$, we can define a \emph{selection function}
 $\mathcal{S}_h(\vec{y}^{(n)})$ to select subsets $\mathcal{K}_n$ per data point
 $\vec{y}^{(n)}$, with the goal of containing most of the probability mass
 $\prob{\vec{s}}{\vec{y}}$ while also being significantly smaller than the entire
-latent space.  So far, the form of $\mathcal{S}_h(\vec{y}^{(n)})$ has been
-a hand-engineered deterministic function derived based on the structure of the considered model
-(see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
-BornscheinEtAl2013, SheikhEtAl2014}).
-
+latent space.  
+%
 The \textit{general selection function}  can be expressed as
 %
 \vspace{-.1cm}
 \begin{equation}\label{eq:sel-func}
-\mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n
+\mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
 \end{equation}
 %
+So far, the form of $\mathcal{S}_h(\vec{y}^{(n)})$ has been
+a hand-engineered deterministic function derived based on the structure of the considered model
+(see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
+BornscheinEtAl2013, SheikhEtAl2014}).
+
 %Using such subsets $\mathcal{K}_n$, Equation~\eqref{eq:sel-post} results in good approximations to the full posteriors.
-When the set $\Kn$ fulfills the above property of containing the indices of the states with concentrated posterior mass, Equation~\eqref{eq:sel-post} is a good approximation of the full posterior.
+%redundant: When the set $\Kn$ fulfills the above property of containing the indices of the states with concentrated posterior mass, Equation~\eqref{eq:sel-post} is a good approximation of the full posterior.
+
+\subsection{Inference in EM with selection}
+%
+As a meta-algorithm, ET selects the $\Kn$ subspace prior to every EM iteration.
+In each iteration, $\Kn$ is used to approximate posterior distribution by calculating the true posterior on the truncated space, $q(\vec{s})$,
+ with which inference can be performed using any standard method.
+Potential examples are to perform exact inference or to draw Gibbs samples from $q(\vec{s})$ for a sampling approximation of the truncated posterior.
 
 To summarize, in one iteration of this approximate EM algorithm, the following
 occurs: prior to the E-step, the algorithm is given a latent variable subset
@@ -301,68 +312,85 @@ equations in the M-step.
 %In this work we generalize the above approach, where instead of defining $\Sh$
 %by hand, we propose that $\Sh$ be learned in a black-box fashion based on the
 %data.
-We wish to generalize this approximate EM algorithm for inference in graphical
-models: instead of predefining the form of $\Sh$ for variable selection, we want
+We now generalize this approximate EM algorithm:  %for inference in graphical models
+instead of predefining the form of $\Sh$ for variable selection, we want
 to learn it in a black-box and model-free way based on the data.
 %
 The case we consider is to learn $\Sh$ by using Gaussian process (GP) regression
 (e.g. \citep{RasmussenGPbook}), which is flexible, can make exact predictions,
-and scales with the number of data points $N$.  Thus, with the previously
-defined concepts, we can express the Gaussian process model for the posterior
-marginal probability that $s_h^{(n)}=1$:
+and scales cubicly with the number of data points $N$ but linearly with the number of latent variables $H$.  
+%
+%Thus, with the previously defined concepts, we can express the Gaussian process model for the posterior marginal probability that $s_h^{(n)}=1$:
 %generative story for a single latent variable $s_h$ as:
 %
-\begin{align}\label{eq:gen-story}
-f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right), \,\,\,
-p_h^{(n)} \sim f(\vec{y}^{(n)}) + \epsilon^{(n)}, \\
-\text{and}\quad \epsilon^{(n)} \sim \mathcal{N}(0,\sigma^2_{noise})
-\end{align}
+% TODO REMOVE XXX
+%\begin{align}\label{eq:gen-story}
+%f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right), \,\,\,
+%p_h^{(n)} \sim f(\vec{y}^{(n)}) + \epsilon^{(n)}, \\
+%\text{and}\quad \epsilon^{(n)} \sim \mathcal{N}(0,\sigma^2_{noise})
+%\end{align}
 %
-where $p_h$ represents the posterior marginal probability that $s_h^{(n)}=1$,
-$k(\cdot, \cdot)$ is the covariance kernel, which can flexibly govern the
-representation of the relationship between variables, and $\sigma_{noise}^2$ is
-the degree of Gaussian noise on the function $f_h$.
-
-Thus, we use a GP to regress $\vec{S}$ onto $\vec{Y}$.  In order to train the
-GP, we define our training data as the output of the previous iteration of the
-EM parameter inference algorithm, $q(\vec{S})$, or rather, the expectations of
-the latent variables, and the set of observed variables $\vec{Y}$, namely 
-$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}_{\text{prev-it}}\rangle^{(n)}) | n = 1,
-\dots, N \}$.  
-% FIXME TODO incorporate feedback from review! unclear here
-This means that in the very first EM iteration contains no actual
-information from the posterior distribution, and in this iteration the GP uses
-training data that is simply the initialization of the latent variables and the
-observed data.
-Then in the subsequent EM iterations, the training data for the GP are the \textit{expectations} of $\vec{s}$.
-%We reformulate the data in the model as our "training" dataset $\mathcal{D}$ of $N$ observations, $\mathcal{D} = \{ (\vec{y}^{(n)}, \vec{s}^{(n)}) | n = 1, \dots, N \}$.
-
-Leave-one-out (LOO) prediction for GP regression can be shown to be:
 %
+%TODO put in reasons GPs are awesome!! XXX 
+A nice property of Gaussian processes is that we only need to compute 
+Specifically, we will define the affinity function $f_h$ as being drawn from a Gaussian process model: 
+$f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, $k(\cdot, \cdot)$ is the covariance kernel, which can flexibly govern the
+representation of the relationship between variables.
+Again, we use $f_h$ to approximate the
+marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
+
+
+% DO NOT EVEN USE: and $\sigma_{noise}^2$ is the degree of Gaussian noise on the function $f_h$.
+Thus, in each EM iteration, we calculate the affinity function by using a GP to regress $\vec{S}$ onto $\vec{Y}$.  
+Specifically, we define our training data as the \textit{expectations} of latent variables $\vec{s}$ 
+and the set of observed variables $\vec{Y}$, namely 
+%$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}_{\text{prev-it}}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
+$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
+%
+%output of the previous iteration of the % EM parameter inference algorithm, $q(\vec{S})$, or rather, the expectations of
+%This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
+In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec{s})}$ are initialized randomly, 
+in each subsequent EM iteration, the true expecations w.r.t. the $\Kn-$truncated posterior $q(\vec{s})$ are used. 
+
+% TODO details here why XXX
+We compute the predictive mean for of the predictive probability defined by the GPregression model \comment{(???)} by using
+leave-one-out (LOO) prediction -- the training set consists of $n= 1, \dots,N \backslash n'$ for all $n'=1,\dots, N$.
+For each latent variable $h$ and each data point $n$, the LOO predictive mean is
+%
+\comment{Fix equation! but what does $[K]_{ii}$ mean here? how reference that?} 
 \vspace{-.1cm}  % (*1)
 \begin{equation}\label{eq:gp-loo}
 \vec{\mu}^{(n)} \;=\;  \hat{\vec{s}}^{(n)} \;=\;  \frac{ \vec{s}^{(n)} -[ K^{-1} \vec{s}^{(n)} ] }{ diag [ K^{-1} ] }
 \end{equation}
 %
-which computes the predictions of the GPs for the entire training set by only computing one kernel matrix inversion
-(see e.g. Chapter 5~\citep{RasmussenGPbook}).
-Namely, it computes a prediction for each $s_h^{(n)}$ given all variables $\vec{Y}$, where each predicted $\hat{s}_h$
-represents the GP's characterization of the relationship between the two.
+which computes the predictions of the GP model using leave-one-out by only computing one kernel matrix inversion
+(see e.g. Section 5.4.2~\citep{RasmussenGPbook}).
+% TODO dont want these sentences i assume -- I don't know what they want to say...
+% Namely, it computes a prediction for each $s_{h,t}^{(n)}$ given all variables $\vec{Y}$, where each predicted marginal probability 
+%$\hat{s}_h$ represents the GP's characterization of the relationship between the two.
+%
+Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variables $h=1,\dots,H$ and all data points $n=1,\dots,N$ using matrix operations.
 %
 %%%%% The idea now is to use these predictions for preselection of relevant latent variables in the EM fashion described earlier. %, we will compute equations~\eqref{eq:loo-gp} in every EM iteration.%, prior to each E-step.
 %%%%% Our approach deviates however from classic EM [with preselection]: prior to each E-step we compute GP-selection in Equation~\eqref{eq:gp-sel-
 %%%% We are not interested in the actual GP prediction, only in the relative size of each $\hat{s}_h^{(n)}$, which indicates how relevant variable $h$ is to $\vec{y}^{(n)}$.
 %%%%% Specifically, we use the prediction size to select which subset of latent variables from $H$ are relevant for a given data point $\vec{y}^{(n)}$:
 %
-Using LOO prediction leads to the following expression of the \textit{GP selection function} for the
-$n$th data point:
 %
-\vspace{-.1cm}      % (*2)
-\begin{equation}\label{eq:gp-sel-func}
-\mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[ \gamma \left[ \hat{\vec{s}}^{(n)} \right] \right],
-\end{equation}
+We can now specialize the selection function in Equation~\eqref{eq:sel-func} by using Equation~\eqref{eq:gp-loo} to define the affinity function $\vec{f}$.
 %
-which specializes Equation~\eqref{eq:sel-func}.
+We call this entire process \textit{GP-select}, for which an outline is shown in Algorithm~\ref{alg:gp-select}.
+
+%Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
+%
+% TODO REMOVE THIS TOO XXX 
+%\vspace{-.1cm}      % (*2)
+%\begin{equation}\label{eq:gp-sel-func}
+%\mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[ \gamma \left[ \hat{\vec{s}}^{(n)} \right] \right],
+%\end{equation}
+%
+%which specializes Equation~\eqref{eq:sel-func}.
+%
 %%% where $\gamma(\cdot)$ is a function that sorts the $s_h$ variables in descending order and gives the corresponding indices.
 %%% This selection function $\mathcal{S}(\vec{y}^{(n)})$ aids with dimensionality selection -- it provides a ranking of the $H$ latent variable indices, from which we choose  $h,\dots, H' < H$ for the subset $\mathcal{K}_n$ per data point that we will use for inference.
 %%% Particularly, we can use this subset $\mathcal{K}_n$ to define the support for the reduced posterior distribution $q_n(\vec{s}, \Theta)$, and perform inference more efficiently with far fewer further approximations.
@@ -378,6 +406,13 @@ which specializes Equation~\eqref{eq:sel-func}.
 %\end{align}
 %
 
+% TODO PUT ALGO HERE XXX
+\begin{algorithm}
+\label{alg:gp-select}
+1.\\
+2.\\
+3.
+\end{algorithm}
 Optimization of the model parameters in EM continues in the standard EM-style format as described earlier: the
 M-step computes the model parameters based on these subsets of $\Kn$ 
 (the indices of the $H' < H$ 'most relevant' states) 
@@ -431,7 +466,8 @@ for which the mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max
 \end{enumerate}
 
 In the above models, inference with the truncated posterior in Equation~\eqref{eq:sel-post} and selection functions designed by hand has yielded results as good as or more robust than exact inference.
-For models (1) and (3), the hand-crafted selection function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and each data point $\vec{y}^{(n)}$: $  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
+For models (1) and (3), the hand-crafted selection function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and 
+each data point $\vec{y}^{(n)}$: $  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
 For model (2), the hand-crafted function was the data likelihood given a singleton state $\vec{s}_h$, not taking into account
 the probability of the state itself  (i.e., $p(\vec{s}_h\,|\,\Theta)$).
 We will train GP regression for our flexible selection approach, where, for all models, the targets of the training data is the expected values of the latents.
@@ -489,7 +525,7 @@ The model of the observations is:
 %
 \vspace{-.2cm}
 \begin{equation}\label{eq:mog}
-p(\vec{y}^{(n)} | \mu_c, \sigma_c, \pi) = \sum_c^{C} \mathcal{N}(\mu_c, \sigma_c) \, \pi_c
+p(\vec{y}^{(n)} | \mu_c, \sigma_c, \pi) = \sum_c^{C} \mathcal{N}(\vec{y}^{(n)}; \mu_c, \sigma_c) \, \pi_c
 \end{equation}
 %
 where $C$ is the number of mixture components, the task is assign each data point to a cluster.
