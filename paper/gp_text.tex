@@ -240,29 +240,36 @@ e.g.\ we try to learn $f$ such that $f_h(\vec{y}^{(n)}) \approx p^{(n)}_h$.
 % TODO FIXME
 %THERE NEEDS TO BE A BIT MORE TEXT HERE TO LINK THESE TWO.
 % ************ XXX -----------------------------------
-When the $H$ latent variables in the marginal posterior probability $p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
+When the $H$ latent variables in the marginal posterior probability $\vec{p} = p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
 %
 Even when this strong assumption does not hold in practice, which is often the case, 
 the affinity can still highlight relevant variables; 
 it has been empirically shown to be quite effective when dependencies exist.
 
 % TODO REMOVE REDUNANCY XXX
-FIX REDUNDANCY\\ 
-Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
-First, we define $f_h(\vec{y}^{(n)})$ as a function that takes the input of a single data
-point $\vec{y}^{(n)}$ and predicts the probability that the latent variable
-$s_h$ is equal to $1$ for this particular data point, such that each data point
-$\vec{y}^{(n)}$ is associated with an $H$-dimensional vector of predictions
-$\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$.
+%XXX Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
+%First, we define $f_h(\vec{y}^{(n)})$ as a function that takes the input of a single data
+%point $\vec{y}^{(n)}$ and predicts the probability that the latent variable
+%$s_h$ is equal to $1$ for this particular data point, such that each data point
+%$\vec{y}^{(n)}$ is associated with an $H$-dimensional vector of predictions
+%$\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$.
 %
-Next, define $\gamma(\vec{s}^{(n)})$ as a function of each
-$\vec{s}^{(n)}$ that returns a sorted and reduced set of indices $I$ corresponding
-to the highest probability states that $\vec{s}^{(n)}=1$ (output from $\vec{f}(\vec{y}^{(n)})$).
-In other words, $\gamma(\vec{s}^{(n)})$
-sorts all $h,...,H$ of the $s_h^{(n)}$ variables in descending order of estimated relevance, and gives the
-sorted indices of the $H' < H$ 'most relevant' states.
+Next, using all $p_{h=1}^{(n)},\dots, p_H^{(n)}$ approximated marginal posterior probabilities from the affinity function $\vec{f}(\vec{y}^{(n)})$, we define 
+ $\gamma(\vec{p}^{(n)})$ to sort the indices in descending order and \textit{reduce} the sorted set to $H' << H$ 
 %
-Finally, we define $\mathcal{I}(I)$ as a function of the sorted indices $I$ that sets all 'non-relevant' variables $h\not\in I$ for a given data point $\vec{y}^{(n)}$ to $0$, and returns the set of $H'$ selected relevant latent states' indices $\Kn$.
+%of the indices $I$ corresponding
+%to the highest probability states that $\vec{s}^{(n)}=1$ 
+(i.e. all $h=1,\dots,H'$ latent variables sorted by estimated relevance).
+%s a function of each
+%$\vec{s}^{(n)}$ that returns a sorted and reduced set of indices $I$ corresponding
+%to the highest probability states that $\vec{s}^{(n)}=1$ (output from $\vec{f}(\vec{y}^{(n)})$).
+%In other words, $\gamma(\vec{s}^{(n)})$
+%sorts all $h,...,H$ of the $s_h^{(n)}$ variables in descending order of estimated relevance.
+%
+Finally, we define $\mathcal{I}(I)$ to return an $H'$-dimensional vector for each data point $\vec{y}^{(n)}$, containing the set of selected relevant latent states indices $\Kn$. 
+All 'non-relevant' variables $h\not\in I$ are effectively set to $0$ in Equation~\eqref{eq:sel-post} 
+by not being present in the state set $\Kn$.
+%to $0$, and returns the set of $H'$ selected relevant latent states' indices $\Kn$.
 % with the "non-relevant" variables set to $0$ ($\mathcal{K}_n = \{\vec{s}^{(n)}\,|\,\mbox{for all}\ h\not\in I:\ s_h=0 \}$).
 %
 %for $K_n$ ... $\mathcal{I}(s) = K_n$ takes a given I, makes $K_n$, basically
@@ -270,7 +277,7 @@ Finally, we define $\mathcal{I}(I)$ as a function of the sorted indices $I$ that
 %takes subset of the H variables, produces a subset where everything NOT in subset is set to 0 ... say where s comes from
 %We define $\mathcal{K}_n$ as $\mathcal{K}_n = \{\vec{s}\,|\,\mbox{for all}\ h\not\in I:\ s_h=0 \}$ where $\mathcal{I}$ contains the indices of the latents estimated to be most relevant for $\vec{y}^{(n)}$.
 %
-%
+
 Using $f_h$, $\Ih$ and $\gamma$, we can define a \emph{selection function}
 $\mathcal{S}_h(\vec{y}^{(n)})$ to select subsets $\mathcal{K}_n$ per data point
 $\vec{y}^{(n)}$, with the goal of containing most of the probability mass
@@ -332,13 +339,12 @@ and scales cubicly with the number of data points $N$ but linearly with the numb
 %
 %
 %TODO put in reasons GPs are awesome!! XXX 
-A nice property of Gaussian processes is that we only need to compute 
 Specifically, we will define the affinity function $f_h$ as being drawn from a Gaussian process model: 
-$f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, $k(\cdot, \cdot)$ is the covariance kernel, which can flexibly govern the
-representation of the relationship between variables.
-Again, we use $f_h$ to approximate the
-marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
-
+$f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, where $k(\cdot, \cdot)$ is the covariance kernel, which can flexibly govern the representation of the relationship between variables.
+Again, we use $f_h$ to approximate the marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
+%
+A nice property of Gaussian processes is that we only need to compute the kernel matrix $K$ once (until updating of it's hyperparameters) 
+to approximate the marginal posterior probability for the entire $N\times H$ set of latent variables $\vec{S}$.
 
 % DO NOT EVEN USE: and $\sigma_{noise}^2$ is the degree of Gaussian noise on the function $f_h$.
 Thus, in each EM iteration, we calculate the affinity function by using a GP to regress $\vec{S}$ onto $\vec{Y}$.  
@@ -355,12 +361,14 @@ in each subsequent EM iteration, the true expecations w.r.t. the $\Kn-$truncated
 % TODO details here why XXX
 We compute the predictive mean for of the predictive probability defined by the GPregression model \comment{(???)} by using
 leave-one-out (LOO) prediction -- the training set consists of $n= 1, \dots,N \backslash n'$ for all $n'=1,\dots, N$.
-For each latent variable $h$ and each data point $n$, the LOO predictive mean is
+In each latent variable $h$ and each data point $n$, the LOO predictive mean is
 %
 \comment{Fix equation! but what does $[K]_{ii}$ mean here? how reference that?} 
 \vspace{-.1cm}  % (*1)
 \begin{equation}\label{eq:gp-loo}
-\vec{\mu}^{(n)} \;=\;  \hat{\vec{s}}^{(n)} \;=\;  \frac{ \vec{s}^{(n)} -[ K^{-1} \vec{s}^{(n)} ] }{ diag [ K^{-1} ] }
+%\vec{\mu}^{(n)} \;=\;  \hat{\vec{s}}^{(n)} \;=\;  
+p_{h}^{(n)} =   
+\frac{ p_{h}^{(n)} - [ K^{-1} p_{h}^{(n)} ]^{n} }{ [ K^{-1} ]_{nn} }
 \end{equation}
 %
 which computes the predictions of the GP model using leave-one-out by only computing one kernel matrix inversion
@@ -379,7 +387,7 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 %
 We can now specialize the selection function in Equation~\eqref{eq:sel-func} by using Equation~\eqref{eq:gp-loo} to define the affinity function $\vec{f}$.
 %
-We call this entire process \textit{GP-select}, for which an outline is shown in Algorithm~\ref{alg:gp-select}.
+We call this entire process \textit{GP-select}, for which an outline is shown in Algorithm 1.
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
 %
@@ -408,12 +416,23 @@ We call this entire process \textit{GP-select}, for which an outline is shown in
 
 % TODO PUT ALGO HERE XXX
 \begin{algorithm}
+\caption{GP-Select as meta-algorithm to accelerate inference in Expectation Maximization}
 \label{alg:gp-select}
-1.\\
-2.\\
-3.
+per EM iteration $t=1,\dots,T$\\
+per data point $n=1,\dots, N$\\
+1. assess importance of all latent variables, affinity\\
+\quad 1.1. GP LOO for affinity
+2. sort and reduce indices to $H'$\\
+3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
+4. compute posterior $q(\vec{s})$ on reduced $\Kn$ in E-step\\
+5. update model parameters in M-step\\ 
+6. use resulting $\langle s \rangle_{q_{t}(\vec{s})}$ for next EM iteration $t+1$\\
+..repeat
 \end{algorithm}
-Optimization of the model parameters in EM continues in the standard EM-style format as described earlier: the
+
+% TODO PUT INTO ALGO ABOVE XXX
+\iffalse
+ Optimization of the model parameters in EM continues in the standard EM-style format as described earlier: the
 M-step computes the model parameters based on these subsets of $\Kn$ 
 (the indices of the $H' < H$ 'most relevant' states) 
 to approximate the posterior distribution shown in Equation~\eqref{eq:sel-post}.
@@ -424,7 +443,7 @@ We identify the relevance of each latent (binary) variable $h\dots H$ by approxi
 When this exceeds some threshold, the variable likely contains relevant information and its index should be in the $H'-$dimensional set $K_n$.
 %Furthermore, when all $H$ latents in the marginal posterior are conditionally independent, the affinity function $f_h$ is indeed the correct way to isolate the most relevant variables and is a useful approximation even when dependencies exist.%We (approximately) learn the marginal posteriors using GP regression. 
 We use the expectations of $\vec{s}$ from the previous EM iteration as the target in the subsequent GP regression, which will give the marginal posterior approximation to guide the variables selected for inference in the next EM iteration.
-
+\fi
 
 \section{Experiments}
 \label{exps}
