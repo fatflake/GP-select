@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: gp_aistats_arxiv.aux
+The style file: authordate1.bst
+Database file #1: cnml-all.bib.bib
+Warning--empty publisher in DaiLucke2012a
+Warning--empty publisher in DaiLucke2012b
+You've used 29 entries,
+            2441 wiz_defined-function locations,
+            756 strings with 9390 characters,
+and the built_in function-call counts, 12613 in all, are:
+= -- 1231
+> -- 491
+< -- 105
++ -- 153
+- -- 144
+* -- 1021
+:= -- 2021
+add.period$ -- 122
+call.type$ -- 29
+change.case$ -- 186
+chr.to.int$ -- 28
+cite$ -- 31
+duplicate$ -- 474
+empty$ -- 942
+format.name$ -- 180
+if$ -- 2650
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 27
+newline$ -- 152
+num.names$ -- 89
+pop$ -- 195
+preamble$ -- 1
+purify$ -- 215
+quote$ -- 0
+skip$ -- 495
+stack$ -- 0
+substring$ -- 802
+swap$ -- 130
+text.length$ -- 6
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 226
+warning$ -- 2
+while$ -- 91
+width$ -- 0
+write$ -- 372
+(There were 2 warnings)

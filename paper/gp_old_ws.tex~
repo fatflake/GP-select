@@ -1,0 +1,276 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips14submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amssymb} 
+\usepackage{amsmath}
+\usepackage{bbm}
+\usepackage{dsfont}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{subfigure}
+
+% ---------- commands ----------
+\newcommand{\x}{\ensuremath{\times}}
+\newcommand{\disT}{\textstyle}
+\newcommand{\disS}{\displaystyle}
+\newcommand{\prob}[2]{p(#1 \, | \, #2)}  % nicely space p(1 | 2)
+\newcommand{\Prime}{\,'}  % nicely space p(1 | 2)
+\newcommand{\One}{I}
+\renewcommand{\vec}[1]{{\mathbf{#1}}}
+%\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+
+
+\title{Gaussian process select-and-sample for efficient approximate inference in graphical models}
+
+
+\author{
+Jacquelyn A. Shelton\\
+TU Berlin\\
+%Berlin, Germany \\
+\texttt{shelton@tu-berlin.edu} \\
+\And
+Jan Gasthaus \\
+%Berlin, Germany \\
+\texttt{j.gasthaus@ucl.ac.uk} \\
+\AND
+Abdul-Saboor Sheikh \\
+TU Berlin \\
+\texttt{sheikh@tu-berlin.de} \\
+\And
+Joerg Luecke \\
+University of Oldenburg \\
+%Oldenburg, Germany \\
+\texttt{joerg.luecke@uni-oldenburg.de} \\
+\And
+Arthur Gretton \\
+UCL Gatsby \\
+\texttt{arthur.gretton@gmail.com} \\
+}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to \LaTeX{} to determine where to break
+% the lines. Using \AND forces a linebreak at that point. So, if \LaTeX{}
+% puts 3 of 4 authors names on the first line, and the last on the second
+% line, try using \AND instead of \And before the third author name.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\nipsfinalcopy % Uncomment for camera-ready version
+
+\begin{document}
+
+
+\maketitle
+
+%\begin{abstract}
+%Goal is to 
+%\end{abstract}
+
+\section{Introduction}
+\vspace{-.2cm}
+
+Learning and inference in probabilistic graphical models is a challenging and popular domain in machine learning research. However, in many interesting cases, when there is e.g. a large number of variables in the model and each can take on a wide range of state values, inference in graphical models quickly becomes computationally intractable. We address this problem domain by proposing a flexible approximate inference approach that iteratively combines latent variable preselection and sampling for compact representation of posterior distributions in an Expectation Maximization (EM) style learning framework. Specifically, for the preselection step, a computationally efficient selection function is used to select the relevant latent variables from the full set, given an observation. This preselected set is then used to represent the posterior distribution with reduced support. The idea is that very few of these latent variables carry relevant information for every observation and as such do not contribute much mass to the posterior distribution. With this assumption, the most relevant latent variables can be selected on a data-driven (per-datapoint) basis for a more compact and tractable representation of the posterior. When the number of latent variables is large, this can lead to significant gains in efficiency of inference. The idea is that the posterior (or regions of high posterior mass) itself can guide the inference algorithm to regions worthwhile for inference.
+
+In previous work, the form of the selection functions has been hand-picked and derived based on the structure of the considered model (see e.g. \cite{SheltonEtAl2011,SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b, BornscheinEtAl2013, SheikhEtAl2014}), however such an approach requires problem-specific engineering, and cannot easily be done in many cases. The present work proposes a generalization of this approach for black-box application to generative graphical models using non-parametric data-driven preselection of latent variables. We use Gaussian Process regression to represent complex relationships between the latent and observed variables, which is particularly useful when this variable relationship cannot be known a priori, is complex, and/or nonlinear. 
+Our regression predicts each latent variable given an input pair of one datapoint of all observed variables and one latent variable. Based on the size of the predictions of all Gaussian processes, we select which variables are deemed relevant, terming this part of our approach \textit{GP-selection}. 
+
+We experimentally illustrate GP-selection first on a simple Gaussian mixture model, showing how such the approach handles challenging data with linear and radial basis function (RBF) covariance kernels.
+Additionally, we discuss preliminary experiments with three sparse generative models, where the relationship between the variables is known to be complex. 
+Interestingly, we furthermore find that even when linear relations exist between the latents and outputs, a nonlinear regression may still be necessary in finding relevant variables, for instance when the latent variable is a spike-and-slab model. 
+%In these experiments, Gibbs sampling from the reduced latent space lead to further decrease computational costs.
+%Furthermore, we show that with this approach we can do inference in challenging models and scale to a large number of latent variables.
+
+\vspace{-.3cm}
+\section{Selection for accelerated inference/learning}
+\label{method}
+\vspace{-.2 cm}
+
+We define the set of $D$ observed variables with $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where $\vec{y}_d = ( \vec{y}_d^{(1)}, \dots, \vec{y}_d^{(N)})$ is all $N$ observations of the $d$th variable.
+% and each $\vec{y}^{(n)}$ denotes the $n$th data point/observation of all of the $D$ observed variables, e.g. $y_d^{(n)} \in \mathrm{R}^{N \times D}$. 
+Similarly we define corresponding $H$ latent variables by $\vec{S}$, where $\vec{s} = (\vec{s}_h^{(1)}, \dots, \vec{s}_h^{(N)})$ and each $\vec{s}_h=(s_h^{(1)}, ..., s_h^{(N)})$, 
+% is a vector of all $N$ observations of the $h$th hidden variable
+and $s_h^{(n)} \in \mathrm{R}^{N \times H}$.
+
+%Define graphical models of interest -- define some notation here about what will be seeing in next paragraphs
+
+Expectation maximization (EM)~\cite{DempsterEtAl1977} is a common formalism to optimize model parameters in graphical models. 
+The posterior distribution (or an approximation thereof) is required for inference in the E-step.
+% -- or, depending on the model, at least the expectations of some functions of the latent variables $\langle g(s) \rangle_{posterior}$ with respect to the posterior are required for parameter update equations in the M-step.
+In the \textit{selection step} of our approach, the posterior distribution $p(\vec{s}\,|\,\vec{y}^{(n)},\Theta)$ is approximated by a truncated distribution $q_n(\vec{s};\Theta)$ which only has support on a subset $\mathcal{K}_n$ of the latent state space~\cite{LuckeEggert2010}:
+%
+\small
+\vspace{-.2cm}
+\begin{equation}
+\label{eq:sel-post}
+p(\vec{s}\,|\,\vec{y}^{(n)},\Theta) \approx q_n(\vec{s};\Theta)
+= \frac{p(\vec{s}\,|\,\vec{y}^{(n)},\Theta)}{\disS\hspace{-1.5mm}\int_{\vec{s}\Prime\in\mathcal{K}_n}\hspace{-2mm}p(\vec{s}\Prime\,|\,\vec{y}^{(n)},\Theta)}\ \delta(\vec{s}\in\mathcal{K}_n)
+\end{equation}
+\normalsize
+%\vspace{-.2cm}
+%
+where $\delta(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ and zero otherwise. 
+A \emph{selection function} $\mathcal{S}_h(\vec{y}^(n))$ is used to select subsets $\mathcal{K}_n$ in a data-driven way per data point $\vec{y}^{(n)}$, with the goal of containing most of the probability mass $\prob{\vec{s}}{\vec{y}}$ while also being significantly smaller than the entire latent space.
+We define $\mathcal{K}_n$ as $\mathcal{K}_n = \{\vec{s}\,|\,\mbox{for all}\ h\not\in\mathcal{I}:\ s_h=0 \}$ where $\mathcal{I}$ contains the indices of the latents estimated to be most relevant for $\vec{y}^{(n)}$.
+Using such subsets $\mathcal{K}_n$, Equation.~\ref{eq:sel-post} results in good approximations to the full posteriors. 
+
+\vspace{-.3cm}
+\subsection{Gaussian process selection}
+\vspace{-.2cm}
+With the above concepts, we can express generative story for a single latent variable $s_h$ as: 
+%
+\begin{equation}\label{eq:gen-story}
+f_h(\vec{y}^{(n)}) \sim GP\left(0, \, k(\cdot,\cdot) \right), \qquad                                   
+s_h^{(n)} \sim f(\vec{y}^{(n)}) + \epsilon^{(n)}, \qquad
+\epsilon^{(n)} \sim \mathcal{N}(0,\sigma^2_{noise})
+\end{equation}
+%
+where $k(\cdot, \cdot)$ is the covariance kernel, which can flexibly govern the representation of the relationship between variables, and $\sigma_{noise}^2$ is the degree of Gaussian noise on the function $f_h$.
+
+We reformulate the data in the model as our "training" dataset $\mathcal{D}$ of $N$ observations, $\mathcal{D} = \{ (\vec{y}^{(n)}, \vec{s}^{(n)}) | n = 1, \dots, N \}$.
+Using leave-one-out cross-validation, we compute the predictions of GPs for the entire training set $\mathcal{D}$, 
+which gives us a prediction for each $s_h^{(n)}$ given all variables $\vec{y}$, where each predicted $\hat{s}_h$ represents the GP's perspective of the relationship between two.
+The idea now is to use these predictions for preselection of important latent variables in the EM fashion described earlier. %, we will compute equations~\eqref{eq:loo-gp} in every EM iteration.%, prior to each E-step.
+%We follow the standard EM framework, where one iterates alternatively between the E- and M-steps, using the results of the respective complementary step in the computations of the next iteration.
+Our approach deviates however from classic EM [with preselection]: prior to each E-step we compute GP-selection in Equation~\eqref{eq:gp-sel-func} using the results of the previous EM-iteration as training data $\vec{s}$ (observed data $\vec{y}$ never changes).
+%As each predicted $\hat{s}_h$ is the GP's perspective of the relationship between the current 
+We are not interested in the actual GP prediction, only in the relative size of each $\hat{s}_h^{(n)}$, which indicates how important variable $h$ is to $\vec{y}^{(n)}$.
+Specifically, we use the prediction size to select which subset of latent variables from $H$ are relevant for a given datapoint $\vec{y}^{(n)}$:
+%The general selection function for the $n$th observed datapoint is expressed simply as follows:
+%
+\vspace{-.5cm}
+\begin{align}\label{eq:gp-sel-func}
+\mathcal{S}(\vec{y}^{(n)}) &= \gamma \left[ \frac{ \vec{s}^{(n)} -[ K^{-1} \vec{s}^{(n)} ] }{ diag [ K^{-1} ] } \right] \\
+                           &= \gamma \left[ \hat{\vec{s}}^{(n)} \right]  
+\end{align}
+%
+where $\gamma(\cdot)$ is a function that sorts the $s_h$ variables in descending order and gives the corresponding indices.
+This selection function gives us a ranking of the $H$ latent variable indices, from which we choose  $h,\dots, H' < H$ for the subset $K_n$ per data point that we will use for inference.
+
+Particularly, we can use this subset $K_n$ to define the support for the reduced posterior distribution $q_n(\vec{s}, \Theta)$, and perform inference more efficiently with far fewer further approximations.
+With no tricks, we we can draw samples from the true posterior of these variables and, given the reduced size of the posterior space, sampling methods can perform efficiently. 
+Or depending on the size of $K_n$ we can calculate the posterior $q_n$ exactly for exact inference in this reduced space.
+
+For additional computational efficiency in large latent spaces or when no analytic solution is possible, the expectations w.r.t. the posterior can be approximated by sampling in the GP-selected latent space.
+%In order to compute/update model parameters, expected values with respect to the posterior are the main computations necessary, i.e.:
+%\begin{align}\label{eq:sel-samp}
+%\langle g(\vec{s}) \rangle_{p(\vec{s}\,|\,\vec{y}^{(n)},\Theta)} \;  & \approx \; \langle g(\vec{s}) \rangle_{q_n(\vec{s};\Theta)}\\
+%\; & \approx \;  \frac{1}{M}\sum_{m=1}^{M}g(\vec{s}^{(m)})
+%\phantom{iii}\mbox{with}\phantom{iii}\vec{s}^{(m)}\sim q_n(\vec{s};\Theta),
+%\end{align}
+%
+EM learning of parameters continues as usual in the M-step, based on this GP-selection approximation of the posterior.
+
+
+\vspace{-.3cm}
+\section{Experiments}
+\label{exps}
+\vspace{-.2cm}
+\textbf{Simple illustration: Gaussian Mixture Model.} 
+To illustrate the idea and benefit of this approach, we consider a simple motivating example: the problem setting posed by Gaussian mixture models. 
+Given data generated from a mixture of Gaussians: 
+%Assume we observed $1$-dimensional data generated from a Gaussians mixture as follows:
+%
+\vspace{-.2cm}
+\begin{equation}\label{eq:mog}
+p(\vec{y}^{(n)} | \mu_k, \sigma_k, \pi) = \sum_k^K \mathcal(N)(\mu_{k}, \sigma_{k}) \, \pi_k
+\end{equation}
+%
+where $K$ is the number of mixture components, the task is to infer from which cluster each data point originates. 
+The latent distribution gives the prior probability of a data point coming from each cluster $k$,
+$p(s^{(n)} = k | \pi) = \pi_k$, and data from the $k$th cluster are distributed according to the $k$th component, 
+$p (\vec{y}^{(n)} | s^{(n)} = k) = p_k(\vec{y}^{(n)})$.
+Once a data point $\vec{y}^{(n)}$ is observed, the posterior probability distribution for the cluster it belongs to is
+%
+\vspace{-.15cm}
+\begin{equation}\label{eq:mog-post}
+p(s^{(n)} = k | \vec{y}^{(n)}) = r_{k}^{(n)} = \frac{p_k(\vec{y}^{(n)})\, \pi k}{\sum_k^{K} p_k(\vec{y}^{(n)}) \, \pi k},
+\end{equation}
+%
+which is often called the responsibility of the $k$th cluster for the $n$th data point, or $r_{k}^{(n)}$.
+
+We apply our GP-selection approach to this model, by applying Equation~\eqref{eq:gp-sel-func} to compute the posterior distribution in~\eqref{eq:mog-post}.
+%
+%Although the increase in computational efficiency by selecting a reduced set of $K$ mixture components would only be e number of clusters considered to be in the data is very large,   
+% Depending on the data
+In these experiments we consider three scenarios for EM learning of the data in Equation~\eqref{eq:mog}: exact inference, GP-selection with an \textit{RBF covariance kernel} and GP-selection with a \textit{linear covariance kernel} (kernel parameters initialized at 1, and model-selected via maximum marginal likelihood every 10 EM iterations).
+%
+The training data set for the GP selection step is $\mathcal{D} = \{ (y^{(n)}, \vec{r}^{(n)}) | n = 1, \dots, N \}$
+%, where $r_{k}^{(n)}$ is the responsibility of the $k$th Gaussian for the $n$th datapoint, $y^{(n)}$.
+With this, we calculate the GP predictions following Equations~\eqref{eq:gp-sel-func} and use the prediction size to select which $k$ clusters to include in the normalization in the calculation of the responsibilities $\vec{r}$ (where $\vec{S}$ is substituted with $\vec{r}$).
+
+For simplicity of the illustration, we generate $2$-dimensional observed data ($\vec{y}^{(n)} \in \mathrm{R}^{D=2} $) from $K=3$ clusters such that the means of the clusters lie roughly on a line. 
+In the GP-selection experiments, we select $K' = 2$ and $K' = 1$ clusters to select from the entire $K=3$ set (where $K'$ clusters is analagous to $H'$ latent variables in the non-mixture model setting), and run $40$ EM iterations of the three experiments.
+Solutions had converged after 3 iterations and the results are shown in Figure~\ref{fig:mogs}.
+%First, we initialize all three experiments in the optimum parameter solution 
+%
+\begin{figure}[h!]
+\begin{center}\label{fig:mogs}
+\includegraphics[width=.35\textwidth]{figs/mog/learn-lin-h2/040.png}\includegraphics[width=.3\textwidth]{figs/mog/learn-lin-h2/GP_pred_40.png}\\
+\subfigure[Data and converged solution]{\includegraphics[width=.35\textwidth]{figs/mog/learn-rbf-h2/040.png}}
+\subfigure[GP regression function]{\includegraphics[width=.3\textwidth]{figs/mog/learn-rbf-h2/GP_pred_40.png}}\\
+\scriptsize
+\caption{Gaussian mixture model results using GP-selection ($K'=2$): Row 1 uses a linear kernel, row 2 an RBF kernel. (a) observed data and converged solution inferring parameters of Gaussian clusters, (b) the corresponding GP regression functions learned/used for GP-selection.}
+\end{center}
+\end{figure}
+%the problem becomes more difficult for selection with a linear covariance kernel. 
+%
+With cluster parameters initialized randomly on these data, the linear GP regression prediction cannot correctly assign the data to their clusters (as seen in row 1), but the nonlinear approach successfully and easily finds the ground-truth clusters (row 2).
+Furthermore, even when both were initialized in the optimal solution, the cluster assignments from GP-selection with linear kernel was identical to random initialization after just 3 iterations. The RBF kernel cluster assignments remained in the optimal solution even with $K'=1$. 
+
+%%%As can be seen, if we observe data that truly originates from $\mathcal{N}(\mu_{1}, \sigma_{1})$, GP-selection will always predict the incorrect Gaussian, because $\mathcal{N}(\mu_{2}, \sigma_{2})$: $f_{2}(\{\vec{y}_n\}$ will always be larger than $f_{1}(\{\vec{y}_n\}$.
+%
+%%%The GP will always assign a higher predictive probability to the wrong class for data originating from the other.
+
+%- choosing features, comp speed up, approximately solving regression (random features, subset of data points -- don't need super good regression solution to pick relevant features, only the size of the regression prediction) robustness/better optima
+% sel-samp shown to work well in parallelized large scale setting
+% this is preliminary work, beleive it cold be very powerrful in high-dimensional setting
+
+
+\textbf{Sparse coding models.} 
+Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional data with use of the selection~\cite{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and select-and-sample~\cite{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
+Often, the hand-crafted function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and each data point $\vec{y}^{(n)}$: $  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
+
+In preliminary experiments, we replace this hand-crafted selection function with our GP-selection approach, using linear and RBF covariance kernels, as in the mixture model experiments. We consider the following generative models: 
+%\begin{itemize}
+(1) \textit{Binary sparse coding}, defined by latent variables $\vec{s} \sim Bern(\vec{s} | \pi) = \disT\prod_{h=1}^H \pi^{s_h} \big( 1 - \pi \big)^{1-s_h}$ and observations  $\vec{y} \sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)$, where $W \in \mathrm{R}^{D \times H}$ denotes the dictionary elements and $\pi$ parameterizes the sparsity (See e.g.~\cite{HennigesEtAl2010, SheltonEtAl2011}). 
+(2) \textit{Spike-and-slab sparse coding}: latent variables $\vec{s} = \vec{b}\odot\vec{z} \sim Bern(\vec{b} | \pi) \odot \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h)$ and observations  $\vec{y} \sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)$ (e.g. \cite{SheikhEtAl2014}), and 
+(3) \textit{Nonlinear Spike-and-slab sparse coding}: latent variables $\vec{s} = \vec{b}\odot\vec{z} \sim Bern(\vec{b} | \pi) \odot \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h)$ and observations  $\vec{y} \sim \mathcal{N}(\vec{y}; \max_{h}\{s_hW_{dh}\}, \sigma^2\One)$ (\cite{SheltonEtAl2012}).
+
+%These experiments yield promising results on ground-truth data: in all models, inference using GP-selection was able to infer ground-truth model parameters. 
+
+These experiments yield promising results: in all experiments, the GP-selection approach could infer ground-truth parameters as well as the hand-crafted function. For models where the cosine similarity was used (in (1) and (3)), GP regression with a linear kernel quickly learned the ground-truth parameters. 
+This means that, even though we did not provide GP-selection with explicit weights $W$ as used in the hand-crafted function, GP regression learned a similar enough function to yield identical results. 
+Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of (2)), only GP regression with an RBF kernel was able to recover ground-truth parameters.
+
+%\end{itemize}
+\vspace{-.4cm}
+\section{Discussion}
+\vspace{-.3cm}
+
+Results so far are promising -- the Gaussian mixture model demonstrated that data exist for which a linear predictor will always fail at finding relevant features, whereas a nonlinear predictor offers flexibility without a priori assumptions.
+The results on diverse sparse coding models also demonstrate the power of the approach in its ability to learn hand-engineered selection functions even via simple linear regression.
+Current work is applying this inference approach to complex models at large-scale, where we expect to the benefits of this approach to shine -- both in terms of computational efficiency as well as the flexibility offered by such a simple regression approach to "pre-learn" complicated inference landscapes.
+
+\vspace{-.3cm}
+
+%\subsubsection*{Acknowledgments}
+%
+%Use unnumbered third level headings for the acknowledgments. All
+%acknowledgments go at the end of the paper. Do not include 
+%acknowledgments in the anonymized submission, only in the 
+%final paper. 
+
+\renewcommand\baselinestretch{0.6}
+\setlength{\itemsep}{-2.3pt}
+\small{
+\bibliographystyle{unsrt} %abbrv
+%\bibliography{sampling,../bibs/jpl2011-05Plain}
+\bibliography{cnml-all}
+}
+
+\end{document}

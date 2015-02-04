@@ -1,0 +1,184 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citename{Bornschein {\em et~al.\ }\relax,
+  }2013]{BornscheinEtAl2013}
+Bornschein, J., Henniges, M., \& L\"ucke, J. 2013.
+\newblock Are {V}1 Simple Cells Optimized for Visual Occlusions? {A}
+  Comparative Study.
+\newblock {\em PLoS Computational Biology}, {\bf 9}(6), e1003062.
+
+\bibitem[\protect\citename{Dai \& L\"{u}cke, }2012a]{DaiLucke2012a}
+Dai, Z., \& L\"{u}cke, J. 2012a.
+\newblock Autonomous Cleaning of Corrupted Scanned Documents -- A Generative
+  Modeling Approach.
+\newblock {\em Pages  3338--3345 of:} {\em IEEE Conference on Computer Vision
+  and Pattern Recognition}.
+
+\bibitem[\protect\citename{Dai \& L\"{u}cke, }2012b]{DaiLucke2012b}
+Dai, Z., \& L\"{u}cke, J. 2012b.
+\newblock Unsupervised Learning of Translation Invariant Occlusive Components.
+\newblock {\em Pages  2400--2407 of:} {\em IEEE Conference on Computer Vision
+  and Pattern Recognition}.
+
+\bibitem[\protect\citename{Dai \& L\"{u}cke, }2014]{DaiLucke2014}
+Dai, Z., \& L\"{u}cke, J. 2014.
+\newblock Autonomous Document Cleaning -- A Generative Approach to Reconstruct
+  Strongly Corrupted Scanned Texts.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  {\bf 36}(10), 1950--1962.
+
+\bibitem[\protect\citename{Dai {\em et~al.\ }\relax, }2013]{DaiEtAl2013}
+Dai, Z., Exarchakis, G., \& L{\"u}cke, J. 2013.
+\newblock What Are the Invariant Occlusive Components of Image Patches? A
+  Probabilistic Generative Approach.
+\newblock {\em Pages  243--251 of:} {\em Advances in Neural Information
+  Processing Systems}.
+
+\bibitem[\protect\citename{Dai {\em et~al.\ }\relax, }2014]{butt}
+Dai, Zhenwen, Damianou, Andreas, Hensman, James, \& Lawrence, Neil. 2014.
+\newblock {\em Gaussian Process Models with Parallelization and GPU
+  acceleration}.
+
+\bibitem[\protect\citename{Dempster {\em et~al.\ }\relax,
+  }1977]{DempsterEtAl1977}
+Dempster, A.~P., Laird, N.~M., \& Rubin, D.~B. 1977.
+\newblock Maximum Likelihood from Incomplete Data via the {EM} Algorithm (with
+  discussion).
+\newblock {\em Journal of the Royal Statistical Society B}, {\bf 39}, 1--38.
+
+\bibitem[\protect\citename{Goodfellow {\em et~al.\ }\relax,
+  }2013]{GoodfellowEtAl2013}
+Goodfellow, I.~J., Courville, A., \& Bengio, Y. 2013.
+\newblock Scaling up spike-and-slab models for unsupervised feature learning.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  {\bf 35}(8), 1902--1914.
+
+\bibitem[\protect\citename{Henniges {\em et~al.\ }\relax,
+  }2010]{HennigesEtAl2010}
+Henniges, M., Puertas, G., Bornschein, J., Eggert, J., \& L\"ucke, J. 2010.
+\newblock {Binary Sparse Coding}.
+\newblock {\em Pages  450--57 of:} {\em Proceedings LVA/ICA}.
+\newblock LNCS 6365.
+\newblock Springer.
+
+\bibitem[\protect\citename{Hensman {\em et~al.\ }\relax, }2012]{Hensman2012}
+Hensman, James, Rattray, Magnus, \& Lawrence, Neil~D. 2012.
+\newblock {Fast Variational Inference in the Conjugate Exponential Family}.
+\newblock {\em In:} {\em Advances in Neural Information Processing System}.
+
+\bibitem[\protect\citename{Hensman {\em et~al.\ }\relax,
+  }2013]{HensmanEtAl2013}
+Hensman, James, Fusi, N, \& Lawrence, ND. 2013.
+\newblock {Gaussian processes for big data}.
+\newblock {\em In:} {\em Uncertainty in Artificial Intelligence}.
+
+\bibitem[\protect\citename{Hinton {\em et~al.\ }\relax, }1995]{HintonEtAl1995}
+Hinton, G.~E., Dayan, P., Frey, B.~J., \& Neal, R.~M. 1995.
+\newblock The `Wake-Sleep' Algorithm for Unsupervised Neural Networks.
+\newblock {\em Science}, {\bf 268}, 1158 -- 1161.
+
+\bibitem[\protect\citename{Kingma \& Welling, }2014]{WellingICML2014}
+Kingma, Diederik~P., \& Welling, Max. 2014.
+\newblock Efficient Gradient-Based Inference through Transformations between
+  Bayes Nets and Neural Nets.
+\newblock {\em In:} {\em International Conference on Machine Learning}.
+
+\bibitem[\protect\citename{K\"orner {\em et~al.\ }\relax,
+  }1999]{KoernerEtAl1999}
+K\"orner, E., Gewaltig, M.~O., K\"orner, U., Richter, A., \& Rodemann, T. 1999.
+\newblock A model of computation in neocortical architecture.
+\newblock {\em Neural Networks}, {\bf 12}, 989 -- 1005.
+
+\bibitem[\protect\citename{Lawrence {\em et~al.\ }\relax, }2003]{sparseGP}
+Lawrence, Neil, Seeger, Matthias, \& Herbrich, Ralf. 2003.
+\newblock Fast Sparse Gaussian Process Methods: The Informative Vector Machine.
+\newblock {\em Pages  625--632 of:} {\em Advances in Neural Information
+  Processing Systems 15}.
+\newblock MIT Press.
+
+\bibitem[\protect\citename{Le {\em et~al.\ }\relax, }2013]{LeSarSmo13}
+Le, Q.V., Sarlos, T., \& Smola, A.~J. 2013.
+\newblock Fastfood --- Computing Hilbert Space Expansions in Loglinear Time.
+\newblock {\em In:} {\em International Conference on Machine Learning}.
+
+\bibitem[\protect\citename{L\"ucke \& Eggert, }2010]{LuckeEggert2010}
+L\"ucke, J., \& Eggert, J. 2010.
+\newblock Expectation Truncation And the Benefits of Preselection in Training
+  Generative Models.
+\newblock {\em Journal of Machine Learning Research}, {\bf 11}, 2855--900.
+
+\bibitem[\protect\citename{L\"ucke \& Sahani, }2008]{LuckeSahani2008}
+L\"ucke, J., \& Sahani, M. 2008.
+\newblock Maximal Causes for Non-linear Component Extraction.
+\newblock {\em Journal of Machine Learning Research}, {\bf 9}, 1227--67.
+
+\bibitem[\protect\citename{Mnih \& Gregor, }2014]{MnihGregor2014}
+Mnih, Andriy, \& Gregor, Karol. 2014.
+\newblock Neural Variational Inference and Learning in Belief Networks.
+\newblock {\em In:} {\em Proceedings of the 31st International Conference on
+  Machine Learning}.
+
+\bibitem[\protect\citename{Neal \& Hinton, }1998]{NealHinton1998}
+Neal, R., \& Hinton, G. 1998.
+\newblock A View of the {EM} Algorithm that Justifies Incremental, Sparse, and
+  other Variants.
+\newblock {\em In:} Jordan, M.~I. (ed), {\em Learning in Graphical Models}.
+\newblock Kluwer.
+
+\bibitem[\protect\citename{Nene {\em et~al.\ }\relax, }1996]{coil100}
+Nene, S.~A., Nayar, S.~K., \& Murase, H. 1996.
+\newblock {\em Columbia Object Image Library (COIL-100)}.
+\newblock Tech. rept. CUCS-006-96.
+
+\bibitem[\protect\citename{Rasmussen \& Williams, }2005]{RasmussenGPbook}
+Rasmussen, Carl~Edward, \& Williams, Christopher K.~I. 2005.
+\newblock {\em Gaussian Processes for Machine Learning (Adaptive Computation
+  and Machine Learning)}.
+\newblock The MIT Press.
+
+\bibitem[\protect\citename{Rodr{\'{\i}}guez{-}Serrano \& Larlus,
+  }2013]{Rodriguez-SerranoL13}
+Rodr{\'{\i}}guez{-}Serrano, Jos{\'{e}}~A., \& Larlus, Diane. 2013.
+\newblock Predicting an Object Location Using a Global Image Representation.
+\newblock {\em Pages  1729--1736 of:} {\em International Conference on Computer
+  Vision}.
+
+\bibitem[\protect\citename{Sheikh {\em et~al.\ }\relax, }2014]{SheikhEtAl2014}
+Sheikh, A.-S., Shelton, J., \& L\"ucke, J. 2014.
+\newblock A Truncated {EM} Approach for Spike-and-Slab Sparse Coding.
+\newblock {\em Journal of Machine Learning Research}, {\bf 15}, 2653--2687.
+
+\bibitem[\protect\citename{Shelton {\em et~al.\ }\relax,
+  }2011]{SheltonEtAl2011}
+Shelton, J., Bornschein, J., Sheikh, A.-S., Berkes, P., \& L\"ucke, J. 2011.
+\newblock Select and Sample - A Model of Efficient Neural Inference and
+  Learning.
+\newblock {\em Advances in Neural Information Processing Systems}, {\bf 24}.
+
+\bibitem[\protect\citename{Shelton {\em et~al.\ }\relax,
+  }2012]{SheltonEtAl2012}
+Shelton, J., Sterne, P., Bornschein, J., Sheikh, A.-S., \& L\"ucke, J. 2012.
+\newblock Why {MCA}? Nonlinear sparse coding with spike-and-slab prior for
+  neurally plausible image encoding.
+\newblock {\em Advances in Neural Information Processing Systems}, {\bf 25}.
+
+\bibitem[\protect\citename{Titsias \& L{\'a}zaro-Gredilla,
+  }2011]{TitsiasGredilla2011}
+Titsias, M., \& L{\'a}zaro-Gredilla, M. 2011.
+\newblock Spike and Slab Variational Inference for Multi-Task and Multiple
+  Kernel Learning.
+\newblock {\em In:} {\em Advances in Neural Information Processing Systems}.
+
+\bibitem[\protect\citename{Yuille \& Kersten, }2006]{YuilleKersten2006}
+Yuille, A., \& Kersten, D. 2006.
+\newblock Vision as {Bayesian} inference: analysis by synthesis?
+\newblock {\em Trends in Cognitive Sciences}, {\bf 10}(7), 301--308.
+
+\bibitem[\protect\citename{Zhang {\em et~al.\ }\relax, }2014]{zhang14divide}
+Zhang, Yuchen, Duchi, John~C., \& Wainwright, Martin~J. 2014.
+\newblock {\em Divide and Conquer Kernel Ridge Regression: A Distributed
+  Algorithm with Minimax Optimal Rates}.
+\newblock Tech. rept. University of California, Berkeley.
+\newblock (\url{http://arxiv.org/abs/1305.5029}).
+
+\end{thebibliography}
