@@ -131,14 +131,32 @@ to implement and having a far lower computational cost.
 %Furthermore, we show that with this approach we can do inference in challenging models and scale to a large number of latent variables.
 
 
-\section{Variable selection for accelerated inference/learning}
+\section{Variable selection for accelerated inference}
 \label{method}
 %
-%%%%%%%%%%%%%%%%%%
-% Describe how ET works, how it relates to EM. An inference algorithm that takes $\Kn$ and gives you a $q$
-%%%%%%%%%
-Expectation truncation (ET) is an extension of the expectation maximization (EM) algorithm (e.g. \citep{DempsterEtAl1977,
-NealHinton1998}) to optimize the model parameters of a given graphical model.
+\textbf{Notation.}
+%Notation throughout the paper will be as follows.
+We denote the observed data by the matrix $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where each vector $\vec{y}^{(n)} = ( y_1^{(n)}, \dots, y_D^{(n)})^\mathrm{T}$ is the $n$th observation 
+in a $D-$dimensional space.
+Similarly we define corresponding 
+binary latent variables\footnote{We restrict ourselves to binary latent variables here, though
+discrete variables with higher cardinality can easily be used by
+converting them into binary variables.} 
+by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{N \times H}$ with $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ a the $H-$dimensional latent space,
+and for each individual hidden variable $h$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
+%
+We denote the prior distribution over the latent variables with $p(\vec{s} | \theta)$ 
+and the likelihood of the data with $p(\vec{y} | \vec{s}, \theta)$
+% TODO check wording here
+Using these expressions, the posteror distribution over latent variables is 
+%
+\vspace{-.2cm}
+\begin{equation}
+\label{eq:post}
+p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}
+{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}.
+\end{equation}
+\subsection{Expectation Maximization}
 EM iteratively optimizes a lower bound on the data likelihood by inferring the
 posterior distribution over hidden variables given the current parameters (the
 E-step), and then adjusting the parameters to maximize the likelihood of the
@@ -158,27 +176,16 @@ the E-step becomes intractable and approximations are required.
 %
 % From JL: Note that Zhenwen's y entries are not necessarily in R. Also corrected s notation.
 %
-Notation throughout the paper will be as follows.
-We denote the observed data by the matrix $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where each vector $\vec{y}^{(n)} = ( y_1^{(n)}, \dots, y_D^{(n)})^\mathrm{T}$ is the $n$th observation 
-in a $D-$dimensional space.
-Similarly we define corresponding 
-binary latent variables\footnote{We restrict ourselves binary latent variables here, though
-discrete variables with higher cardinality can easily be used by
-converting them into binary variables.} 
-by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{N \times H}$ with $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ a the $H-$dimensional latent space,
-and for each individual hidden variable $h$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
+
 %
-We denote the prior distribution over the latent variables with $p(\vec{s} | \theta)$ 
-and the distribution over the data with the likelihood $p(\vec{y} | \vec{s}, \theta)$
-% TODO check wording here
-Using these expressions, the posteror distribution over latent variables is 
+
+\subsection{Selection with Expectation Truncation}
+%%%%%%%%%%%%%%%%%%
+% Describe how ET works, how it relates to EM. An inference algorithm that takes $\Kn$ and gives you a $q$
+%%%%%%%%%
 %
-\vspace{-.2cm}
-\begin{equation}
-\label{eq:post}
-p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}
-{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}.
-\end{equation}
+Expectation truncation (ET) is an extension of the expectation maximization (EM) algorithm (e.g. \citep{DempsterEtAl1977,
+NealHinton1998}) to optimize the model parameters of a given graphical model.
 %
 The main idea underlying ET is that for a given observation $\vec{y}^{(n)}$
 only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant, meaning
@@ -233,7 +240,10 @@ e.g.\ we try to learn $f$ such that $f_h(\vec{y}^{(n)}) \approx p^{(n)}_h$.
 %THERE NEEDS TO BE A BIT MORE TEXT HERE TO LINK THESE TWO.
 % ************ XXX -----------------------------------
 When the $H$ latent variables in the marginal posterior probability $p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
-That said, the affinity can still highlight relevant variables even when dependencies exist.
+That said, 
+Even when this strong assumption does not hold in practice, which is often the case, 
+the affinity can still highlight relevant variables; 
+It's been empirically shown to be effective when dependencies exist.
 
 %
 Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
@@ -286,7 +296,7 @@ $q(\vec{s})$.  This result is then used to calculate the model parameter update
 equations in the M-step.
 
 
-\section{Gaussian process selection}
+\section{GP-Select}
 %
 %In this work we generalize the above approach, where instead of defining $\Sh$
 %by hand, we propose that $\Sh$ be learned in a black-box fashion based on the
