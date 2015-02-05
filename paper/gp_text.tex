@@ -346,8 +346,10 @@ and scales cubicly with the number of data points $N$ but linearly with the numb
 %
 %
 %TODO put in reasons GPs are awesome!! XXX 
-Specifically, we will define the affinity function $f_h$ as being drawn from a Gaussian process model: 
-$f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, where $k(\cdot, \cdot)$ is the covariance kernel, which can flexibly govern the representation of the relationship between variables.
+Specifically, we define the affinity function $f_h$ as being drawn from a Gaussian process model: 
+$f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, where $k(\cdot, \cdot)$ is the covariance kernel, 
+which can be flexibly parameterized to represent the relationship between variables.
+%flexibly govern the representation of the relationship between variables.
 Again, we use $f_h$ to approximate the marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
 %
 A nice property of Gaussian processes is that we only need to compute the kernel matrix $K$ once (until updating of it's hyperparameters) 
@@ -366,7 +368,7 @@ In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec
 in each subsequent EM iteration, the true expecations w.r.t. the $\Kn-$truncated posterior $q(\vec{s})$ are used. 
 
 % TODO details here why XXX
-We do this because.... 
+\comm{We do this because.... }
 We compute the predictive mean for of the predictive probability defined by the GP regression model \comm{(???)} by using
 leave-one-out (LOO) prediction -- the training set consists of $n= 1, \dots,N \backslash n'$ for all $n'=1,\dots, N$.
 In each latent variable $h$ and each data point $n$, the LOO predictive mean is
@@ -397,6 +399,7 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 We can now specialize the selection function in Equation~\eqref{eq:sel-func} by using Equation~\eqref{eq:gp-loo} to define the affinity function $\vec{f}$.
 %
 We call this entire process \textit{GP-select}, for which an outline is shown in Algorithm 1.
+\comm{hash out and compress, add notation and structure:}
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
 %
