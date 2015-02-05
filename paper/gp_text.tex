@@ -1,20 +1,16 @@
 
-\begin{abstract}
-% XXX one paragraph limit
 
-% XXX changed "score" to "selection"
+\definecolor{Green}{rgb}{0,.80,0} 
+%\newcommand{\comm}[1]{}
+\newcommand{\comm}[1]{\textcolor{Green}{[#1]}} % ---XXX comment out when DONE with revisions ---
+
+\begin{abstract}
 We propose a nonparametric procedure to achieve fast inference in generative graphical models when the number of latent states is very large.
  The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and use this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally unfeasible.
 We learn the selection function entirely from the observed data and current EM state via Gaussian process regression: this is by contrast with earlier approaches, where selections were hand-designed for each problem setting.
 We show our approach to perform as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method,  at a far lower computational cost.
 
-
-
-
-
-
 %Specifically, for the preselection step, a computationally efficient selection function is used to select the relevant latent variables from the full set, given an observation. This preselected set is then used to represent the posterior distribution with reduced support.
-%TODO
 \end{abstract}
 
 % XXX 8 pages text + references
@@ -24,12 +20,9 @@ We show our approach to perform as well as these bespoke selection functions on 
 
 \section{Introduction}
 %
-%TODO
 %- Embed work in Landscape of Sexiness (TM)\\
 %- Discuss new stuff from Welling, old stuff... \\
-%- mention leverage score relation\\
-%- Take some ideas from abstract
-
+%- mention leverage score relation???
 
 
 Inference in probabilistic graphical models can be challenging in situations where
@@ -37,7 +30,7 @@ there are a large number of hidden variables, each of which may take on one of s
 state values. The EM algorithm is widely applied for inference when hidden variables
 are present, however inference can quickly become intractable as the dimensionality increases.
 
-More general grounding of motivation, before get into more specific general grounding?  I.e. challenges of big data / scaling and other shiny BS people love to hear, and how the simplest quick approach that can handle inference should be chosen, stuff from Bottou paper~\cite{Bottou08thetradeoffs} we somehow forgot to cite.
+\comm{More general grounding of motivation, before get into more specific general grounding?  I.e. challenges of big data / scaling and other shiny stuff people love to hear, and how the simplest quick approach that can handle inference should be chosen, stuff from Bottou paper~\cite{Bottou08thetradeoffs}? }
 
 
 Expectation truncation (ET) \citep{LuckeEggert2010} is a meta algorithm for accelerating EM learning
@@ -134,6 +127,7 @@ to implement and having a far lower computational cost.
 
 \section{Variable selection for accelerated inference}
 \label{method}
+\comm{can remove subsections later if want - was to help me structure. js}
 %
 \textbf{Notation.}
 %Notation throughout the paper will be as follows.
@@ -148,16 +142,17 @@ where each $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}
 and for each individual hidden variable $h$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
 %
 We denote the prior distribution over the latent variables with $p(\vec{s} | \theta)$ 
-and the likelihood of the data with $p(\vec{y} | \vec{s}, \theta)$
+and the likelihood of the data with $p(\vec{y} | \vec{s}, \theta)$.
 % TODO check wording here
 Using these expressions, the posteror distribution over latent variables is 
 %
-\vspace{-.2cm}
+\vspace{-.1cm}
 \begin{equation}
 \label{eq:post}
 p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}
 {\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}.
 \end{equation}
+\vspace{-.3cm}
 
 \subsection{Expectation Maximization}
 Expectation Maximization (EM) is an iterative algorithm to optimize the model parameters of a given graphical model.
@@ -176,6 +171,7 @@ the E-step becomes intractable and approximations are required.
 %
 % From JL: Note that Zhenwen's y entries are not necessarily in R. Also corrected s notation.
 %
+\comm{here or below could add a simple graphical model, all $s_{h=1},\dots, s_{H}$ leading to one $\vec{y}^{(n)}$, some plot of marginal posterior, a few are "high" and thus selected?  similar to select and sample paper}
 
 \subsection{Selection with Expectation Truncation}
 %%%%%%%%%%%%%%%%%%
@@ -188,6 +184,7 @@ NealHinton1998}).
 The main idea underlying ET is that for a given observation $\vec{y}^{(n)}$
 only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant, meaning
 that the marginal posterior probability $p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)$
+\comm{do we want to make this an actual equation to make it easier to locate/refer to?}
 exceeds some threshold. 
 % TODO want some reference to a graphical nmodel here?
 A selection function is used to identify this subset
@@ -211,7 +208,7 @@ p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
 where $\Kn$ contains the indices of relevant latent states for data point
 $\vec{y}^{(n)}$, and $\delta(\vec{s}\in\mathcal{K}_n)=1$ if
 $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
-Note that $\Kn$ is not an arbitrary set of the possible states, but is axis aligned according to the latent states that are zero, which is more challenging. \comment{Jan, what did you mean here?}
+Note that $\Kn$ is not an arbitrary set of the possible states, but is axis aligned according to the latent states that are zero, which is more challenging. \comm{Jan, what did you mean here?}
 %FIXME 
 
 %%%%
@@ -230,21 +227,21 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis alig
 
 \subsection{ET with affinity} % TODO can remove when structure is stand-alone
 %%%%%%
-One way of constructing a selection function $\mathcal{S}^{(n)}$ is by
-ranking the latent variables according to an 
+One way of constructing a selection function %$\mathcal{S}^{(n)}$ 
+is by first ranking the latent variables according to an 
 \emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}^{+}$
-which directly reflects the relevance of latent variable $s_h$. A natural choice
-for such a function is one that approximates the marginal posterior probability,
+which directly reflects the relevance of latent variable $s_h$. 
+A natural choice for such a function is one that approximates the marginal posterior probability,
 e.g.\ we try to learn $f$ such that $f_h(\vec{y}^{(n)}) \approx p^{(n)}_h$.
 %
 % TODO FIXME
 %THERE NEEDS TO BE A BIT MORE TEXT HERE TO LINK THESE TWO.
 % ************ XXX -----------------------------------
-When the $H$ latent variables in the marginal posterior probability $\vec{p} = p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
+When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\vec{p}^{(n)} = p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
 %
-Even when this strong assumption does not hold in practice, which is often the case, 
-the affinity can still highlight relevant variables; 
-it has been empirically shown to be quite effective when dependencies exist.
+However, even when this strong assumption does not hold in practice, which is often the case, 
+the affinity can still correctly highlight relevant variables.
+It has been empirically shown to be quite effective even when dependencies exist.
 
 % TODO REMOVE REDUNANCY XXX
 %XXX Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
@@ -254,20 +251,25 @@ it has been empirically shown to be quite effective when dependencies exist.
 %$\vec{y}^{(n)}$ is associated with an $H$-dimensional vector of predictions
 %$\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$.
 %
-Next, using all $p_{h=1}^{(n)},\dots, p_H^{(n)}$ approximated marginal posterior probabilities from the affinity function $\vec{f}(\vec{y}^{(n)})$, we define 
- $\gamma(\vec{p}^{(n)})$ to sort the indices in descending order and \textit{reduce} the sorted set to $H' << H$ 
-To ensure that there is a non-zero probability of choosing each state per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen at random.
+Next, using all $p_{h=1}^{(n)},\dots, p_H^{(n)}$ resulting 
+%approximated marginal posterior probabilities 
+from the affinity function 
+$\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we define 
+ $\gamma(\vec{p}^{(n)})$ to simultaneously sort the indices in descending order and \textit{reduce} the sorted set to the $H'$ highest (most relevant) states' indices, where $H' \ll H$.
+To ensure that there is a non-zero probability of selecting each state per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random.
+$\gamma(\vec{p}^{(n)})$ thus returns the $H'$ selected indices $I$ deemed by the affinity to be relevant to the $n$th data point.
+%
+%(i.e. all $h=1,\dots,H'$ latent variables sorted by estimated relevance).
 %
 %of the indices $I$ corresponding
 %to the highest probability states that $\vec{s}^{(n)}=1$ 
-(i.e. all $h=1,\dots,H'$ latent variables sorted by estimated relevance).
 %s a function of each
 %$\vec{s}^{(n)}$ that returns a sorted and reduced set of indices $I$ corresponding
 %to the highest probability states that $\vec{s}^{(n)}=1$ (output from $\vec{f}(\vec{y}^{(n)})$).
 %In other words, $\gamma(\vec{s}^{(n)})$
 %sorts all $h,...,H$ of the $s_h^{(n)}$ variables in descending order of estimated relevance.
 %
-Finally, we define $\mathcal{I}(I)$ to return an $H'$-dimensional vector for each data point $\vec{y}^{(n)}$, containing the set of selected relevant latent states indices $\Kn$. 
+Finally, using the indices $I$ from $\gamma$, we define $\mathcal{I}(I)$ to return an $H'$-dimensional vector for each data point $\vec{y}^{(n)}$, containing the set of selected relevant latent states $\Kn$. 
 All 'non-relevant' variables $h\not\in I$ are effectively set to $0$ in Equation~\eqref{eq:sel-post} 
 by not being present in the state set $\Kn$.
 %to $0$, and returns the set of $H'$ selected relevant latent states' indices $\Kn$.
@@ -279,7 +281,9 @@ by not being present in the state set $\Kn$.
 %We define $\mathcal{K}_n$ as $\mathcal{K}_n = \{\vec{s}\,|\,\mbox{for all}\ h\not\in I:\ s_h=0 \}$ where $\mathcal{I}$ contains the indices of the latents estimated to be most relevant for $\vec{y}^{(n)}$.
 %
 
-Using $f_h$, $\Ih$ and $\gamma$, we can define a \emph{selection function}
+Using $\vec{f}$, 
+%$\Ih$ 
+$\mathcal{I}$, and $\gamma$, we can define a \emph{selection function}
 $\mathcal{S}_h(\vec{y}^{(n)})$ to select subsets $\mathcal{K}_n$ per data point
 $\vec{y}^{(n)}$, with the goal of containing most of the probability mass
 $\prob{\vec{s}}{\vec{y}}$ while also being significantly smaller than the entire
@@ -303,16 +307,16 @@ BornscheinEtAl2013, SheikhEtAl2014}).
 \subsection{Inference in EM with selection}
 %
 As a meta-algorithm, ET selects the $\Kn$ subspace prior to every EM iteration.
-In each iteration, $\Kn$ is used to approximate posterior distribution by calculating the true posterior on the truncated space, $q(\vec{s})$,
- with which inference can be performed using any standard method.
-Potential examples are to perform exact inference or to draw Gibbs samples from $q(\vec{s})$ for a sampling approximation of the truncated posterior.
+In each iteration of EM, the following occurs: 
+prior to the E-step, the selection function $\Sh$~\eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
+which are then used to approximate the posterior distribution by computing the true posterior on the truncated space $q(\vec{s})$~\eqref{eq:sel-post}.
+With the truncated posterior $q(\vec{s})$, inference can be performed using any standard method, such as exact inference or e.g. Gibbs sampling from $q(\vec{s})$ for a further approximation. % sampling approximation of the truncated posterior.
+The result of the E-step is then used to update the model parameters in the M-step. 
 
-To summarize, in one iteration of this approximate EM algorithm, the following
-occurs: prior to the E-step, the algorithm is given a latent variable subset
-$\Kn$ computed by the selection function $\Sh$ to use in the E-step.  Based on
-this, the E-step computes and returns the approximate posterior distribution
-$q(\vec{s})$.  This result is then used to calculate the model parameter update
-equations in the M-step.
+% To summarize, in each iteration of EM, the following occurs: 
+%prior to the E-step, the selection function $\Sh$~\eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
+%which are then used to compute the truncated posterior distribution $q(\vec{s})$~\eqref{eq:sel-post}.
+%This result is then used to calculate the model parameter update equations in the M-step. 
 
 
 \section{GP-Select}
@@ -361,17 +365,18 @@ in each subsequent EM iteration, the true expecations w.r.t. the $\Kn-$truncated
 
 % TODO details here why XXX
 We do this because.... 
-We compute the predictive mean for of the predictive probability defined by the GP regression model \comment{(???)} by using
+We compute the predictive mean for of the predictive probability defined by the GP regression model \comm{(???)} by using
 leave-one-out (LOO) prediction -- the training set consists of $n= 1, \dots,N \backslash n'$ for all $n'=1,\dots, N$.
 In each latent variable $h$ and each data point $n$, the LOO predictive mean is
 %
-\comment{Fix equation! but what does $[K]_{ii}$ mean here? how reference that?} 
-\vspace{-.1cm}  % (*1)
+\comm{Fix equation! notation for $[K]_{ii}$ somehow less ugly here?} 
+\vspace{-.2cm}  % (*1)
 \begin{equation}\label{eq:gp-loo}
 %\vec{\mu}^{(n)} \;=\;  \hat{\vec{s}}^{(n)} \;=\;  
 p_{h}^{(n)} =   
 \frac{ p_{h}^{(n)} - [ K^{-1} p_{h}^{(n)} ]^{n} }{ [ K^{-1} ]_{nn} }
 \end{equation}
+\vspace{-.0cm}
 %
 which computes the predictions of the GP model using leave-one-out by only computing one kernel matrix inversion
 (see e.g. Section 5.4.2~\citep{RasmussenGPbook}).
