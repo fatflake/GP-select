@@ -631,7 +631,8 @@ Given one likely cannot know a priori the structure of the (potentially high-dim
 \subsection{Translation Invariant Occlusive models}
 
 \begin{figure*}[t]
-\begin{center}
+\centering
+
 %\centering
 %\begin{subfigure}[b]{.25\textwidth}
 %\includegraphics[width=\textwidth]{figs/inveca/dataSamples.png}
@@ -649,6 +650,7 @@ Given one likely cannot know a priori the structure of the (potentially high-dim
 %\end{subfigure}
 
 %\includegraphics[width=\textwidth]{figs/inveca/locationHist.png}
+
 \caption{Results of GP-select on the Translation Invariant model.
 \textbf{A} shows some example from the dataset.
 \textbf{B} shows the learned components and their masks. The first column shows the mask of each component, the second column shows the learned feature representations, and the third column only shows the area of the learned components with mask higher than $0.5$.
@@ -656,7 +658,6 @@ Given one likely cannot know a priori the structure of the (potentially high-dim
 \textbf{D} shows the convergence of the pseudo log-likelihood [of the model parameters learned at each EM iteration] for the both selection functions over all EM iterations. Figures \textbf{C} and \textbf{D} demonstrate the matching inference performance of both selection functions. % used for inference in this model: GP-select and the original hand-crafted one.
 }
 \label{fig:inveca}
-\end{center}
 \end{figure*}
 
 Now that we have verified that GP-select can be applied to diverse graphical models and converge to ground-truth parameters, we consider a more challenging model that addresses a problem in the computer vision domain.
