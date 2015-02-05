@@ -706,7 +706,8 @@ Furthermore, the pseudo-log likelihood for both selection functions are shown in
 % FIXME TODO ---- pseudo like
 
 Because GP selection avoids explicitly scanning through the whole image, the time of inference is significantly faster than the original selection function. For the GP-selection function, which was applied without any approximations or tricks to enhance speed, inferring the whole dataset (2000 images) required $22.1$ seconds on a single CPU core, while the inference with the original selection function required $1830.9$ seconds on a single CPU core.
-In the original work, the hand-crafted selection function was implemented with GPU acceleration and parallelization.
+In the original work, the hand-crafted selection function was implemented with GPU acceleration and parallelization. The time for fitting a normal GP regression model is 390 seconds (10 iterations), while fitting a GP with incomplete choleksy takes 194 seconds.
+
 
 
 % potential extension multiple output GP.
@@ -729,8 +730,7 @@ distribution over the latents.
 The significant benefit we show empirically is that by learning the selection function in a general and flexible nonparametric way, we can avoid using expensive hand-engineered selection functions.
 Cost reduction is both in terms of required expertise in the problem domain, and computation time in identifying the relevant latent variables.
 Inference using our approach required 22.1 seconds on a single CPU core, versus  1830.9 seconds with the original hand-crafted function 
-for the complex hierarchical model of \citep{DaiLucke2014}.
-
+for the complex hierarchical model of \citep{DaiLucke2014}. 
 
 A major area where further performance gains might be expected is in
 improving computational performance, since we expect the greatest
