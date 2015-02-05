@@ -296,10 +296,7 @@ The \textit{general selection function}  can be expressed as
 \mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
 \end{equation}
 %
-So far, the form of $\mathcal{S}_h(\vec{y}^{(n)})$ has been
-a hand-engineered deterministic function derived based on the structure of the considered model
-(see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
-BornscheinEtAl2013, SheikhEtAl2014}).
+% MOVED PART ABOUT SELECTION TO NEXT SEC XXX
 
 %Using such subsets $\mathcal{K}_n$, Equation~\eqref{eq:sel-post} results in good approximations to the full posteriors.
 %redundant: When the set $\Kn$ fulfills the above property of containing the indices of the states with concentrated posterior mass, Equation~\eqref{eq:sel-post} is a good approximation of the full posterior.
@@ -324,7 +321,12 @@ The result of the E-step is then used to update the model parameters in the M-st
 %In this work we generalize the above approach, where instead of defining $\Sh$
 %by hand, we propose that $\Sh$ be learned in a black-box fashion based on the
 %data.
-We now generalize this approximate EM algorithm:  %for inference in graphical models
+So far, the form of the selection function $\mathcal{S}_h(\vec{y}^{(n)})$ has been
+a hand-engineered deterministic function derived based on the structure of the considered model
+(see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
+BornscheinEtAl2013, SheikhEtAl2014}).
+%
+We now generalize the selection approach:  %for inference in graphical models
 instead of predefining the form of $\Sh$ for variable selection, we want
 to learn it in a black-box and model-free way based on the data.
 %
