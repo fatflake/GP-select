@@ -574,8 +574,6 @@ The other models, algorithm using GP-select converged to the ground-truth parame
 %Hand crafted functions can do as well as exact case, as shown in papers.
 %Some sort of kernel can do as well as a selection function engineered by hand.
 
-% ------ FIXME -------- leave this??
-%\comm{remove this? bit wishy washy }
 Furthermore, we see experimentally that the composition kernel is flexible enough to subsume all other kernels, which suggests it a good choice  for general use. 
 %as the composition kernel is flexible enough to adapt to both linear and nonlinear relationships, this supports it as a reasonable general choice.
 
@@ -743,7 +741,8 @@ Furthermore, the pseudo-log likelihood for both selection functions are shown in
 % FIXME TODO ---- pseudo like
 
 Because GP selection avoids explicitly scanning through the whole image, the time of inference is significantly faster than the original selection function. For the GP-selection function, which was applied without any approximations or tricks to enhance speed, inferring the whole dataset (2000 images) required $22.1$ seconds on a single CPU core, while the inference with the original selection function required $1830.9$ seconds on a single CPU core.
-In the original work, the hand-crafted selection function was implemented with GPU acceleration and parallelization.
+In the original work, the hand-crafted selection function was implemented with GPU acceleration and parallelization. The time for fitting a normal GP regression model is 390 seconds (10 iterations), while fitting a GP with incomplete choleksy takes 194 seconds.
+
 
 
 % potential extension multiple output GP.
