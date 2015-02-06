@@ -234,6 +234,21 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-alig
 %One could try to learn a general function from Kn to R
 %But would somehow need to represent it compactly
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=.35\textwidth]{figs/graph-affinity.pdf}
+%\subfigure[Data and converged\\ solution]{\includegraphics[width=.25\textwidth]{figs/mog/learn-rbf-h2/040.png}}
+%\subfigure[GP regression\\ function]{\includegraphics[width=.21\textwidth]{figs/mog/learn-rbf-h2/GP_pred_40.png}}\\
+%\centerline{\fbox{This figure intentionally left non-blank}}
+\caption{Illustration of the affinity function for selection.
+The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ latent variable (top), 
+which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom). 
+Here, the affinity would rank variables $s_1$ and $s_3$ as being relevant for $\vec{y}^{(n)}$.
+}\label{fig:graph-affinity}
+\end{center}
+\end{figure}
+%\vspace{-.7cm}
+%
 One way of constructing a selection function %$\mathcal{S}^{(n)}$ 
 is by first ranking the latent variables according to an 
 \emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$ %^{+}$
@@ -249,7 +264,7 @@ f_h(\vec{y}^{(n)}) \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Thet
 %
 meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
 exceeds some threshold. %and is closer to zero for the rest. 
-\comm{want some reference to a graphical model here}
+See Figure~\ref{fig:graph-affinity} for a simplified illustration. 
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
@@ -338,7 +353,7 @@ The result of the E-step is then used to update the model parameters in the M-st
 %In this work we generalize the above approach, where instead of defining $\Sh$
 %by hand, we propose that $\Sh$ be learned in a black-box fashion based on the
 %data.
-In previous work, the form of the selection function $\mathcal{S}_h(\vec{y}^{(n)})$ has been
+In previous work, the form of the selection function $\mathcal{S}(\vec{y}^{(n)})$ has been
 a manually-derived deterministic function constructed based on the structure of the considered model by hand 
 (see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
 BornscheinEtAl2013, SheikhEtAl2014}).
@@ -418,7 +433,6 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 
 Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func}, 
 we call entire process \textit{GP-select}, for which an outline is shown in Algorithm 1.
-\comm{hash out and compress, add notation and structure:}
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
 %
@@ -447,19 +461,25 @@ we call entire process \textit{GP-select}, for which an outline is shown in Algo
 
 % TODO PUT ALGO HERE XXX
 \begin{algorithm}
-\caption{GP-Select as meta algorithm to accelerate inference in Expectation Maximization}
+\caption{GP-Select to accelerate inference in \\Expectation Maximization}
 \label{alg:gp-select}
-per EM iteration $t=1,\dots,T$\\
-per data point $n=1,\dots, N$\\
-1. assess importance of all latent variables, affinity\\
-    1.1. GP LOO for affinity
-2. sort and reduce indices to $H'$\\
-    2.2. include uniformly chosen indices\\
-3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
-4. compute posterior $q(\vec{s})$ on reduced $\Kn$ in E-step\\
-5. update model parameters in M-step\\ 
-6. use resulting $\langle s \rangle_{q_{t}(\vec{s})}$ for next EM iteration $t+1$\\
-..repeat
+\begin{algorithmic}
+\FOR{EM iterations $t=1,\dots,T$}\STATE{
+\vspace{-.4cm}    
+    \FOR{data point $n=1,\dots, N$}
+    \STATE{
+    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: Eq.~\eqref{eq:gp-loo}\\
+%2. sort and reduce indices to $H'$\\
+ %   2.2. include uniformly chosen indices\\
+    compute subset of relevant states $\Ss$: Eq.~\eqref{eq:sel-func}\\ % get $\Kn$ 
+%3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
+    compute truncated posterior $q_{n,t}(\vec{s})$, E-step: Eq.~\eqref{eq:sel-post}\\ % on reduced set $\Kn$
+    store $\langle \vec{s} \rangle_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
+    update model parameters in M-step\\ 
+    }\ENDFOR\\
+    update kernel hyperparams every $T^{*}$ EM iterations
+}\ENDFOR
+\end{algorithmic}
 \end{algorithm}
 
 % TODO PUT INTO ALGO ABOVE XXX
@@ -486,9 +506,9 @@ We now apply our GP-selection inference approach to five different probabilistic
 Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  latent spaces with use of the selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and select-and-sample~\citep{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
 In this set of experiments, we consider three sparse generative models (further details of which can be found in the respective publications) and perform inference with our GP-select approach instead of a hand-crafted selection function:
 %
-\comm{A, B, C??? environment for that??}
-\begin{enumerate}
-\item \textit{Binary sparse coding}:
+%\begin{enumerate}
+\begin{description}
+\item[\textbf{A.}] \textit{Binary sparse coding}:
 %
 \vspace{-.1cm}
 \begin{align}
@@ -498,7 +518,7 @@ In this set of experiments, we consider three sparse generative models (further 
 %
 where $W \in \mathrm{R}^{D \times H}$ denotes the dictionary elements and $\pi$ parameterizes the sparsity (see e.g.~\citep{HennigesEtAl2010}).
 %
-\item \textit{Spike-and-slab sparse coding}:
+\item[\textbf{B.}] \textit{Spike-and-slab sparse coding}:
 \vspace{-.2cm}
 \begin{align}
 \text{latents: } \,\,\,\vec{s} = \vec{b}\odot\vec{z} \sim Bern(\vec{b} | \pi) \odot \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h)\nonumber\\
@@ -507,7 +527,7 @@ where $W \in \mathrm{R}^{D \times H}$ denotes the dictionary elements and $\pi$ 
 where the point-wise multiplication of the two latent vectors, i.e., $(\vec{s}\odot\vec{z})_h = s_h\,z_h$
 generates a `spike-and-slab' distributed variable ($\vec{s}\odot\vec{z}$), that has either continuous values or exact zero entries (e.g. \citep{TitsiasGredilla2011,GoodfellowEtAl2013,SheikhEtAl2014}).
 %
-\item \textit{Nonlinear Spike-and-slab sparse coding}:
+\item[\textbf{C.}] \textit{Nonlinear Spike-and-slab sparse coding}:
 \vspace{-.2cm}
 \begin{align}\label{eq:ssmca}
 \text{latents: } \,\,\,\vec{s} = \vec{b}\odot\vec{z} &\sim Bern(\vec{b} | \pi) \odot \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma), \nonumber\\
@@ -515,39 +535,40 @@ generates a `spike-and-slab' distributed variable ($\vec{s}\odot\vec{z}$), that 
 \end{align}
 for which the mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max_{h}\{s_h\vec{W}_{h}\}$, where $\max_{h}$ is a nonlinearity that considers all $H$ latent components and takes the $h$ yielding the maximum value for $s_h\vec{W}_{h}$ (\citep{LuckeSahani2008,SheltonEtAl2012,BornscheinEtAl2013}), instead of centering the data at the linear combination of $\sum_h s_h\vec{W}_h=W\vec{s}$.
 %
-\end{enumerate}
+\end{description}
+%\end{enumerate}
 
 In the above models, inference with the truncated posterior of Equation~\eqref{eq:sel-post} using manually-derived selections has yielded results as good as or more robust than exact inference (converging less frequently to local optima than exact inference, see the citations corresponding to the models).
-For models [1] and [3], the hand-crafted selection function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and 
+For models \textbf{A} and \textbf{C}, the hand-crafted selection function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and 
 each data point $\vec{y}^{(n)}$: 
 $  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$.
 %, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
-For model [2], the hand-crafted selection function was the data likelihood given a singleton state:
+For model \textbf{B}, the hand-crafted selection function was the data likelihood given a singleton state:
  $\mathcal{S}_h(\vec{y}^{(n)}) = p(\vec{y}^{(n)} | \vec{s}=\vec{s}_h, \Theta)$, 
 %
 where $\vec{s}_h$ represents a singleton state in which only the entry $h$ is non-zero
 %, and it does not take into account  the probability of the state itself  (i.e., $p(\vec{s}_h\,|\,\Theta)$).
 %repeat: We will train GP regression for our flexible selection approach, where, for all models, the targets of the training data is the expected values of the latents.
 
-We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models [1-3]:
+We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models \textbf{A-C}:
 %the dataset consists of
-$N$ images of randomly selected overlapping 'bars' with varying intensities for models [2] and [3] and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$.
+$N$ images of randomly selected overlapping 'bars' with varying intensities for models \textbf{B} and \textbf{C} and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$ (e.g. following the spike-and-slab prior).
 On average, each data point contains $2$ bars (i.e. ground-truth is $H'=2$, but we allow the selection function to choose $H'=5$ per data point).
 
-For each of these models, we run 10 repetitions the following set of experiments: (1.) selection using the respective hand-crafted selection function,
-(2.) GP-selection using a linear covariance kernel, (3.) GP-selection using an RBF covariance kernel, and (4.) GP-selection using a composition kernel of RBF, linear, bias and white noise kernels.
+For each of these models, we run 10 repetitions the following set of experiments: (1) selection using the respective hand-crafted selection function,
+(2) GP-selection using a linear covariance kernel, (3) GP-selection using an RBF covariance kernel, and (4) GP-selection using a composition kernel of RBF, linear, bias and white noise kernels.
 %silly: The latter has been shown to be particularly adaptive to data, i.e. generally when there is no linear trend in the data, the variance of that kernel would go to zero.
 % TODO
-As hyperparameters of kernels are learned, the composition kernel (4.) can adapt itself to the data and only use the kernel components required. 
+As hyperparameters of kernels are learned, the composition kernel (4) can adapt itself to the data and only use the kernel components required. 
 See the book by Rasmussen~\citep{RasmussenGPbook} for a discussion on kernel selection.
 Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
 As inference with the hand-crafted selection functions has already been shown to converge to extract ground-truth parameters, we do not explicitly compare with this case.
-For models [1] and [2], inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractible in model [3], inference was performed by drawing Gibbs samples from the truncated space.
+For models \textbf{A} and \textbf{B}, inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractible in model \textbf{C}, inference was performed by drawing Gibbs samples from the truncated space.
 The number of selected latent variables was set to $H'=5$.
 %
 We run all models until convergence. %these experiments for $30$ EM iterations for models [1] and [3] and for $60$ iterations for model [2].
 
-\begin{figure}[h]
+\begin{figure}[t]
 \begin{center}
 \includegraphics[width=.45\textwidth]{figs/sparsecoding/bars-test.pdf}
 %\subfigure[Data and converged\\ solution]{\includegraphics[width=.25\textwidth]{figs/mog/learn-rbf-h2/040.png}}
@@ -564,17 +585,17 @@ Bottom row: Converged dictionary elements $W$ learned by the GP-select with $H'=
 
 Results are shown in Figure~\ref{fig:sparse}.
 In all experiments, the GP-selection approach could infer ground-truth parameters as well as the hand-crafted function.
-For models where the cosine similarity was used (in [1] and [3]), GP regression with a linear kernel quickly learned the ground-truth parameters, and hence fewer iterations of EM were necessary.
+For models where the cosine similarity was used (in \textbf{A} and \textbf{C}), GP regression with a linear kernel quickly learned the ground-truth parameters, and hence fewer iterations of EM were necessary.
 In other words, even without providing GP-selection function explicit weights $W$ as necessary in the hand-crafted function, GP regression learned a similar enough function to quickly yield identical results.
-Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of [2]), only GP regression with an RBF kernel was able to recover ground-truth parameters.
-In this case, (model [2]) GP-select using an RBF kernel recovered the ground-truth 'bars' in $7$ out of $10$ repetitions, whereas the hand-crafted function recovered the bases in $8$ instances.
+Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of \textbf{B}), only GP regression with an RBF kernel was able to recover ground-truth parameters.
+In this case, (model \textbf{B}) GP-select using an RBF kernel recovered the ground-truth 'bars' in $7$ out of $10$ repetitions, whereas the hand-crafted function recovered the bases in $8$ instances.
 The other models, algorithm using GP-select converged to the ground-truth parameters with the same average frequency as the hand-crafted functions.
 %This suggests difficulty in predicting which kernel will work a priori.
 
 %Hand crafted functions can do as well as exact case, as shown in papers.
 %Some sort of kernel can do as well as a selection function engineered by hand.
 
-Furthermore, we see experimentally that the composition kernel is flexible enough to subsume all other kernels, which suggests it a good choice  for general use. 
+Furthermore, we see empirically that the composition kernel is flexible enough to subsume all other kernels, which suggests it a good choice  for general use. 
 %as the composition kernel is flexible enough to adapt to both linear and nonlinear relationships, this supports it as a reasonable general choice.
 
 
