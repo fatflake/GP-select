@@ -730,32 +730,32 @@ Such models are particularly difficult to optimize because they must consider mu
 %Especially considering multiple objects in a scene, the complexity of latent space becomes the number of locations to the power of the number of objects.
 Inference in such a massive latent space heavily relies on the idea of variable selection to reduce the number of candidate objects and locations. In particular, hand-engineered pre-selection functions that consider translational invariance have been successfully applied to this type of model~\citep{DaiLucke2012b,DaiLucke2014,DaiEtAl2013}.
 %
-For this model, the reduced subset has been hand-constructed as follows: first, the candidate locations of all the objects in the model are predicted, and then a subset of candidate objects that might appear in the image are selected according to the predicted locations.  Next, the subset of states $\Kn$ is constructed according to the combinatorics of the different locations of all the candidate objects.
+For this model, the reduced subset has been constructed as follows: first, the candidate locations of all the objects in the model are predicted, and then a subset of candidate objects that might appear in the image are selected according to the predicted locations.  Next, the subset of states $\Kn$ is constructed according to the combinatorics of the different locations of all the candidate objects.
 % --- Then the true posterior probabilities are estimated for this preselected latent subspace, while considering the posterior probabilities in the rest space to be zero.
 The posterior distribution is then computed following Equation~\eqref{eq:sel-post}.
 
-This hand-engineered system is costly: the selection function has parameters which need to be hand-tuned, e.g., the number of representative features and %, which leads to problems when this number is either too big or too small.
+This selection system is very costly: the selection function has parameters which need to be hand-tuned, e.g., the number of representative features, and %, which leads to problems when this number is either too big or too small.
 it needs to scan through the entire image, considering all possible locations, which becomes computationally demanding for large-scale experiments.
 %
 %In this experiment, we follow a similar design to use a GP regression model as a general selection. Different from the applications in previous models,
 In translation invariant models, instead of predicting the existence of a component, the selection function has to predict all possible locations a component could be.
 To maximally exploit the capabilities of GP-selection function, we directly use the GP regression model to \textit{predict the possible locations} of a component \textit{without introducing any knowledge of translation invariance} into the selection function. In this work, a GP regression model is fitted from the input image to marginal posterior probabilities of individual components appearing at all possible locations. Therefore, the input to the GP-selection function is the image to be inferred and the output is a score for each possible location of each component in the model.
-For example, for learning $10$ components in a $D=30\times 30$ pixel image patch, the output dimensionality of GP-select is $9000$.
+For example, when learning $10$ components in a $D=30\times 30$ pixel image patch, the output dimensionality of GP-select is $9000$.
 Although this initially seems a challenging computation for GP-selection, this is not the case given GP models scale linearly with output dimensionality.
-The inference of components' locations with GP-select is significantly faster than the hand-craft function in the original work, as it avoid explicitly scanning through the image.
+The inference of components' locations with GP-select is significantly faster than the selection function in the original work, as it avoids explicitly scanning through the image.
 
-The additional price we have to pay for an automatic selection function like GP-select is the computation of adjusting its parameters. %Unfortunately, the computation of updating the parameters of a GP regression model is relatively expensive. 
+The additional price we have to pay for an automatic selection function like GP-select is the computational cost of adjusting its parameters. %Unfortunately, the computation of updating the parameters of a GP regression model is relatively expensive. 
 There are many options for reducing the cost of the parameter fitting. 
-First, we approximate the full Gram matrix by an incomplete Cholesky approximation~\cite{FinSch01}
+First, we may approximate the full Gram matrix by an incomplete Cholesky approximation~\cite{FinSch01}.
 % XXX
 % XXX
 %
 %We follow the approach of \cite{FinSch01}
 %\citep[][section 5]{SonGreBicLowGue11} 
 %for the low-rank approximation of the inversion of covariance matrix (incomplete Choleksy decomposition). 
-Second, we reduce the frequency of kernel hyperparameter updates to only every $T^*=5$ EM iterations.
+Second, we may reduce the frequency of kernel hyperparameter updates to only every $T^*=5$ EM iterations.
 % to correspondingly reduce the average time by a factor of $5$.
-We expect the Cholesky approximation plus infrequent updates to result in a speedup as follows: a factor of five speedup for infrequent updates, and a factor of $(N-D)^2$ speedup from the Cholesky, where $D$ is the final dimension of the Cholesky and $N$ is the number of original data points.
+We expect the Cholesky approximation plus infrequent updates have the following benefits: a factor of five speedup for infrequent updates, and a factor of $(N-Q)^2$ speedup from incomplete Cholesky, where $Q$ is the rank of the Cholesky approximation and $N$ is the number of original data points.
 
 %Intuitively, using GP-select for this problem makes sense, as objects are typically not uniformly distributed in a scene and with limited  observations we often can give a good rough prediction of object locations.
 %Approaches such as data-driven location are based entirely on this idea, going further to convert a detection problem into an information retrieval problem, and recently achieving the state-of-art performance on object detection \citep{Rodriguez-SerranoL13}.
@@ -763,25 +763,27 @@ We expect the Cholesky approximation plus infrequent updates to result in a spee
 \textbf{COIL Data.}
 We apply our GP-selection function to the Invariant Exclusive Component Analysis (InvECA) model~\citep{DaiEtAl2013}.
 We consider an image dataset used in previous work: data were generated using objects from the COIL-100 image dataset \citep{coil100}, taking $16$ different objects, downscaled to $D=10 \times 10$ pixels and segmented out from the black background.
-A given image was generated by randomly selecting a subset of the $16$ objects, where each object has a probability of $0.2$ to appear.
+A given image was generated by randomly selecting a subset of the $16$ objects, where each object has a probability of $0.2$ of appearing.
 The appearing objects were placed at random positions on a $30 \times 30$ black image.
 When the objects overlap, they occlude each other with a different random depth order for each image.
 In total, $N=2000$ images were generated in the dataset (examples shown in Figure~\ref{fig:inveca}\textbf{A}).
 
-With the InvECA model, the task here is to discover the visual components (i.e. the images of $16$ objects) from the image set without any label information. We compare the results of learning with difference selection functions: the hand-craft selection function used in the original work, GP-select updated every iteration, GP-select updated every 5 iterations, and GP-select with incomplete Cholesky decomposition approximation updated every iteration. In these experiments, the parameters of GP-select are optimized at the end of each EM iteration, using a maximum of $20$ gradient updates.
+With the InvECA model, the task  is to discover the visual components (i.e. the images of $16$ objects) from the image set without any label information. We compare the results of learning with various selection functions: the hand-crafted selection function used in the original work, GP-select updated every iteration, GP-select updated every 5 iterations, and GP-select with incomplete Cholesky decomposition updated every iteration (in this manner we isolate the improvements due to Cholesky from those due to infrequent updates). In these experiments, the parameters of GP-select are optimized at the end of each EM iteration, using a maximum of $20$ gradient updates.
 The number of objects sought to be learned is $H=20$ and preselected objects was $H'=5$.
 
 The results are shown in Figure~\ref{fig:inveca}. All the selection functions successfully recover all the objects in the image set. The learned object representation with GP-select are shown in Figure~\ref{fig:inveca}\textbf{B}.
-Four additional components developed into representations, all of which have very low mask values,  which can easily tell from other true components.
+Four additional components developed into representations, all of which have very low mask values,  which can easily be distinguished from other true components.
 In order to quantify the accuracy of the GP-select approach, we collected the GP-selection after learning, and applied the GP selection function to the whole dataset again, then compared with the ground-truth location of all the objects in the datasets.
 %
 Then, we compute the accuracy of the predicted locations comparing the distance from the location of the top candidate and the ground-truth location. See Figure~\ref{fig:inveca}\textbf{C} for a histogram of the distances versus accuracy for all selection functions. Note that the percentages in the histogram are plotted in log scale.
-As a comparison, we also estimated the prediction accuracy of the original hand-craft selection function. Both selection functions can very accurately predict the locations of all the objects in the dataset.
-Furthermore, the pseudo-log likelihood \cite{DaiEtAl2013} for both selection functions are shown in Figure~\ref{fig:inveca}\textbf{D}.
+As a comparison, we also estimated the prediction accuracy of the original selection function. Both selection functions can very accurately predict the locations of all the objects in the dataset.
+The pseudo-log likelihood \cite{DaiEtAl2013} for both selection functions are shown in Figure~\ref{fig:inveca}\textbf{D}.
 % FIXME TODO ---- pseudo like
 
-As GP-select avoids explicitly scanning through the image, the time for inferring the location of an object is significantly faster than the hand-craft function. GP-select requires $22.1$ seconds on a single CPU core to infer the locations of objects across the whole image set, while the hand-crafted function requires $183.9$ seconds. In the original work, the hand-crafted selection function was implemented with GPU acceleration and parallelization. 
-However, for GP-select we must compute the kernel hyperparameters, thus we took several preliminary measures to reduce these costs. In this experiment, updating the parameters of GP-select with $10$ gradient steps took about $390$ seconds. We employed the incomplete Cholesky decomposition approximation while inverting the covariance matrix. It reduced the computational time of updating the GP-select parameters to $194$ seconds. We also tried to update the GP-select parameters only every 5 iterations. This reduced the average time by one fifth.
+As GP-select avoids explicitly scanning through the image, the time for inferring the location of an object is significantly faster than the hand-craft function. GP-select requires $22.1$ seconds on a single CPU core to infer the locations of objects across the whole image set, while the hand-crafted function requires $1830.9$ seconds. In the original work, the  selection function was implemented with GPU acceleration and parallelization. 
+However, for GP-select we must compute the kernel hyperparameters, 
+which necessitates strategies for reducing computational cost.
+ In this experiment, updating the parameters of GP-select with $10$ gradient steps took about $390$ seconds for the full-rank kernel matrix. When we employed the incomplete Cholesky decomposition while inverting the covariance matrix, compute time was reduced to $194$ seconds. We also  updated the GP-select parameters  every 5 iterations, thus reducing the average time by one fifth.
 
 
 % potential extension multiple output GP.
