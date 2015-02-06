@@ -730,10 +730,10 @@ For example, for learning $10$ components in a $D=30\times 30$ pixel image patch
 Although this initially seems a challenging computation for GP-selection, this is not the case given GP models scale linearly with output dimensionality.
 The inference of components' locations with GP-select is significantly faster than the hand-craft function in the original work, as it avoid explicitly scanning through the image.
 
+The additional price we have to pay for an automatic selection function like GP-select is the computation of adjusting its parameters. Unfortunately, the computation of updating the parameters of a GP regression model is relatively expensive. There are many options for reducing the cost of the parameter fitting. We follow the approach of \citep[][section 5]{SonGreBicLowGue11} for the low-rank approximation of the inversion of covariance matrix (incomplete Choleksy decomposition). We also try to reduce the frequency of updating the GP-select parameters by every 5 iterations. This can reduce the average time by one fifth. These different options are tested in the experimental part.
+
 %Intuitively, using GP-select for this problem makes sense, as objects are typically not uniformly distributed in a scene and with limited  observations we often can give a good rough prediction of object locations.
 %Approaches such as data-driven location are based entirely on this idea, going further to convert a detection problem into an information retrieval problem, and recently achieving the state-of-art performance on object detection \citep{Rodriguez-SerranoL13}.
-
-
 
 \textbf{COIL Data.}
 We apply our GP-selection function to the Invariant Exclusive Component Analysis (InvECA) model~\citep{DaiEtAl2013}.
@@ -744,10 +744,9 @@ When the objects overlap, they occlude each other with a different random depth 
 In total, $N=2000$ images were generated in the dataset (examples shown in Figure~\ref{fig:inveca}\textbf{A}).
 
 With the InvECA model, the task here is to discover the visual components (i.e. the images of $16$ objects) from the image set without any label information. We compare the results of learning with difference selection functions: the hand-craft selection function used in the original work, GP-select updated every iteration, GP-select updated every 5 iterations, and GP-select with incomplete Cholesky decomposition approximation updated every iteration. In these experiments, the parameters of GP-select are optimized at the end of each EM iteration, using a maximum of $20$ gradient updates.
-All images in the training set are used and the marginal truncated posterior probabilities are denoted $p(l_h | \vec{y}^{(n)})$, where $l_h$ is the location of the $h$ component. The number of objects sought to be learned is $H=20$ and preselected objects was $H'=5$.
+The number of objects sought to be learned is $H=20$ and preselected objects was $H'=5$.
 
-Results are shown in Figure~\ref{fig:inveca}.
-GP-select successfully recovers all objects in the dataset, all of which are shown with their masks in Figure~\ref{fig:inveca}\textbf{B}.
+The results are shown in Figure~\ref{fig:inveca}. All the selection functions successfully recover all the objects in the image set. The learned object representation with GP-select are shown in Figure~\ref{fig:inveca}\textbf{B}.
 Four additional components developed into representations, all of which have very low mask values,  which can easily tell from other true components.
 In order to quantify the accuracy of our GP-selection function, we collected the GP-selection after learning, and applied the GP selection function to the whole dataset again, then compared with the ground-truth location of all the objects in the datasets.
 %
