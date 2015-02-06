@@ -14,8 +14,8 @@
    width="744.09448"
    height="1052.3622"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="gp-sel_bars-test.svg">
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="bars-test.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -26,14 +26,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1366"
-     inkscape:window-height="672"
+     inkscape:window-height="692"
      id="namedview189"
      showgrid="false"
      inkscape:zoom="1.0000488"
-     inkscape:cx="209.9446"
+     inkscape:cx="211.9445"
      inkscape:cy="698.94579"
      inkscape:window-x="0"
-     inkscape:window-y="28"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -814,7 +814,7 @@
            x="43.726582"
            y="431.28394"
            id="tspan4929-33"
-           style="font-size:18px">hand-crafted</tspan></text>
+           style="font-size:18px">hand-derived</tspan></text>
     </g>
     <g
        transform="matrix(0,-1,1,0,-489.97011,593.28786)"
@@ -840,7 +840,7 @@
            x="-43.188683"
            y="585.59241"
            id="tspan4929-33-9"
-           style="font-size:18px">GP regression</tspan></text>
+           style="font-size:18px">GP-select</tspan></text>
     </g>
   </g>
 </svg>
