@@ -240,9 +240,10 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-alig
 %\subfigure[Data and converged\\ solution]{\includegraphics[width=.25\textwidth]{figs/mog/learn-rbf-h2/040.png}}
 %\subfigure[GP regression\\ function]{\includegraphics[width=.21\textwidth]{figs/mog/learn-rbf-h2/GP_pred_40.png}}\\
 %\centerline{\fbox{This figure intentionally left non-blank}}
-\caption{Illustration of the affinity function in ET.
-The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ variable (top), 
-which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom).
+\caption{Illustration of the affinity function for selection.
+The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ latent variable (top), 
+which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom). 
+Here, the affinity would rank variables $s_1$ and $s_3$ as being relevant for $\vec{y}^{(n)}$.
 }\label{fig:graph-affinity}
 \end{center}
 \end{figure}
