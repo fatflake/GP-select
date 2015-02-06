@@ -393,7 +393,7 @@ Thus, prior to each E-step in each EM iteration, within each calculation of the 
 Specifically, we train on $p_h$ from the previous EM iteration (where $p_h$ is equal to $\langle s_h \rangle$), for 
 training data of 
 %$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}_{\text{prev-it}}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
-$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
+$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q_n(\vec{s})}) | n = 1,\dots, N \}$.
 %
 %output of the previous iteration of the % EM parameter inference algorithm, $q(\vec{S})$, or rather, the expectations of
 %This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
@@ -474,7 +474,7 @@ we call entire process \textit{GP-select}, for which an outline is shown in Algo
     compute subset of relevant states $\Ss$: Eq.~\eqref{eq:sel-func}\\ % get $\Kn$ 
 %3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
     compute truncated posterior $q_{n,t}(\vec{s})$, E-step: Eq.~\eqref{eq:sel-post}\\ % on reduced set $\Kn$
-    store $\langle \vec{s} \rangle_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
+    store $\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
     update model parameters in M-step\\ 
     }\ENDFOR\\
     update kernel hyperparams every $T^{*}$ EM iterations
@@ -502,8 +502,8 @@ We use the expectations of $\vec{s}$ from the previous EM iteration as the targe
 We now apply our GP-selection inference approach to five different probabilistic generative models.
 
 \subsection{Sparse coding models}
-Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  latent spaces with use of the selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and select-and-sample~\citep{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
-In this set of experiments, we consider three sparse generative models (further details of which can be found in the respective publications) and perform inference with our GP-select approach instead of a hand-crafted selection function:
+Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  latent spaces with use of the selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and selection with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
+In these experiments, we consider three sparse generative models (further details of which can be found in the respective publications) and perform inference with our GP-select approach instead of a hand-crafted selection function:
 %
 %\begin{enumerate}
 \begin{description}
@@ -517,7 +517,8 @@ In this set of experiments, we consider three sparse generative models (further 
 %
 where $W \in \mathrm{R}^{D \times H}$ denotes the dictionary elements and $\pi$ parameterizes the sparsity (see e.g.~\citep{HennigesEtAl2010}).
 %\
-\vspace{.4cm}
+% XXX 
+%\vspace{.4cm}
 \item[\textbf{B.}] \textit{Spike-and-slab sparse coding}:
 \vspace{-.2cm}
 \begin{align}
@@ -556,7 +557,7 @@ $N$ images of randomly selected overlapping 'bars' with varying intensities for 
 On average, each data point contains $2$ bars (i.e. ground-truth is $H'=2$, but we allow the selection function to choose $H'=5$ per data point).
 
 For each of these models, we run 10 repetitions the following set of experiments: (1) selection using the respective hand-crafted selection function,
-(2) GP-selection using a linear covariance kernel, (3) GP-selection using an RBF covariance kernel, and (4) GP-selection using a composition kernel of RBF, linear, bias and white noise kernels.
+(2) GP-select using a linear covariance kernel, (3) GP-select using an RBF covariance kernel, and (4) GP-select using a composition kernel of RBF, linear, bias and white noise kernels.
 %silly: The latter has been shown to be particularly adaptive to data, i.e. generally when there is no linear trend in the data, the variance of that kernel would go to zero.
 % TODO
 As hyperparameters of kernels are learned, the composition kernel (4) can adapt itself to the data and only use the kernel components required. 
@@ -601,7 +602,7 @@ Furthermore, we see empirically that the composition kernel is flexible enough t
 
 \subsection{Gaussian mixture model}
 %
-Next, we apply GP-selection to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.
+Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.
 %To illustrate the idea and benefit of this approach, we consider a simple motivating example: the problem setting posed by Gaussian mixture models.
 The model of the data likelihood is:
 %
@@ -610,7 +611,7 @@ The model of the data likelihood is:
 p(\vec{y}^{(n)} | \mu_c, \sigma_c, \pi) = \sum_{c=1}^{C} \mathcal{N}(\vec{y}^{(n)}; \mu_c, \sigma_c) \, \pi_c
 \end{equation}
 %
-where $C$ is the number of mixture components, the task is assign each data point to a cluster.
+where $C$ is the number of mixture components, the task is assign each data point to it's latent cluster.
 %%%  infer from which cluster each data point originates.
 %%% The latent distribution gives the prior probability of a data point coming from each cluster $c$, $p(s^{(n)} = c | \pi) = \pi_c$, and data from the $c$th cluster are distributed according to the $c$th component, $p (\vec{y}^{(n)} | s^{(n)} = c) = p_c(\vec{y}^{(n)})$.
 %%% Once a data point $\vec{y}^{(n)}$ is observed, the posterior probability distribution for the cluster it belongs to is
@@ -621,14 +622,14 @@ where $C$ is the number of mixture components, the task is assign each data poin
 %% \end{equation}
 %
 
-The training data used for GP regression was $\mathcal{D} = \{ (y^{(n)}, \vec{r}^{(n)}) | n = 1, \dots, N \}$, where the targets were cluster responsibilities for all data points, $\vec{r}$.
-With this, we apply our GP-select approach to this model, computing the selection function according to Equation~\eqref{eq:sel-func} with affinity $f$ defined by a GP~\eqref{eq:gp-loo} 
+The training data used for GP regression was $\mathcal{D} = \{ (y^{(n)}, \langle \vec{r}\rangle_{q_{n}}^{(n)}) | n = 1, \dots, N \}$, where the targets were the expected cluster responsibilities (posterior probability distribution for each cluster) for all data points, $\langle \vec{r} \rangle$.
+With this, we apply our GP-select approach to this model, computing the selection function according to Equation~\eqref{eq:sel-func} with affinity $f$ defined by GP regression~\eqref{eq:gp-loo} 
 and following the approximate EM approach as in the previous experiments.
 %%% by applying Equation~\eqref{eq:gp-sel-func} to compute the posterior distribution in~\eqref{eq:mog-post}.
 %
 %Although the increase in computational efficiency by selecting a reduced set of $K$ mixture components would only be e number of clusters considered to be in the data is very large,
 % Depending on the data
-In these experiments we consider three scenarios for EM learning of the data in Equation~\eqref{eq:mog}: GP-selection with an RBF covariance kernel and a linear covariance kernel.%, and the composition kernel used in the sparse coding experiments (RBF, linear, bias, and white).
+In these experiments we consider three scenarios for EM learning of the data likelihood in Equation~\eqref{eq:mog}: GP-select with an RBF covariance kernel and a linear covariance kernel.%, and the composition kernel used in the sparse coding experiments (RBF, linear, bias, and white).
 %
 %, where $r_c^{(n)}$ is the responsibility of the $k$th Gaussian for the $n$th data point, $y^{(n)}$.
 %%% With this, we calculate the GP predictions following Equations~\eqref{eq:gp-sel-func} and use the prediction size to select which $c$ clusters to include in the normalization in the calculation of the responsibilities $\vec{r}$ (where $\vec{S}$ is substituted with $\vec{r}$).
