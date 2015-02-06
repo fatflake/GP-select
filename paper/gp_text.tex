@@ -6,7 +6,7 @@
 
 \begin{abstract}
 We propose a nonparametric procedure to achieve fast inference in generative graphical models when the number of latent states is very large.
- The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and using this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally unfeasible.
+ The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and using this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally infeasible.
 We learn the selection function entirely from the observed data and current EM state via Gaussian process regression: this is by contrast with earlier approaches, where selection functions were manually-designed for each problem setting.
 We show our approach to perform as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method,  at a far lower computational cost.
 
@@ -108,11 +108,11 @@ We show that GP-select can produce results with equal performance to the respect
 %
 Interestingly, we find it can be essential to use nonlinear GP regression
 in the spike-and-slab case, and that simple linear regression is not
-sufficiently flexible in modelling the posterior shape.
+sufficiently flexible in modeling the posterior shape.
 %
 Second, we illustrate GP-select on a simple Gaussian mixture model,
 where we can explicitly visualize the form of the learned regression function.
-We find that even for a simple model, it can be be essental to learn a nonlinear mapping.
+We find that even for a simple model, it can be be essential to learn a nonlinear mapping.
 %this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
 %
 Finally, we present results
@@ -405,7 +405,7 @@ $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q_n(\vec{s})}) | 
 %output of the previous iteration of the % EM parameter inference algorithm, $q(\vec{S})$, or rather, the expectations of
 %This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
 In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec{s})}$ are initialized randomly;
-in each subsequent EM iteration, the true expecations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
+in each subsequent EM iteration, the true expectations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
 The hyperparameters of the kernel are optimized by maximum likelihood every $T^*$ EM iterations.
 
 For each data point $n$ and latent variable $h$ we compute the predicted mean of the GP by leaving 
@@ -572,7 +572,7 @@ As hyperparameters of kernels are learned, the composition kernel (4) can adapt 
 See the book by Rasmussen~\citep{RasmussenGPbook} for a discussion on kernel selection.
 Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
 As inference with the hand-crafted selection functions has already been shown to converge to extract ground-truth parameters, we do not explicitly compare with this case.
-For models \textbf{A} and \textbf{B}, inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractible in model \textbf{C}, inference was performed by drawing Gibbs samples from the truncated space.
+For models \textbf{A} and \textbf{B}, inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractable in model \textbf{C}, inference was performed by drawing Gibbs samples from the truncated space.
 %AG: you already made the point below.
 %The number of selected latent variables was set to $H'=5$.
 %
@@ -673,7 +673,7 @@ The RBF kernel cluster assignments remained in the optimal solution even with nu
 %The purpose of these experiments was for easy visualization of the sele $2$-dimensional plots
 These experiments demonstrate that the selection function needs to be flexible even
 for very simple models, and that nonlinear selection functions are an essential tool
-even in such appaarently straightforward cases.
+even in such apparently straightforward cases.
 
 
 
