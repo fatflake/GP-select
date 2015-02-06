@@ -50,7 +50,7 @@ This property is observed to hold in many visual data and general pattern recogn
 The general idea of aiding inference in graphical models by
 learning a function that maps from the observed data to
 a property of the latent variables is quite old, dating back at least to the
-Helmholtz machine and its bottom-up connections trained using the wake-sleep
+Helmholtz machine~\cite{Dayan95thehelmholtz} and its bottom-up connections trained using the wake-sleep
 algorithm \citep{HintonEtAl1995}.
 More recently, the idea has surfaced in the context of learning variational distributions with neural networks~\citep{WellingICML2014}.
 A two-stage inference has furthermore been discussed in the context of
@@ -85,7 +85,7 @@ also be applied. The main advantage of GPs
 is that they have an analytic one-shot learning procedure, and that learning different
 functions based on the same inputs is computationally cheap, which makes adaptive learning
 of a changing target function efficient. We term this part of our approach
-\textit{GP-selection}.
+\textit{GP-select}.
 Our nonparametric generalization of  ET may be applied as a black-box
 meta algorithm for accelerating inference in  generative graphical models,
 with no expert knowledge required.
@@ -96,24 +96,25 @@ with no expert knowledge required.
 %Can probably add some more here if needed
 
 
-We have applied GP-selection in a number of experimental benchmarks.
+We have applied GP-select in a number of experimental benchmarks.
 First, we considered the case of sparse coding models (binary sparse coding,
 spike-and-slab, nonlinear spike-and-slab), where the relationship between the
 observed and latent variables is known to be complex and nonlinear.\footnote{Note that
- even
-when linear relations exist between the latents and outputs, a nonlinear
+ even when linear relations exist between the latents and outputs, a nonlinear
 regression may still be necessary in finding relevant variables,
 as a result of explaining away.}
-We show that GP-selection can produce results with equal performance to the respective manually-derived selection functions.
-Interestingly,
-we find it can be essential to use nonlinear GP regression
+%
+We show that GP-select can produce results with equal performance to the respective manually-derived selection functions.
+%
+Interestingly, we find it can be essential to use nonlinear GP regression
 in the spike-and-slab case, and that simple linear regression is not
 sufficiently flexible in modelling the posterior shape.
-Second, we illustrate GP-selection on a simple Gaussian mixture
-model,
-where we explicitly show the form of the learned regression function: this matches
-well with our expectations for the model, and again reveals that it may be essential
-to learn a nonlinear mapping.
+%
+Second, we illustrate GP-select on a simple Gaussian mixture model,
+where we can explicitly visualize the form of the learned regression function.
+We find that even for a simple model, it can be be essental to learn a nonlinear mapping.
+%this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
+%
 Finally, we present results
 for a recently published hierarchical model for  translation invariant occlusion components analysis
 \citep{DaiLucke2014}.
@@ -135,20 +136,20 @@ to implement and having a far lower computational cost.
 %
 \textbf{Notation.}
 %Notation throughout the paper will be as follows.
-We denote the observed data by the matrix $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where each vector $\vec{y}^{(n)} = ( y_1^{(n)}, \dots, y_D^{(n)})^\mathrm{T}$ is the $n$th observation 
+We denote the observed data by the $D\times N$ matrix $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where each vector $\vec{y}^{(n)} = ( y_1^{(n)}, \dots, y_D^{(n)})^\mathrm{T}$ is the $n$th observation 
 in a $D$-dimensional space.
 Similarly we define corresponding 
 binary latent variables\footnote{We restrict ourselves to binary latent variables here, though
 discrete variables with higher cardinality can easily be used by
 converting them into binary variables.} 
-by the $H \times N$ matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{N \times H}$ 
+by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{H \times N}$ 
 where each $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ is the $n$th vector in the $H$-dimensional latent space,
 and for each individual hidden variable $h=1,\dots,H$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
 %
 We denote the prior distribution over the latent variables with $p(\vec{s} | \theta)$ 
 and the likelihood of the data with $p(\vec{y} | \vec{s}, \theta)$.
 % TODO check wording here
-Using these expressions, the posteror distribution over latent variables is 
+Using these expressions, the posterior distribution over latent variables is 
 %
 \vspace{-.1cm}
 \begin{equation}
@@ -156,7 +157,7 @@ Using these expressions, the posteror distribution over latent variables is
 p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} | \vec{s}, \theta)}
 {\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s}\Prime | \theta) \, p(\vec{y} | \vec{s}\Prime, \theta)}.
 \end{equation}
-\vspace{-.3cm}
+\vspace{-.5cm}
 
 \subsection{Expectation Maximization}
 \comm{might want equation?}
@@ -186,14 +187,16 @@ the E-step becomes intractable and approximations are required.
 Expectation truncation (ET) is an extension of the expectation maximization (EM) algorithm (e.g. \citep{DempsterEtAl1977,
 NealHinton1998}).
 %
-The main idea underlying ET is that for a given observation $\vec{y}^{(n)}$
+The main idea underlying ET is that the posterior probability mass is concentrated in a smaller subspace of the full latent space.
+In other words, for a given data point $\vec{y}^{(n)}$ 
 only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant, meaning
-that the marginal posterior probability $p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)$
+that, for these variables, the marginal posterior probability $p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)$
 \comm{do we want to make this an actual equation to make it easier to locate/refer to?}
-exceeds some threshold. 
-% TODO want some reference to a graphical nmodel here?
+exceeds some threshold, and is closer to zero for the rest. 
+% TODO 
+\comm{want some reference to a graphical nmodel here?}
 A selection function is used to identify this subset
-of variables, which in turn is used to define a subset $\mathcal{K}_n$ of the space. 
+of variables, which in turn is used to define a subset $\mathcal{K}_n$ of the space per data point. 
 Variables not in this space (non-relevant variables) are fixed to 0.
 %
 The posterior distribution~\eqref{eq:post} can then be approximated by a truncated posterior distribution, computed on reduced support:
@@ -213,7 +216,7 @@ p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
 where $\Kn$ contains the relevant latent states for data point
 $\vec{y}^{(n)}$, and $\delta(\vec{s}\in\mathcal{K}_n)=1$ if
 $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
-Note that $\Kn$ is not an arbitrary set of the possible states, but is axis aligned according to the latent states that are zero, which is more challenging. \comm{Jan, what did you mean here?}
+Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-aligned according to the latent states that are zero, the selection of which is much simpler than the general case.
 %FIXME 
 
 %%%%
@@ -232,6 +235,14 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis alig
 
 \subsection{ET with affinity} % TODO can remove when structure is stand-alone
 %%%%%%
+\comm{fix "notation" and "wording"}
+%2.3 needs some improved notation
+%And wording
+%My point was that the sets kn we choose are simpler than the general case
+%And our approach with the affinity function is also simpler
+%One could try to learn a general function from Kn to R
+%But would somehow need to represent it compactly
+
 One way of constructing a selection function %$\mathcal{S}^{(n)}$ 
 is by first ranking the latent variables according to an 
 \emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}^{+}$
@@ -308,10 +319,10 @@ The \textit{general selection function}  can be expressed as
 
 \subsection{Inference in EM with selection}
 %
-As a meta-algorithm, ET selects the $\Kn$ subspace prior to every EM iteration.
+As a meta algorithm, ET selects the $\Kn$ subspace prior to every EM iteration.
 In each iteration of EM, the following occurs: 
 prior to the E-step, the selection function $\Sh$~\eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
-which are then used to approximate the posterior distribution by computing the true posterior on the truncated space $q(\vec{s})$~\eqref{eq:sel-post}.
+which are then used to approximate the posterior distribution by computing the true posterior on the truncated space $q_n(\vec{s})$~\eqref{eq:sel-post}.
 With the truncated posterior $q(\vec{s})$, inference can be performed using any standard method, such as exact inference or e.g. Gibbs sampling from $q(\vec{s})$ for a further approximation. % sampling approximation of the truncated posterior.
 The result of the E-step is then used to update the model parameters in the M-step. 
 
@@ -363,7 +374,7 @@ to approximate $p_h^{(n)}$ for the entire $N\times H$ set of latent variables $\
 
 % DO NOT EVEN USE: and $\sigma_{noise}^2$ is the degree of Gaussian noise on the function $f_h$.
 Thus, prior to each E-step in each EM iteration, within each calculation of the selection function, we calculate the affinity by using a GP to regress $\vec{S}$ onto $\vec{Y}$.  
-\comm{expectations suddenly being used}
+\comm{expectations suddenly being used - need to mention earlier?}
 Specifically, we define our training data as the \textit{expectations} of latent variables $\vec{s}$ 
 and the set of observed variables $\vec{Y}$, namely 
 %$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}_{\text{prev-it}}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
@@ -435,7 +446,7 @@ We call this entire process \textit{GP-select}, for which an outline is shown in
 
 % TODO PUT ALGO HERE XXX
 \begin{algorithm}
-\caption{GP-Select as meta-algorithm to accelerate inference in Expectation Maximization}
+\caption{GP-Select as meta algorithm to accelerate inference in Expectation Maximization}
 \label{alg:gp-select}
 per EM iteration $t=1,\dots,T$\\
 per data point $n=1,\dots, N$\\
@@ -471,8 +482,8 @@ We use the expectations of $\vec{s}$ from the previous EM iteration as the targe
 We now apply our GP-selection inference approach to five different probabilistic generative models.
 
 \subsection{Sparse coding models}
-Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  data with use of the selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and select-and-sample~\citep{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
-In this set of experiments, we consider three sparse generative models (further details of which can be found in the respective publications) and do inference with our GP-selection approach instead of a hand-crafted selection function:
+Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  latent spaces with use of the selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and select-and-sample~\citep{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
+In this set of experiments, we consider three sparse generative models (further details of which can be found in the respective publications) and perform inference with our GP-select approach instead of a hand-crafted selection function:
 %
 \begin{enumerate}
 \item \textit{Binary sparse coding}:
@@ -504,26 +515,35 @@ for which the mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max
 %
 \end{enumerate}
 
-In the above models, inference with the truncated posterior in Equation~\eqref{eq:sel-post} and selection functions designed by hand has yielded results as good as or more robust than exact inference.
-For models (1) and (3), the hand-crafted selection function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and 
-each data point $\vec{y}^{(n)}$: $  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
-For model (2), the hand-crafted function was the data likelihood given a singleton state $\vec{s}_h$, not taking into account
-the probability of the state itself  (i.e., $p(\vec{s}_h\,|\,\Theta)$).
-We will train GP regression for our flexible selection approach, where, for all models, the targets of the training data is the expected values of the latents.
-
-We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models (1-3):
-%the dataset consists of
-$N$ images of randomly selected overlapping 'bars' with varying intensities for models (2) and (3) and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$.
-On average, each data point contains $2$ bars.
-
-For each of these models, we run 10 repetitions the following set of experiments: (1) selection using the respective hand-crafted selection function,
-(2) GP-selection using a linear covariance kernel, (3) GP-selection using an RBF covariance kernel, (4) GP-selection using a composition kernel of RBF, linear, bias and white noise kernels.
-The latter has been shown to be particularly adaptive to data, i.e. generally when there is no linear trend in the data, the variance of that kernel would go to zero. See the book by Rasmussen~\citep{RasmussenGPbook} for a discussion on kernel selection.
-Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
-As inference with the hand-crafted selection functions has already been shown to extract ground-truth parameters as robustly or more so than exact inference, we do not explicitly compare with this case.
-Number of selected latent variables was set to $H'=5$.
+In the above models, inference with the truncated posterior of Equation~\eqref{eq:sel-post} using manually-derived selections has yielded results as good as or more robust than exact inference (converging less frequently to local optima than exact inference, see the citations corresponding to the models).
+For models [1] and [3], the hand-crafted selection function used successfully was the cosine similarity between the weights (e.g. dictionary elements, components, etc.) $\vec{W}_h$ associated with each latent variable $s_h$ and 
+each data point $\vec{y}^{(n)}$: 
+$  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$.
+%, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
+For model [2], the hand-crafted selection function was the data likelihood given a singleton state:
+ $\mathcal{S}_h(\vec{y}^{(n)}) = p(\vec{y}^{(n)} | \vec{s}=\vec{s}_h, \Theta)$, 
 %
-We run these experiments for $30$ EM iterations for models (1) and (3) and for $60$ iterations for model (2).
+where $\vec{s}_h$ represents a singleton state in which only the entry $h$ is non-zero
+%, and it does not take into account  the probability of the state itself  (i.e., $p(\vec{s}_h\,|\,\Theta)$).
+%repeat: We will train GP regression for our flexible selection approach, where, for all models, the targets of the training data is the expected values of the latents.
+
+We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models [1-3]:
+%the dataset consists of
+$N$ images of randomly selected overlapping 'bars' with varying intensities for models [2] and [3] and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$.
+On average, each data point contains $2$ bars (i.e. ground-truth is $H'=2$, but we allow the selection function to choose $H'=5$ per data point).
+
+For each of these models, we run 10 repetitions the following set of experiments: (1.) selection using the respective hand-crafted selection function,
+(2.) GP-selection using a linear covariance kernel, (3.) GP-selection using an RBF covariance kernel, and (4.) GP-selection using a composition kernel of RBF, linear, bias and white noise kernels.
+%silly: The latter has been shown to be particularly adaptive to data, i.e. generally when there is no linear trend in the data, the variance of that kernel would go to zero.
+% TODO
+As hyperparams of kernels are learned, the composition kernel (4.) can adapt itself to the data and only use the kernel components required. 
+See the book by Rasmussen~\citep{RasmussenGPbook} for a discussion on kernel selection.
+Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
+As inference with the hand-crafted selection functions has already been shown to converge to extract ground-truth parameters, we do not explicitly compare with this case.
+For models [1] and [2], inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractible in model [3], inference was performed by drawing Gibbs samples from the truncated space.
+The number of selected latent variables was set to $H'=5$.
+%
+We run all models until convergence. %these experiments for $30$ EM iterations for models [1] and [3] and for $60$ iterations for model [2].
 
 \begin{figure}[h]
 \begin{center}
@@ -542,10 +562,10 @@ Bottom row: Converged dictionary elements $W$ learned by the GP-select with $H'=
 
 Results are shown in Figure~\ref{fig:sparse}.
 In all experiments, the GP-selection approach could infer ground-truth parameters as well as the hand-crafted function.
-For models where the cosine similarity was used (in (1) and (3)), GP regression with a linear kernel quickly learned the ground-truth parameters, and hence fewer iterations of EM were necessary.
+For models where the cosine similarity was used (in [1] and [3]), GP regression with a linear kernel quickly learned the ground-truth parameters, and hence fewer iterations of EM were necessary.
 In other words, even without providing GP-selection function explicit weights $W$ as necessary in the hand-crafted function, GP regression learned a similar enough function to quickly yield identical results.
-Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of (2)), only GP regression with an RBF kernel was able to recover ground-truth parameters.
-In this case, (model (2)) GP-select using an RBF kernel recovered the ground-truth 'bars' in $7$ out of $10$ repetitions, whereas the hand-crafted function recovered the bases in $8$ instances.
+Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of [2]), only GP regression with an RBF kernel was able to recover ground-truth parameters.
+In this case, (model [2]) GP-select using an RBF kernel recovered the ground-truth 'bars' in $7$ out of $10$ repetitions, whereas the hand-crafted function recovered the bases in $8$ instances.
 The other models, algorithm using GP-select converged to the ground-truth parameters with the same average frequency as the hand-crafted functions.
 %This suggests difficulty in predicting which kernel will work a priori.
 
@@ -553,6 +573,7 @@ The other models, algorithm using GP-select converged to the ground-truth parame
 %Some sort of kernel can do as well as a selection function engineered by hand.
 
 % ------ FIXME -------- leave this??
+\comm{remove this? bit wishy washy }
 Furthermore, as the composition kernel is flexible enough to adapt to both linear and nonlinear relationships, this supports it as a reasonable general choice.
 
 
@@ -560,7 +581,7 @@ Furthermore, as the composition kernel is flexible enough to adapt to both linea
 %
 Next, we apply GP-selection to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.
 %To illustrate the idea and benefit of this approach, we consider a simple motivating example: the problem setting posed by Gaussian mixture models.
-The model of the observations is:
+The model of the data likelihood is:
 %
 \vspace{-.2cm}
 \begin{equation}\label{eq:mog}
@@ -578,8 +599,9 @@ where $C$ is the number of mixture components, the task is assign each data poin
 %% \end{equation}
 %
 
-The targets of the training data used for GP regression is cluster responsibilities for all data points, for $\mathcal{D} = \{ (y^{(n)}, \vec{r}^{(n)}) | n = 1, \dots, N \}$.
-With this, we apply our GP-selection approach to this model, computing the selection function according to Equation~\eqref{eq:gp-sel-func} and following the approximate EM approach as in the previous experiments.
+The training data used for GP regression was $\mathcal{D} = \{ (y^{(n)}, \vec{r}^{(n)}) | n = 1, \dots, N \}$, where the targets were cluster responsibilities for all data points, $\vec{r}$.
+With this, we apply our GP-select approach to this model, computing the selection function according to Equation~\eqref{eq:sel-func} with affinity $f$ defined by a GP~\eqref{eq:gp-loo} 
+and following the approximate EM approach as in the previous experiments.
 %%% by applying Equation~\eqref{eq:gp-sel-func} to compute the posterior distribution in~\eqref{eq:mog-post}.
 %
 %Although the increase in computational efficiency by selecting a reduced set of $K$ mixture components would only be e number of clusters considered to be in the data is very large,
@@ -607,17 +629,20 @@ For each iteration shown, we see (1) the observed data and their inferred cluste
 
 %%% XXX NOT TRUE: When the data are allowed to have clusters with means scattered about, both kernels used for GP-selection inference can find the optimal cluster assignments of the data.
 With cluster parameters initialized randomly on these data, the linear GP regression prediction cannot correctly assign the data to their clusters (as seen in Figure~\ref{fig:mog}\textbf{B}), but the nonlinear approach successfully and easily finds the ground-truth clusters (Figure~\ref{fig:mog}\textbf{A}).
-Furthermore, even when both were initialized in the optimal solution, the cluster assignments from GP-selection with a linear kernel quickly wandered away from the optimal solution and was identical to random initialization, converging to the same result shown in iteration 20 of Figure~\ref{fig:mog}\textbf{B})
+Furthermore, even when both were initialized in the optimal solution, the cluster assignments from GP-selection with a linear kernel quickly wandered away from the optimal solution and was identical to random initialization, converging to the same result shown in iteration 20 of Figure~\ref{fig:mog}\textbf{B}).
 The RBF kernel cluster assignments remained in the optimal solution even with number of preselected clusters set to $C'=1$.
 
 %%% These experiments demonstrate that inference using GP-selection can successfully infer ground-truth cluster assignments in a mixture model using both a linear and nonlinear covariance kernel in the GP regression.
 
-These experiments demonstrate that, not only is it difficult to know the relationship of the inputs and the output variables a priori,
-but the structure of the data strongly plays a role in the success of using selection in inference.
+%The purpose of these experiments was for easy visualization of the sele $2$-dimensional plots
+These experiments demonstrate that the selection function even for very simple models needs to be complicated, 
+which supports our goal of flexibly learning the selection function.
+
+%not only is it difficult to know the relationship of the inputs and the output variables a priori,but the structure of the data strongly plays a role in the success of using selection in inference.
 %which makes hanand which kernel to choose / which selection function would be the best.
 %Moral of the story will be to throw a kernel that can handle nonlinearities.
 %Thus, selecting the variables in a flexible and nonlinear can successfully do inference, when a linear selection would not.
-Given one likely cannot know a priori the structure of the (potentially high-dimensional) data, these results suggest using a flexible kernel that can handle diverse data.
+%Given one likely cannot know a priori the structure of the (potentially high-dimensional) data, these results suggest using a flexible kernel that can handle diverse data.
 
 
 %%%As can be seen, if we observe data that truly originates from $\mathcal{N}(\mu_{1}, \sigma_{1})$, GP-selection will always predict the incorrect Gaussian, because $\mathcal{N}(\mu_{2}, \sigma_{2})$: $f_{2}(\{\vec{y}_n\}$ will always be larger than $f_{1}(\{\vec{y}_n\}$.
@@ -652,6 +677,7 @@ Given one likely cannot know a priori the structure of the (potentially high-dim
 %\includegraphics[width=\textwidth]{figs/inveca/locationHist.png}
 
 \caption{Results of GP-select on the Translation Invariant model.
+\comm{fix for new experiments -- really great speedup (fivefold from less frequent updates, plus factor of 100 from chol (since it's square in the number of features reduced))}
 \textbf{A} shows some example from the dataset.
 \textbf{B} shows the learned components and their masks. The first column shows the mask of each component, the second column shows the learned feature representations, and the third column only shows the area of the learned components with mask higher than $0.5$.
 \textbf{C} shows the log-scale histogram of the prediction accuracy for both selection functions in terms of the distance from the predicted location to the ground truth location: the $x$-axis shows the distance from the ground-truth location in terms of pixels, and the $y$-axis shows the percentages.
@@ -698,7 +724,8 @@ In total, $N=2000$ images were generated in the dataset (examples shown in Figur
 
 %We apply the model with GP selection function and seek to learn $20$ objects from the dataset.
 %
-For this experiment, the GP model parameters are optimized at the end of each EM iteration, using a maximum of $20$ gradient updates with L-BFGS \comm{put at least whole name here if not def}.
+\comm{describe new exps}
+For these experiments, the GP model parameters are optimized at the end of each EM iteration, using a maximum of $20$ gradient updates with L-BFGS \comm{put at least whole name here if not def}.
 All images in the training set are used and the marginal truncated posterior probabilities are denoted $p(l_h | \vec{y}^{(n)})$, where $l_h$ is the location of the $h$ component. The number of objects sought to be learned is $H=20$ and preselected objects was $H'=5$.
 
 Results are shown in Figure~\ref{fig:inveca}.
