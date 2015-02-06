@@ -778,7 +778,7 @@ In order to quantify the accuracy of the GP-select approach, we collected the GP
 %
 Then, we compute the accuracy of the predicted locations comparing the distance from the location of the top candidate and the ground-truth location. See Figure~\ref{fig:inveca}\textbf{C} for a histogram of the distances versus accuracy for all selection functions. Note that the percentages in the histogram are plotted in log scale.
 As a comparison, we also estimated the prediction accuracy of the original hand-craft selection function. Both selection functions can very accurately predict the locations of all the objects in the dataset.
-Furthermore, the pseudo-log likelihood \cite{DaiEtAl2013} for both selection functions are shown in Figure~\ref{fig:inveca}\textbf{D}.
+Furthermore, the pseudo log likelihood \cite{DaiEtAl2013} for both selection functions are shown in Figure~\ref{fig:inveca}\textbf{D}.
 % FIXME TODO ---- pseudo like
 
 As GP-select avoids explicitly scanning through the image, the time for inferring the location of an object is significantly faster than the hand-craft function. GP-select requires $22.1$ seconds on a single CPU core to infer the locations of objects across the whole image set, while the hand-crafted function requires $183.9$ seconds. In the original work, the hand-crafted selection function was implemented with GPU acceleration and parallelization. 
