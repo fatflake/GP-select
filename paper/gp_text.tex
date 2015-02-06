@@ -6,8 +6,8 @@
 
 \begin{abstract}
 We propose a nonparametric procedure to achieve fast inference in generative graphical models when the number of latent states is very large.
- The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and use this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally unfeasible.
-We learn the selection function entirely from the observed data and current EM state via Gaussian process regression: this is by contrast with earlier approaches, where selections were manually-designed for each problem setting.
+ The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and using this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally unfeasible.
+We learn the selection function entirely from the observed data and current EM state via Gaussian process regression: this is by contrast with earlier approaches, where selection functions were manually-designed for each problem setting.
 We show our approach to perform as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method,  at a far lower computational cost.
 
 %Specifically, for the preselection step, a computationally efficient selection function is used to select the relevant latent variables from the full set, given an observation. This preselected set is then used to represent the posterior distribution with reduced support.
@@ -35,22 +35,24 @@ in graphical models, which restricts the inference performed during the E-step
 to an ``interesting'' subset of states of the latent variables,  %The subset is
 chosen per data point according to a \emph{selection function}.
 In previous work, functions to select states of high posterior mass were 
-derived separately and manually for each model of interest by hand from upper bounds or noiseless limits 
+derived individually for each model of interest, in general by taking upper bounds or noiseless limits. 
 %hand-crafted to model the properties of the graphical model of interest, using intuition from noiseless limits or upper-bound results specific to the model 
 \citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,SheikhEtAl2014}.
 %derived separately and manually for each model by hand from upper bounds or noiseless limits" 
-The crucial underlying assumption remains that the posterior mass is finally concentrated in small volumes of the latent state space.
+The crucial underlying assumption remains that 
+when EM has converged,
+the posterior mass is  concentrated in small volumes of the latent state space.
 %\footnote{Approaches using sparse priors (i.e. automatic relevance determination (ARD) prior) find sparse subsets of states across all observations in a final model, whereas ours provides relevant features for each observation (often different between observations), to guide EM iterations towards regions of high posterior probability in any model.}
 % (a property exploited by earlier ET approaches).
 This property is observed to hold in many visual data and general pattern recognition settings.
 
 The general idea of aiding inference in graphical models by
 learning a function that maps from the observed data to
-a property of the latent variables is quite old, dating back at least to the
+a property of the latent variables is quite old. Early work includes the
 Helmholtz machine~\cite{Dayan95thehelmholtz} and its bottom-up connections trained using the wake-sleep
 algorithm \citep{HintonEtAl1995}.
 More recently, the idea has surfaced in the context of learning variational distributions with neural networks~\citep{WellingICML2014}.
-A two-stage inference has furthermore been discussed in the context of
+A two-stage inference has  been discussed in the context of
 computer vision \citep{YuilleKersten2006} and neural inference \citep{KoernerEtAl1999}.
 Recently, researchers~\citep{MnihGregor2014} %http://jmlr.org/proceedings/papers/v32/mnih14.pdf
 have generalized this idea to learning in arbitrary graphical models by training
@@ -61,12 +63,13 @@ For more complex graphical models, notably the hierarchical model of \citep{DaiL
 is extremely challenging: it requires both expert knowledge
 on the problem domain and considerable computational resources to implement
  (indeed, the design of such functions for  particular problems
-has been a major contribution in several of the foregoing papers).
+has been a major contribution in previous work on the topic).
+
 
 In the present work, we propose a generalization of the ET approach, where
 we avoid completely the challenge of problem-specific selection function design.
 Instead,
-we learn this function  adaptively and nonparametrically
+we learn selection functions  adaptively and nonparametrically
 from the data,
  while learning the model
 parameters  simultaneously using EM.
@@ -115,7 +118,7 @@ We find that even for a simple model, it can be be essental to learn a nonlinear
 Finally, we present results
 for a recently published hierarchical model for  translation invariant occlusion components analysis
 \citep{DaiLucke2014}.
-The performance of our inference algorithm matched that of the complex
+The performance of our inference algorithm matches that of the complex
 hand-engineered selection function of the previous work, while being straightforward
 to implement and having a far lower computational cost.
 
@@ -181,7 +184,7 @@ the E-step becomes intractable and approximations are required.
 % Describe how ET works, how it relates to EM. An inference algorithm that takes $\Kn$ and gives you a $q$
 %%%%%%%%%
 %
-Expectation truncation (ET) is a meta algorithm of the expectation maximization (EM) algorithm (e.g. \citep{DempsterEtAl1977,
+Expectation truncation (ET) is a meta algorithm, which improves convergence of the expectation maximization (EM) algorithm (e.g. \citep{DempsterEtAl1977,
 NealHinton1998}).
 %
 The main idea underlying ET is that the posterior probability mass is concentrated in a smaller subspace of the full latent space.
@@ -191,7 +194,7 @@ A \textit{selection function} is used to identify this subset
 of variables, which in turn is used to define a subset $\mathcal{K}_n$ of the space per data point. 
 Variables not in this space (non-relevant variables) are fixed to 0.
 %
-The posterior distribution~\eqref{eq:post} can then be approximated by a truncated posterior distribution, computed on reduced support:
+The posterior distribution~\eqref{eq:post} can then be approximated by a truncated posterior distribution, computed on the reduced support,
 %
 %\small
 \vspace{-.1cm}
@@ -208,7 +211,9 @@ p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
 where $\Kn$ contains the relevant latent states for data point
 $\vec{y}^{(n)}$, and $\delta(\vec{s}\in\mathcal{K}_n)=1$ if
 $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
-Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-aligned according to the latent states that are zero, the selection of which is much simpler than the general case.
+The sum over $\Kn$ is much more  efficient than the sum for the full posterior, since it need only be done over the states of the latent variables deemed relevant: the irrelevant variables are simply set to zero.
+
+%Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-aligned according to the latent states that are zero, the selection of which is much simpler than the general case.
 %FIXME 
 
 %%%%
@@ -243,7 +248,7 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-alig
 \caption{Illustration of the affinity function for selection.
 The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ latent variable (top), 
 which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom). 
-Here, the affinity would rank variables $s_1$ and $s_3$ as being relevant for $\vec{y}^{(n)}$.
+Here, the affinity would return variables $s_1$ and $s_3$ as being relevant for $\vec{y}^{(n)}$.
 }\label{fig:graph-affinity}
 \end{center}
 \end{figure}
@@ -268,9 +273,9 @@ See Figure~\ref{fig:graph-affinity} for a simplified illustration.
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
-However, even when this strong assumption does not hold in practice, which is often the case, 
-the affinity can still correctly highlight relevant variables.
-It has been empirically shown to be quite effective even when dependencies exist.
+Even when this strong assumption does not hold in practice (which is often the case), however,
+the affinity can still correctly highlight relevant variables,
+and has been empirically shown to be quite effective even when dependencies exist.
 
 
 %XXX Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
@@ -353,16 +358,18 @@ The result of the E-step is then used to update the model parameters in the M-st
 %In this work we generalize the above approach, where instead of defining $\Sh$
 %by hand, we propose that $\Sh$ be learned in a black-box fashion based on the
 %data.
-In previous work, the form of the selection function $\mathcal{S}(\vec{y}^{(n)})$ has been
-a manually-derived deterministic function constructed based on the structure of the considered model by hand 
- \citep[see e.g.][]{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
+In previous work, the selection function $\mathcal{S}(\vec{y}^{(n)})$ 
+was a deterministic function derived  individually for each model 
+%AG: that's WAY overkill :)
+%has been a manually-derived deterministic function constructed based on the structure of the considered model by hand 
+\citep[see e.g.][]{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
 BornscheinEtAl2013, SheikhEtAl2014}.
 %
 We now generalize the selection approach:  %for inference in graphical models
 instead of predefining the form of $\Ss$ for variable selection, we want
 to learn it in a black-box and model-free way based on the data.
 %
-The case we consider is to learn $\Ss$ by using Gaussian process (GP) regression
+We learn $\Ss$  using Gaussian process (GP) regression
 \citep[e.g.][]{RasmussenGPbook}, which is flexible, can make exact predictions,
 and scales cubicly with the number of data points $N$ but linearly with the number of latent variables $H$.  
 %
@@ -384,12 +391,12 @@ which can be flexibly parameterized to represent the relationship between variab
 %flexibly govern the representation of the relationship between variables.
 Again, we use $f_h$ to approximate the marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
 %
-A nice property of Gaussian processes is that the kernel matrix $K$ must only be computed once (until the kernel function hyperparameters are updated) 
+A nice property of Gaussian processes is that the kernel matrix $K$ need only be computed once (until the kernel function hyperparameters are updated) 
 to approximate $p_h^{(n)}$ for the entire $H\times N$ set of latent variables $\vec{S}$.
 %the marginal posterior probability
 
 % DO NOT EVEN USE: and $\sigma_{noise}^2$ is the degree of Gaussian noise on the function $f_h$.
-Thus, prior to each E-step in each EM iteration, within each calculation of the selection function, we calculate the affinity by using a GP to regress the expected values of the latent variables $\langle \vec{S} \rangle$ onto the observed data $\vec{Y}$.  
+Thus, prior to each E-step in each EM iteration, within each calculation of the selection function, we calculate the affinity  using a GP to regress the expected values of the latent variables $\langle \vec{S} \rangle$ onto the observed data $\vec{Y}$.  
 Specifically, we train on $p_h$ from the previous EM iteration (where $p_h$ is equal to $\langle s_h \rangle$), for 
 training data of 
 %$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}_{\text{prev-it}}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
@@ -397,7 +404,7 @@ $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q_n(\vec{s})}) | 
 %
 %output of the previous iteration of the % EM parameter inference algorithm, $q(\vec{S})$, or rather, the expectations of
 %This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
-In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec{s})}$ are initialized randomly, 
+In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec{s})}$ are initialized randomly;
 in each subsequent EM iteration, the true expecations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
 The hyperparameters of the covariance kernel are optimized by maximum likelihood every $T^*$ EM iterations.
 
@@ -432,7 +439,7 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 %
 
 Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func}, 
-we call entire process \textit{GP-select}, for which an outline is shown in Algorithm 1.
+we call entire process \textit{GP-select}. An outline is shown in Algorithm 1.
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
 %
@@ -499,7 +506,7 @@ We use the expectations of $\vec{s}$ from the previous EM iteration as the targe
 \section{Experiments}
 \label{exps}
 %
-We now apply our GP-selection inference approach to five different probabilistic generative models.
+We apply our GP-selection inference approach to five different probabilistic generative models.
 
 \subsection{Sparse coding models}
 Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  latent spaces with use of the selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and selection with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012} inference approaches.
