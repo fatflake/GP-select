@@ -27,7 +27,7 @@ We show our approach to perform as well as these bespoke selection functions on 
 
 Inference in probabilistic graphical models can be challenging in situations where
 there are a large number of hidden variables, each of which may take on one of several
-state values. The EM algorithm is widely applied for inference when hidden variables
+state values. The Expectation Maximization (EM) algorithm is widely applied for inference when hidden variables
 are present, however inference can quickly become intractable as the dimensionality increases.
 
 Expectation truncation (ET) \citep{LuckeEggert2010} is a meta algorithm for accelerating EM learning
@@ -156,7 +156,7 @@ p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} 
 \end{equation}
 \vspace{-.5cm}
 
-\subsection{Expectation Maximization}
+\subsection{Selection via Expectation Truncation in EM}
 Expectation Maximization (EM) is an iterative algorithm to optimize the model parameters of a given graphical model.
 EM iteratively optimizes a lower bound on the data likelihood by inferring the
 posterior distribution over hidden variables given the current parameters (the
@@ -176,7 +176,7 @@ the E-step becomes intractable and approximations are required.
 %
 %\comm{here or below could add a simple graphical model, all $s_{h=1},\dots, s_{H}$ leading to one $\vec{y}^{(n)}$, some plot of marginal posterior, a few are "high" and thus selected?  similar to select and sample paper}
 
-\subsection{Selection with Expectation Truncation}
+%\subsection{Selection with Expectation Truncation}
 %%%%%%%%%%%%%%%%%%
 % Describe how ET works, how it relates to EM. An inference algorithm that takes $\Kn$ and gives you a $q$
 %%%%%%%%%
@@ -186,12 +186,7 @@ NealHinton1998}).
 %
 The main idea underlying ET is that the posterior probability mass is concentrated in a smaller subspace of the full latent space.
 In other words, for a given data point $\vec{y}^{(n)}$ 
-only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant, meaning
-that, for these variables, the marginal posterior probability $p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)$
-\comm{do we want to make this an actual equation to make it easier to locate/refer to?}
-exceeds some threshold, and is closer to zero for the rest. 
-% TODO 
-\comm{want some reference to a graphical model here}
+only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant.
 A \textit{selection function} is used to identify this subset
 of variables, which in turn is used to define a subset $\mathcal{K}_n$ of the space per data point. 
 Variables not in this space (non-relevant variables) are fixed to 0.
@@ -232,7 +227,6 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-alig
 
 \subsection{ET with affinity} % TODO can remove when structure is stand-alone
 %%%%%%
-\comm{fix "notation" and "wording"}
 %2.3 needs some improved notation
 %And wording
 %My point was that the sets kn we choose are simpler than the general case
@@ -242,21 +236,28 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-alig
 
 One way of constructing a selection function %$\mathcal{S}^{(n)}$ 
 is by first ranking the latent variables according to an 
-\emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$%^{+}$
+\emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$ %^{+}$
 which directly reflects the relevance of latent variable $s_h$. 
-A natural choice for such a function is one that approximates the marginal posterior probability,
-e.g.\ we try to learn $f$ such that $f_h(\vec{y}^{(n)}) \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)$.
 %
-% TODO FIXME
-%THERE NEEDS TO BE A BIT MORE TEXT HERE TO LINK THESE TWO.
-% ************ XXX -----------------------------------
-When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\vec{p}^{(n)} = p_{h=1}^{(n)},\dots, p_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$,  this affinity function correctly isolates the most relevant variables in the posterior.
+A natural choice for such a function is one that approximates the marginal posterior probability 
+of each variable, e.g.\ we try to learn $f$ as follows:
+%
+\begin{equation}
+\label{eq:affinity}
+f_h(\vec{y}^{(n)}) \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
+\end{equation}
+%
+meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
+exceeds some threshold. %and is closer to zero for the rest. 
+\comm{want some reference to a graphical model here}
+%
+When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
 However, even when this strong assumption does not hold in practice, which is often the case, 
 the affinity can still correctly highlight relevant variables.
 It has been empirically shown to be quite effective even when dependencies exist.
 
-% TODO REMOVE REDUNANCY XXX
+
 %XXX Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
 %First, we define $f_h(\vec{y}^{(n)})$ as a function that takes the input of a single data
 %point $\vec{y}^{(n)}$ and predicts the probability that the latent variable
@@ -264,13 +265,13 @@ It has been empirically shown to be quite effective even when dependencies exist
 %$\vec{y}^{(n)}$ is associated with an $H$-dimensional vector of predictions
 %$\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$.
 %
-Next, using all $p_{h=1}^{(n)},\dots, p_H^{(n)}$ resulting 
+Next, using all $\hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$  
 %approximated marginal posterior probabilities 
 from the affinity function 
 $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we define 
- $\gamma(\vec{p}^{(n)})$ to simultaneously sort the indices in descending order and \textit{reduce} the sorted set to the $H'$ highest (most relevant) states' indices, where $H' \ll H$.
+ $\gamma(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices in descending order and \textit{reduce} the sorted set to the $H'$ highest (most relevant) states' indices, where $H' \ll H$.
 To ensure that there is a non-zero probability of selecting each state per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random.
-$\gamma(\vec{p}^{(n)})$ thus returns the $H'$ selected indices $I$ deemed by the affinity to be relevant to the $n$th data point.
+$\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected indices $I$ deemed by the affinity to be relevant to the $n$th data point.
 %
 %(i.e. all $h=1,\dots,H'$ latent variables sorted by estimated relevance).
 %
@@ -294,12 +295,11 @@ by not being present in the state set $\Kn$.
 %We define $\mathcal{K}_n$ as $\mathcal{K}_n = \{\vec{s}\,|\,\mbox{for all}\ h\not\in I:\ s_h=0 \}$ where $\mathcal{I}$ contains the indices of the latents estimated to be most relevant for $\vec{y}^{(n)}$.
 %
 
-Using $\vec{f}$, 
-%$\Ih$ 
-$\mathcal{I}$, and $\gamma$, we can define a \emph{selection function}
-$\mathcal{S}_h(\vec{y}^{(n)})$ to select subsets $\mathcal{K}_n$ per data point
-$\vec{y}^{(n)}$, with the goal of containing most of the probability mass
-$\prob{\vec{s}}{\vec{y}}$ while also being significantly smaller than the entire
+Using $\vec{f}$, $\mathcal{I}$, and $\gamma$, we can define a 
+\emph{selection function} $\mathcal{S}: \mathrm{R}^D \mapsto 2^{ \{1,\dots,H \}}$ 
+to select subsets $\mathcal{K}_n$ per data point $\vec{y}^{(n)}$.   \comm{restrict the output to be from $2^{\{1,...,H'\}}$ ?}
+Again, the goal is for the states $\Kn$ to contain most of the probability mass
+$\prob{\vec{s}}{\vec{y}}$ and to be significantly smaller than the entire
 latent space.  
 %
 The \textit{affinity based selection function}  can be expressed as
@@ -309,7 +309,7 @@ The \textit{affinity based selection function}  can be expressed as
 \mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
 \end{equation}
 %
-% MOVED PART ABOUT SELECTION TO NEXT SEC XXX
+% MOVED PART ABOUT SELECTION TO NEXT S$EC XXX
 
 %Using such subsets $\mathcal{K}_n$, Equation~\eqref{eq:sel-post} results in good approximations to the full posteriors.
 %redundant: When the set $\Kn$ fulfills the above property of containing the indices of the states with concentrated posterior mass, Equation~\eqref{eq:sel-post} is a good approximation of the full posterior.
@@ -737,7 +737,7 @@ In order to quantify the accuracy of our GP-selection function, we collected the
 Then, the accuracy of the predicted locations are estimated by computing the distance from the location of the top candidate and the ground-truth location.
 These distances are plotted as a histogram in Figure~\ref{fig:inveca}\textbf{C}.
 As a comparison, we also estimated the prediction accuracy of the original hand-craft selection function. Both selection functions can very accurately predict the locations of all the objects in the dataset.
-Furthermore, the pseudo-log likelihood for both selection functions are shown in Figure~\ref{fig:inveca}\textbf{D}.
+Furthermore, the pseudo-log likelihood \comm{citation for?} for both selection functions are shown in Figure~\ref{fig:inveca}\textbf{D}.
 % FIXME TODO ---- pseudo like
 
 Because GP selection avoids explicitly scanning through the whole image, the time of inference is significantly faster than the original selection function. For the GP-selection function, which was applied without any approximations or tricks to enhance speed, inferring the whole dataset (2000 images) required $22.1$ seconds on a single CPU core, while the inference with the original selection function required $1830.9$ seconds on a single CPU core.
