@@ -234,6 +234,20 @@ Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-alig
 %One could try to learn a general function from Kn to R
 %But would somehow need to represent it compactly
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=.35\textwidth]{figs/graph-affinity.pdf}
+%\subfigure[Data and converged\\ solution]{\includegraphics[width=.25\textwidth]{figs/mog/learn-rbf-h2/040.png}}
+%\subfigure[GP regression\\ function]{\includegraphics[width=.21\textwidth]{figs/mog/learn-rbf-h2/GP_pred_40.png}}\\
+%\centerline{\fbox{This figure intentionally left non-blank}}
+\caption{Illustration of the affinity function in ET.
+The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ variable (top), 
+which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom).
+}\label{fig:graph-affinity}
+\end{center}
+\end{figure}
+%\vspace{-.7cm}
+%
 One way of constructing a selection function %$\mathcal{S}^{(n)}$ 
 is by first ranking the latent variables according to an 
 \emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$ %^{+}$
@@ -249,7 +263,7 @@ f_h(\vec{y}^{(n)}) \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Thet
 %
 meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
 exceeds some threshold. %and is closer to zero for the rest. 
-\comm{want some reference to a graphical model here}
+See Figure~\ref{fig:graph-affinity} for a simplified illustration. 
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
@@ -338,7 +352,7 @@ The result of the E-step is then used to update the model parameters in the M-st
 %In this work we generalize the above approach, where instead of defining $\Sh$
 %by hand, we propose that $\Sh$ be learned in a black-box fashion based on the
 %data.
-In previous work, the form of the selection function $\mathcal{S}_h(\vec{y}^{(n)})$ has been
+In previous work, the form of the selection function $\mathcal{S}(\vec{y}^{(n)})$ has been
 a manually-derived deterministic function constructed based on the structure of the considered model by hand 
 (see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
 BornscheinEtAl2013, SheikhEtAl2014}).
@@ -447,19 +461,25 @@ we call entire process \textit{GP-select}, for which an outline is shown in Algo
 
 % TODO PUT ALGO HERE XXX
 \begin{algorithm}
-\caption{GP-Select as meta algorithm to accelerate inference in Expectation Maximization}
+\caption{GP-Select to accelerate inference in \\Expectation Maximization}
 \label{alg:gp-select}
-per EM iteration $t=1,\dots,T$\\
-per data point $n=1,\dots, N$\\
-1. assess importance of all latent variables, affinity\\
-    1.1. GP LOO for affinity
-2. sort and reduce indices to $H'$\\
-    2.2. include uniformly chosen indices\\
-3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
-4. compute posterior $q(\vec{s})$ on reduced $\Kn$ in E-step\\
-5. update model parameters in M-step\\ 
-6. use resulting $\langle s \rangle_{q_{t}(\vec{s})}$ for next EM iteration $t+1$\\
-..repeat
+\begin{algorithmic}
+\FOR{EM iterations $t=1,\dots,T$}\STATE{
+\vspace{-.4cm}    
+    \FOR{data point $n=1,\dots, N$}
+    \STATE{
+    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: Eq.~\eqref{eq:gp-loo}\\
+%2. sort and reduce indices to $H'$\\
+ %   2.2. include uniformly chosen indices\\
+    compute subset of relevant states $\Ss$: Eq.~\eqref{eq:sel-func}\\ % get $\Kn$ 
+%3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
+    compute truncated posterior $q_{n,t}(\vec{s})$, E-step: Eq.~\eqref{eq:sel-post}\\ % on reduced set $\Kn$
+    store $\langle \vec{s} \rangle_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
+    update model parameters in M-step\\ 
+    }\ENDFOR\\
+    update kernel hyperparams every $T^{*}$ EM iterations
+}\ENDFOR
+\end{algorithmic}
 \end{algorithm}
 
 % TODO PUT INTO ALGO ABOVE XXX
