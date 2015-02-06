@@ -559,7 +559,6 @@ On average, each data point contains $2$ bars (i.e. ground-truth is $H'=2$, but 
 For each of these models, we run 10 repetitions the following set of experiments: (1) selection using the respective hand-crafted selection function,
 (2) GP-select using a linear covariance kernel, (3) GP-select using an RBF covariance kernel, and (4) GP-select using a composition kernel of RBF, linear, bias and white noise kernels.
 %silly: The latter has been shown to be particularly adaptive to data, i.e. generally when there is no linear trend in the data, the variance of that kernel would go to zero.
-% TODO
 As hyperparameters of kernels are learned, the composition kernel (4) can adapt itself to the data and only use the kernel components required. 
 See the book by Rasmussen~\citep{RasmussenGPbook} for a discussion on kernel selection.
 Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
@@ -585,9 +584,9 @@ Bottom row: Converged dictionary elements $W$ learned by the GP-select with $H'=
 \end{figure}
 
 Results are shown in Figure~\ref{fig:sparse}.
-In all experiments, the GP-selection approach could infer ground-truth parameters as well as the hand-crafted function.
+In all experiments, the GP-select approach could infer ground-truth parameters as well as the hand-crafted function.
 For models where the cosine similarity was used (in \textbf{A} and \textbf{C}), GP regression with a linear kernel quickly learned the ground-truth parameters, and hence fewer iterations of EM were necessary.
-In other words, even without providing GP-selection function explicit weights $W$ as necessary in the hand-crafted function, GP regression learned a similar enough function to quickly yield identical results.
+In other words, even without providing GP-select explicit weights $W$ as necessary in the hand-crafted function, its affinity function using GP regression~\eqref{eq:gp-loo} learned a similar enough function to quickly yield identical results.
 Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of \textbf{B}), only GP regression with an RBF kernel was able to recover ground-truth parameters.
 In this case, (model \textbf{B}) GP-select using an RBF kernel recovered the ground-truth 'bars' in $7$ out of $10$ repetitions, whereas the hand-crafted function recovered the bases in $8$ instances.
 The other models, algorithm using GP-select converged to the ground-truth parameters with the same average frequency as the hand-crafted functions.
@@ -611,7 +610,7 @@ The model of the data likelihood is:
 p(\vec{y}^{(n)} | \mu_c, \sigma_c, \pi) = \sum_{c=1}^{C} \mathcal{N}(\vec{y}^{(n)}; \mu_c, \sigma_c) \, \pi_c
 \end{equation}
 %
-where $C$ is the number of mixture components, the task is assign each data point to it's latent cluster.
+where $C$ is the number of mixture components, the task is assign each data point to its latent cluster.
 %%%  infer from which cluster each data point originates.
 %%% The latent distribution gives the prior probability of a data point coming from each cluster $c$, $p(s^{(n)} = c | \pi) = \pi_c$, and data from the $c$th cluster are distributed according to the $c$th component, $p (\vec{y}^{(n)} | s^{(n)} = c) = p_c(\vec{y}^{(n)})$.
 %%% Once a data point $\vec{y}^{(n)}$ is observed, the posterior probability distribution for the cluster it belongs to is
@@ -634,32 +633,32 @@ In these experiments we consider three scenarios for EM learning of the data lik
 %, where $r_c^{(n)}$ is the responsibility of the $k$th Gaussian for the $n$th data point, $y^{(n)}$.
 %%% With this, we calculate the GP predictions following Equations~\eqref{eq:gp-sel-func} and use the prediction size to select which $c$ clusters to include in the normalization in the calculation of the responsibilities $\vec{r}$ (where $\vec{S}$ is substituted with $\vec{r}$).
 
-For visualization purposes, we generate $2$-dimensional observed data ($\vec{y}^{(n)} \in \mathrm{R}^{D=2} $) from $C=3$ clusters -- first with randomly assigned cluster means, and second such that the means of the clusters lie roughly on a line.
-In the GP-selection experiments, we select $C' = 2$ clusters to select from the full set (where $C'$ clusters is analogous to $H'$ latent variables in the non-mixture model setting),
-%%% the indices for which are contained in $\mathcal{K}_n$),
+Such that we can easily visualize the output, we generate $2$-dimensional observed data ($\vec{y}^{(n)} \in \mathrm{R}^{D=2} $) from $C=3$ clusters -- first with randomly assigned cluster means, and second such that the means of the clusters lie roughly on a line.
+In the GP-select experiments, we select $C' = 2$ clusters from the full set,
 and run $40$ EM iterations of the three experiments.
+Note that for mixture models, the notation of $C'$ selected clusters of the $C$ set is analogous to the $H'$ selected latent variables from the $H$ full set, as described in the non-mixture model setting, and the GP-select algorithm proceeds unchanged.
+%%% the indices for which are contained in $\mathcal{K}_n$),
 We randomly initialize the variance of the clusters $\vec{\sigma}_c$ and initialize the cluster means $\vec{\mu}_c$ at randomly selected data points.
 Results are shown in Figure~\ref{fig:mog}.
 
 \begin{figure*}[t]
 \begin{center}
 \includegraphics[width=.75\textwidth]{figs/mog/mog.pdf}
-\caption{Gaussian mixture model results using GP-selection ($C'=2$) for inference.
+\caption{Gaussian mixture model results using GP-select ($C'=2$) for inference.
 Shown is the development of inference using \textbf{A} RBF covariance kernel in the regression, and \textbf{B} a linear covariance kernel.
-For each iteration shown, we see (1) the observed data and their inferred cluster assignments and (2) the $C$ corresponding GP regression functions learned/used for GP-selection in that iteration. Different iterations are pictured due to different convergence rates. As shown, inference with GP-selection using a linear kernel is unable to assign the data points to the appropriate clusters, whereas GP-selection with an RBF kernel succeeds.}\label{fig:mog}% iterations RBF: 0, 1,, 20, LIN: 0,10, 20
+For each iteration shown, we see (1) the observed data and their inferred cluster assignments and (2) the $C$ corresponding GP regression functions learned/used for GP-select in that iteration. Different iterations are pictured due to different convergence rates. As shown, inference with GP-select using a linear kernel is unable to assign the data points to the appropriate clusters, whereas GP-select with an RBF kernel succeeds.}\label{fig:mog}% iterations RBF: 0, 1,, 20, LIN: 0,10, 20
 \end{center}
 \end{figure*}
 
 %%% XXX NOT TRUE: When the data are allowed to have clusters with means scattered about, both kernels used for GP-selection inference can find the optimal cluster assignments of the data.
 With cluster parameters initialized randomly on these data, the linear GP regression prediction cannot correctly assign the data to their clusters (as seen in Figure~\ref{fig:mog}\textbf{B}), but the nonlinear approach successfully and easily finds the ground-truth clusters (Figure~\ref{fig:mog}\textbf{A}).
-Furthermore, even when both were initialized in the optimal solution, the cluster assignments from GP-selection with a linear kernel quickly wandered away from the optimal solution and was identical to random initialization, converging to the same result shown in iteration 20 of Figure~\ref{fig:mog}\textbf{B}).
-The RBF kernel cluster assignments remained in the optimal solution even with number of preselected clusters set to $C'=1$.
+Furthermore, even when both were initialized in the optimal solution, the cluster assignments from GP-select with a linear kernel quickly wandered away from the optimal solution and was identical to random initialization, converging to the same result shown in iteration 20 of Figure~\ref{fig:mog}\textbf{B}).
+The RBF kernel cluster assignments remained in the optimal solution even with number of selected clusters set to $C'=1$.
 
 %%% These experiments demonstrate that inference using GP-selection can successfully infer ground-truth cluster assignments in a mixture model using both a linear and nonlinear covariance kernel in the GP regression.
 
 %The purpose of these experiments was for easy visualization of the sele $2$-dimensional plots
-These experiments demonstrate that the selection function even for very simple models needs to be complicated, 
-which supports our goal of flexibly learning the selection function.
+These experiments demonstrate that the selection function even for very simple models needs to be complicated in order to perform inference correctly, which supports our goal of flexibly learning the selection function.
 
 %not only is it difficult to know the relationship of the inputs and the output variables a priori,but the structure of the data strongly plays a role in the success of using selection in inference.
 %which makes hanand which kernel to choose / which selection function would be the best.
@@ -702,6 +701,7 @@ which supports our goal of flexibly learning the selection function.
 %the $x$-axis shows the distance from the ground-truth location in terms of pixels, and the $y$-axis shows the percentages.
 \textbf{D} shows the convergence of the pseudo log likelihood [of the model parameters learned at each EM iteration] for the both selection functions over all EM iterations. 
 Figures \textbf{C} and \textbf{D} show the equivalent accuracy/performance of inference with all GP-select functions versus the hand-crafted selection function.
+'GP IChol' represents a factor of $100$ speedup vs. 'GP', and 'GP every5' represents a factor of $5$ speedup.
 }
 \label{fig:inveca}
 %\end{center}
