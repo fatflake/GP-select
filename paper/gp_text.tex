@@ -406,7 +406,7 @@ $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q_n(\vec{s})}) | 
 %This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
 In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec{s})}$ are initialized randomly;
 in each subsequent EM iteration, the true expecations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
-The hyperparameters of the covariance kernel are optimized by maximum likelihood every $T^*$ EM iterations.
+The hyperparameters of the kernel are optimized by maximum likelihood every $T^*$ EM iterations.
 
 For each data point $n$ and latent variable $h$ we compute the predicted mean of the GP by leaving 
 this data point out of the training set and considering all others, which is called leave-one-out (LOO) prediction.
@@ -421,8 +421,10 @@ and we use this result to update the predicted affinity as follows:
 \vspace{-.2cm}  % (*1)
 \begin{equation}\label{eq:gp-loo}
 %\vec{\mu}^{(n)} \;=\;  \hat{\vec{s}}^{(n)} \;=\;  
-\hat{p}_{h}^{(n)} =   
-p_{h}^{(n)} - \frac{ [ K^{-1} \vec{p}_{h} ]_{nn} }{ [ K^{-1} ]_{nn} }.
+%\hat{p}_{h}^{(n)} =   
+%p_{h}^{(n)} - \frac{ [ K^{-1} \vec{p}_{h} ]_{nn} }{ [ K^{-1} ]_{nn} }.
+\hat{p}_{h}^{(n)} \leftarrow   
+\langle s \rangle_h^{(n)} - \frac{ [ K^{-1} \langle\vec{s}\rangle_{h} ]_{nn} }{ [ K^{-1} ]_{nn} }.
 \end{equation}
 %
 %which computes the predictions of the GP model using leave-one-out by only computing one kernel matrix inversion (see e.g. Section 5.4.2~\citep{RasmussenGPbook}).
@@ -481,10 +483,10 @@ we call entire process \textit{GP-select}. An outline is shown in Algorithm 1.
     compute subset of relevant states $\Ss$: \eqref{eq:sel-func}\\ % get $\Kn$ 
 %3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
     compute truncated posterior $q_{n,t}(\vec{s})$, E-step: \eqref{eq:sel-post}\\ % on reduced set $\Kn$
-    store $\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
     update model parameters in M-step\\ 
+    store $\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
     }\ENDFOR\\
-    update kernel hyperparams every $T^{*}$ EM iterations
+    optimize kernel hyperparams every $T^{*}$ EM iterations
 }\ENDFOR
 \end{algorithmic}
 \end{algorithm}
