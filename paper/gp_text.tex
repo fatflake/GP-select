@@ -160,7 +160,7 @@ p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \theta) \, p(\vec{y} 
 Expectation Maximization (EM) is an iterative algorithm to optimize the model parameters of a given graphical model.
 EM iteratively optimizes a lower bound on the data likelihood by inferring the
 posterior distribution over hidden variables given the current parameters (the
-E-step), and then adjusts the parameters to maximize the likelihood of the
+E-step), and then adjusting the parameters to maximize the likelihood of the
 data averaged over this posterior (the M-step).
 %
 When the number of latent states to consider is large (e.g.\ exponential in the
@@ -254,7 +254,7 @@ is by first ranking the latent variables according to an
 \emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$ %^{+}$
 which directly reflects the relevance of latent variable $s_h$. 
 %
-A natural choice for such a function is one that approximates the marginal posterior probability 
+A natural choice for such a function is the one that approximates the marginal posterior probability 
 of each variable, e.g.\ we try to learn $f$ as follows:
 %
 \begin{equation}
@@ -299,7 +299,7 @@ $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected indices $I$ deemed 
 %sorts all $h,...,H$ of the $s_h^{(n)}$ variables in descending order of estimated relevance.
 %
 Finally, using the indices $I$ from $\gamma$, we define $\mathcal{I}(I)$ to return an $H'$-dimensional vector for each data point $\vec{y}^{(n)}$, containing the set of selected relevant latent states $\Kn$. 
-All 'non-relevant' variables $h\not\in I$ are effectively set to $0$ in Equation~\eqref{eq:sel-post} 
+All `non-relevant' variables $h\not\in I$ are effectively set to $0$ in Equation~\eqref{eq:sel-post} 
 by not being present in the state set $\Kn$.
 %to $0$, and returns the set of $H'$ selected relevant latent states' indices $\Kn$.
 % with the "non-relevant" variables set to $0$ ($\mathcal{K}_n = \{\vec{s}^{(n)}\,|\,\mbox{for all}\ h\not\in I:\ s_h=0 \}$).
@@ -333,8 +333,8 @@ The \textit{affinity based selection function}  can be expressed as
 %
 %As a meta algorithm, ET selects the $\Kn$ subspace prior to every EM iteration.
 In each iteration of EM, the following occurs: 
-prior to the E-step, the selection function $\Ss(\vec{y}^{(n)})$~\eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
-which are then used to compute the truncated posterior distribution $q_n(\vec{s})$~\eqref{eq:sel-post}.
+prior to the E-step, the selection function $\Ss(\vec{y}^{(n)})$ in \eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
+which are then used to compute the truncated posterior distribution $q_n(\vec{s})$ in \eqref{eq:sel-post}.
 The truncated posterior can be computed using any standard inference method, 
 %posterior distribution by computing the true posterior on the truncated space $q_n(\vec{s})$~\eqref{eq:sel-post}.
 %With the truncated posterior $q(\vec{s})$, inference can be performed using any standard method, 
@@ -355,15 +355,15 @@ The result of the E-step is then used to update the model parameters in the M-st
 %data.
 In previous work, the form of the selection function $\mathcal{S}(\vec{y}^{(n)})$ has been
 a manually-derived deterministic function constructed based on the structure of the considered model by hand 
-(see e.g. \citep{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
-BornscheinEtAl2013, SheikhEtAl2014}).
+ \citep[see e.g.][]{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
+BornscheinEtAl2013, SheikhEtAl2014}.
 %
 We now generalize the selection approach:  %for inference in graphical models
 instead of predefining the form of $\Ss$ for variable selection, we want
 to learn it in a black-box and model-free way based on the data.
 %
 The case we consider is to learn $\Ss$ by using Gaussian process (GP) regression
-(e.g. \citep{RasmussenGPbook}), which is flexible, can make exact predictions,
+\citep[e.g.][]{RasmussenGPbook}, which is flexible, can make exact predictions,
 and scales cubicly with the number of data points $N$ but linearly with the number of latent variables $H$.  
 %
 %Thus, with the previously defined concepts, we can express the Gaussian process model for the posterior marginal probability that $s_h^{(n)}=1$:
@@ -402,7 +402,7 @@ in each subsequent EM iteration, the true expecations w.r.t. the $\Kn$-truncated
 
 For each data point $n$ and latent variable $h$ we compute the predicted mean of the GP by leaving 
 this data point out of the training set and considering all others, which is called leave-one-out (LOO) prediction.
-It can be shown that this can be implemented efficiently (see Section 5.4.2 in \citep{RasmussenGPbook}), 
+It can be shown that this can be implemented efficiently \citep[see Section 5.4.2 in ][]{RasmussenGPbook}, 
 and we use this result to update the predicted affinity as follows:
 %
 %We compute the predictive mean for of the predictive probability defined by the GP regression model \comm{(???)} by using
@@ -468,12 +468,12 @@ we call entire process \textit{GP-select}, for which an outline is shown in Algo
 \vspace{-.4cm}    
     \FOR{data point $n=1,\dots, N$}
     \STATE{
-    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: Eq.~\eqref{eq:gp-loo}\\
+    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: \eqref{eq:gp-loo}\\
 %2. sort and reduce indices to $H'$\\
  %   2.2. include uniformly chosen indices\\
-    compute subset of relevant states $\Ss$: Eq.~\eqref{eq:sel-func}\\ % get $\Kn$ 
+    compute subset of relevant states $\Ss$: \eqref{eq:sel-func}\\ % get $\Kn$ 
 %3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
-    compute truncated posterior $q_{n,t}(\vec{s})$, E-step: Eq.~\eqref{eq:sel-post}\\ % on reduced set $\Kn$
+    compute truncated posterior $q_{n,t}(\vec{s})$, E-step: \eqref{eq:sel-post}\\ % on reduced set $\Kn$
     store $\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
     update model parameters in M-step\\ 
     }\ENDFOR\\
