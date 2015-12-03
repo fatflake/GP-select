@@ -1,0 +1,176 @@
+% this style was created by Philippe Dreuw and Thomas Deselaers
+\ProvidesPackage{beamerthemeFias} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\RequirePackage{tangocolors}
+%\selectcolormodel{cmyk}
+% http://www.colorsontheweb.com/colorwizard.asp#wizard, used start set: #0066cc
+
+\definecolor{bkgrnd}{HTML}{FFFFFF}
+\definecolor{mainfgnd}{HTML}{EEEEFF} 
+\definecolor{title}{HTML}{00005C} 
+\definecolor{subtitle}{HTML}{225cd6}  
+\definecolor{sectionhd}{HTML}{0033cc}  
+\definecolor{footline}{HTML}{9999EE} 
+\definecolor{maintext}{HTML}{444444} 
+\definecolor{other}{HTML}{999999} 
+\definecolor{blocktbgn}{HTML}{225cd6}  
+\colorlet{lblue}{blocktbgn!60}  
+\definecolor{blockbgn}{HTML}{FFFFFF}  % bgn for text in block
+\definecolor{blocktitle}{HTML}{FFFFFF} 
+\definecolor{dg}{rgb}{0,.7,.1}
+
+\mode<presentation>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamercolor{headline}{fg=title,bg=white}
+\setbeamercolor{footline}{fg=footline, bg=white}
+\setbeamerfont{footline}{size=\large,series=\tt}
+\setbeamercolor{separation line}{bg=other}
+\setbeamercolor{title in headline}{fg=title}
+\setbeamercolor{author in headline}{fg=subtitle}
+\setbeamercolor{institute in headline}{fg=subtitle}
+
+\setbeamercolor{framesubtitle}{fg=subtitle, bg=mainfgnd}
+\setbeamercolor{author in head/foot}{fg=footline, bg=white}
+\setbeamercolor{title in head/foot}{fg=footline, bg=white}
+\setbeamercolor{upper separation line head}{fg=other}
+
+\setbeamercolor*{normal text}{fg=maintext, bg=mainfgnd}
+
+% Normal Block
+\setbeamercolor*{block body}{bg=blockbgn,fg=maintext}
+\setbeamercolor*{block title}{fg=blocktitle,bg=blocktbgn}
+\setbeamerfont{block title}{size=\Large}
+\setbeamerfont{block body}{size=\large}
+
+% Example Block
+\setbeamercolor*{example body}{fg=other,bg=black}
+\setbeamercolor*{example text}{fg=maintext,bg=black}
+\setbeamercolor*{example title}{bg=blocktitle,fg=white}
+
+%\setbeamercolor{alerted text}{fg=i6colorscheme3}
+
+\setbeamercolor{structure}{fg=other}
+
+\setbeamertemplate{itemize items}[square]
+\setbeamercolor*{itemize item}{fg=blocktbgn!60,bg=blocktbgn}
+\setbeamertemplate{navigation symbols}{}  % no navigation on a poster
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{block begin}{
+  \vskip-.75ex %was .75ex
+  \begin{beamercolorbox}[rounded=true,shadow=true,leftskip=1cm,colsep*=.75ex]{block title}%
+    \usebeamerfont*{block title}\insertblocktitle
+  \end{beamercolorbox}%
+  {\ifbeamercolorempty[bg]{block body}{}{\nointerlineskip\vskip-0.5pt}}%
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[rounded=true,shadow=true,colsep*=.75ex,sep=.75ex,vmode]{block body}%
+    \ifbeamercolorempty[bg]{block body}{\vskip-.25ex}{\vskip-.75ex}\vbox{}%
+  }
+  \setbeamertemplate{block end}{
+  \end{beamercolorbox}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{headline}{  
+  \leavevmode
+
+  \begin{beamercolorbox}[wd=\paperwidth]{headline}
+    \begin{columns}[T]
+      \begin{column}{1.0\paperwidth}
+        \centering
+        \vskip2.0cm
+        \usebeamercolor{title in headline}{\color{fg}\textbf{\huge\inserttitle}\\[1ex]}
+      \end{column}
+    \end{columns}
+    \begin{columns}[T]
+      \begin{column}{.15\paperwidth}
+    \vspace{-3cm}   % how high logo is
+          \vskip2.0cm
+          %\centering
+          \flushright
+          \includegraphics[width=.5\linewidth]{tu_logo_notext} \hspace{.2cm}
+	% right Logo
+	  \includegraphics[width=.45\linewidth]{sheff_logo} 
+      \end{column}
+      \begin{column}{.70\paperwidth}
+
+%        \raggedleft
+        \centering
+        \vskip1.0cm
+        \usebeamercolor{author in headline}{\color{fg}{\large\insertauthor}\\[1ex]}
+        \usebeamercolor{institute in headline}{\color{fg}{\normalsize\insertinstitute}\\[1ex]}     
+        \vskip2.0cm
+      \end{column}
+      \begin{column}{.15\paperwidth}
+
+    \vspace{-3cm} % logo height location
+          \vskip1.8cm
+%          \centering
+          \flushleft
+	  \includegraphics[width=.35\linewidth]{old_logo} \hspace{.2cm} 
+          \includegraphics[width=.6\linewidth]{UCL_csml_logo_cent} 
+             % left Logo
+          \\
+          \vskip1.0cm
+      \end{column}
+      \begin{column}{.01\paperwidth}
+      \end{column}
+    \end{columns}
+    \vspace{0.3cm}
+  \end{beamercolorbox}
+
+  \begin{beamercolorbox}[wd=\paperwidth]{lower separation line head}
+    \rule{0pt}{2pt}
+  \end{beamercolorbox}
+}
+
+%  \setbeamertemplate{headline}{  
+%    \leavevmode
+%    \begin{beamercolorbox}[sep=0.5cm,wd=.8\paperwidth]{headline}
+%      \usebeamercolor{title in headline}{\raggedleft\color{fg}\textbf{\LARGE{\inserttitle}}\\[1ex]}
+%      \usebeamercolor{author in headline}{\raggedleft\color{fg}\large{\insertauthor}\\[1ex]}
+%      \usebeamercolor{institute in headline}{\raggedleft\color{fg}\large{\insertinstitute}\\[1ex]}     
+%    \end{beamercolorbox}%
+%    \begin{beamercolorbox}[wd=.2\paperwidth]{logo in headline}
+%      \centering
+%      \LARGE{LOGO}
+%    \end{beamercolorbox}  
+
+
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{footline}{
+  %\begin{beamercolorbox}[wd=\paperwidth]{upper separation line foot}
+  %  \rule{0pt}{2pt}
+  %\end{beamercolorbox}
+  
+  \leavevmode%
+  %\begin{beamercolorbox}[ht=4ex,leftskip=1cm,rightskip=1cm]{author in head/foot}%
+  %  This project was supported by the German Federal Ministry of Education
+  %  and Research (BMBF) within the "Bernstein Focus: Neurotechnology
+  %  Frankfurt" through research grant 01GQ0840.
+  %  \vskip1ex
+  %\end{beamercolorbox}
+  %\vskip0pt%
+  %\begin{beamercolorbox}[wd=\paperwidth]{lower separation line foot}
+  %  \rule{0pt}{2pt}
+  %\end{beamercolorbox}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Display a grid to help align images ... and it looks nice with this color scheme
+%\beamertemplategridbackground[1cm]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mode<all>
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-PDF-mode: t
+%%% TeX-master: "poster"
+%%% End: 
