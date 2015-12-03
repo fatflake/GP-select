@@ -294,7 +294,7 @@ of each variable, e.g.\ we try to learn $f$ as follows:
 %
 \begin{equation}
 \label{eq:affinity}
-f_h(\vec{y}^{(n)}) \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
+f_h(\vec{y}^{(n)}) = \hat{\vec{p}}^{(n)} \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
 \end{equation}
 %
 meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
@@ -319,7 +319,7 @@ Next, using all $\hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$
 %approximated marginal posterior probabilities 
 from the affinity function 
 $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we define 
- $\gamma(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices % XXX changed rom rebuttal. states' indices. %, (where $H' \ll H$.
+ $\gamma\,(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices. % XXX changed rom rebuttal. states' indices. %, (where $H' \ll H$.
 To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
 This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
 iterations. 
@@ -441,7 +441,7 @@ $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q_n(\vec{s})}) | 
 %This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
 In the first EM iteration, the expectations $\langle\vec{s}\rangle^{(n)}_{q(\vec{s})}$ are initialized randomly;
 in each subsequent EM iteration, the true expectations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
-The hyperparameters of the kernel are optimized by maximum likelihood every $T^*$ EM iterations.
+The EM algorithm is run for $T$ iterations and the hyperparameters of the kernel are optimized by maximum likelihood every $T^*$ EM iterations.
 
 For each data point $n$ and latent variable $h$ we compute the predicted mean of the GP by leaving 
 this data point out of the training set and considering all others, which is called leave-one-out (LOO) prediction.
