@@ -294,7 +294,7 @@ $^{ 5}$University of Oldenburg}
             \vspace{-.4cm}  
             \begin{itemize}
             \setlength{\labelsep}{0.5em}
-            \item Novel nonparametric procedure for \highlight{fast inference} in \highlight{generative graphical models with large number of latent states}, e.g. $\# latent states^{\# latent variables}$ %exponential in the number of latent variables
+            \item Novel nonparametric procedure for \highlight{fast inference} in \highlight{generative graphical models with large $\#$ of latent states}, e.g. $\# latent$ $states^{\# latent}$$^{variables}$ %exponential in the number of latent variables
             \item \highlight{Idea}: meta-algorithm for EM, \highlight{iterative latent variable preselection} -- alternate between learning a \highlight{'selection function'} (reveal the relevant latent variables) and using the result for a \highlight{compact approx of the posterior distribution for EM}
           %  \item Enables inference with many latent states where exact approaches are computationally infeasible.
             \item \highlight{How}: \textcolor{dg}{learn selection function} entirely from the observed data and current EM state via \highlight{Gaussian process regression} -- earlier approaches used \textcolor{red}{expensive manually-designed selection functions} for each problem setting -- our approach is \textcolor{dg}{fully automatic and flexible}
@@ -341,7 +341,7 @@ $^{ 5}$University of Oldenburg}
 \begin{equation}
 \label{eq:post}
 p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \Theta) \, p(\vec{y} | \vec{s}, \Theta)}
-{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s}\Prime | \Theta) \, p(\vec{y} | \vec{s}\Prime, \Theta)}.
+{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s}\Prime | \Theta) \, p(\vec{y} | \vec{s}\Prime, \Theta)}
 \end{equation}
 \large
 
@@ -359,7 +359,7 @@ p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \Theta) \, p(\vec{y} 
                 p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) 
                 &\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\delta(\vec{s}^{(n)}\in\,\,\Kn)}
                    %{\ disS\hspace{-1.5mm}\int_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-8mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)\,d\vec{s}\Prime^{(n)}}
-                {\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-3mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)},
+                {\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-3mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)}
                 \end{align}
                 %
                 \large
@@ -387,7 +387,7 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
                 \begin{equation}
                 \label{eq:affinity}
                 f_h(\vec{y}^{(n)}) %= \hat{{p}}^{(n)} 
-                    \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
+                    \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta)
                 \end{equation}
                 %
 
@@ -412,13 +412,13 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
             \end{center}
        
         
-          \vspace{-.2cm}
+         \vspace{-.05cm}
            \begin{itemize}
             \setlength{\labelsep}{0.5em}
 
             %%%\item $f_h$ to approximate the marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
             \item \highlight{Sort and reduce} full indices to $H\,'$ most rel. variables' set -- define 
-                  \highlight{$\gamma\,(\hat{\vec{p}}^{(n)})$} to outputs the \highlight{$H\,'$ selected variable indices $I$} for the $n$th data point
+                  \highlight{$\gamma\,(\hat{\vec{p}}^{(n)})$} to output the \highlight{$H\,'$ selected variable indices $I$} for the $n$th data point
                   %From $\hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$, 
             \item \highlight{Define subset} of the $H\,'$-dimensional \highlight{relevant latent states $\Kn$} with \highlight{$\mathcal{I}(I)$} 
                 %for the $n$th data point
@@ -427,47 +427,50 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
             \item All \highlight{non-relevant variable states} $s_h$ for all variables $h\not\in I$ are \highlight{set to $0$} in Eq.~\eqref{eq:sel-post} 
  %are effectively set to $0$ in Equation~\eqref{eq:sel-post} by not being present in the state set $\Kn$.
             \item Using $\vec{f}$, $\mathcal{I}$, and $\gamma$, we can define a 
-            \highlight{emph{selection function}} $\mathcal{S}: \mathrm{R}^D \mapsto 2^{ \{1,\dots,H \}}$ 
+            \highlight{\emph{selection function}} $\mathcal{S}: \mathrm{R}^D \mapsto 2^{ \{1,\dots,H \}}$ 
             to \highlight{select subsets $\mathcal{K}_n$} per data point $\vec{y}^{(n)}$ for
             the \highlight{affinity based selection function}:
             %
-            \vspace{.1cm}
+            \vspace{.2cm}
             \begin{equation}\label{eq:sel-func}
-            \mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
+            \mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n
             \end{equation}
         \end{itemize}
 
-      \vspace{.25cm}
+      \vspace{.35cm}
       \subhead{GP-select: Learn affinity with GP regression}    
         \vspace{-.2cm}
            \begin{itemize}
             \setlength{\labelsep}{0.5em}
 
-            \item Previous work: selection function $\mathcal{S}$ was deterministic and derived by hand for each model 
+            \item \highlight{Previous work}: \highlight{selection function} $\mathcal{S}$ was \highlight{deterministic and derived by hand} for each model using upper bounds or noiseless limits [3,4]
+%hand-crafted to model the properties of the graphical model of interest, using intuition from noiseless limits or upper-bound results specific to the model 
+%\citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,SheikhEtAl2014}.
 
             \item We \highlight{generalize and automatize} this approach:  %for inference in graphical models
 %instead of a predefined form of $\Ss$ for variable selection, learn it in black-box and model-free way based on the data.
                 \highlight{learn $Ss$} with \highlight{GP regression} %-- flexible and can make exact predictions
-            \item Define $f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, where $k(\cdot, \cdot)$ is the covariance kernell and flexibly parameterizable to represent the relationship between variables
+            \item Define $f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, where $k(\cdot, \cdot)$ is the covariance kernel and flexibly parameterizable to represent the relationship between variables
 %flexibly govern the representation of the relationship between variables.
 %%%Again, we use $f_h$ to approximate the marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
 
             \item Before each E-step: 
 %%%compute selection function $\mathcal{S}$ by calculating affinity using a GP to regress the expected values of the latent variables $\langle \vec{S} \rangle$ onto the observed data $\vec{Y}$ -- 
-                train GP on $p_h$ from prev. EM iteration (where $p_h = \langle s_h \rangle$): 
+                \highlight{train GP on $p_h$ from prev. EM iteration} (where $p_h = \langle s_h \rangle$): 
             $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}\rangle^{(n)}_{q_n(\vec{s})}) | n = 1,\dots, N \}$
 
             \item \highlight{Compute} predicted mean of GP using \highlight{leave-one-out (LOO) prediction}:
 
-                \vspace{-.2cm}  % (*1)
+                \vspace{-.6cm}  % (*1)
                 \begin{equation}\label{eq:gp-loo}
                 %\vec{\mu}^{(n)} \;=\;  \hat{\vec{s}}^{(n)} \;=\;  
                 %\hat{p}_{h}^{(n)} =   
                 %p_{h}^{(n)} - \frac{ [ K^{-1} \vec{p}_{h} ]_{nn} }{ [ K^{-1} ]_{nn} }.
                 \hat{p}_{h}^{(n)} \leftarrow   
-                \langle s \rangle_h^{(n)} - \frac{ [ K^{-1} \langle\vec{s}\rangle_{h} ]_{nn} }{ [ K^{-1} ]_{nn} }.
+                \langle s \rangle_h^{(n)} - \frac{ [ K^{-1} \langle\vec{s}\rangle_{h} ]_{nn} }{ [ K^{-1} ]_{nn} }
                 \end{equation}
                 %
+                \vspace{.4cm}
                 \highlight{$\rightarrow$ Efficiently implementable} for all latent vars $h=1,...,H$ and data points $n=1,...,N$ using matrix operations -- only $1$ kernel matrix inversion for all $N$
             \item \highlight{Substitute} Eq.~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function Eq.~\eqref{eq:sel-func} %$\Rightarrow$ GP-select
 
@@ -476,7 +479,7 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
 
 
   \begin{block}{Algorithm}%: GP-Select to accelerate inference in EM}
-    \vspace{-.7cm}
+    \vspace{-1cm}
     \begin{algorithm}[H] 
     %%\caption{GP-Select to accelerate inference in Expectation Maximization}
     \label{alg:gp-select}
@@ -503,7 +506,7 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
     \ENDFOR
     \end{algorithmic}
     \end{algorithm}
-    \vspace{-1.2cm}
+    \vspace{-1.3cm}
 
     \end{block}
 
@@ -523,17 +526,17 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
       \subhead{Sparse coding models}
     %   \textcolor{blocktbgn}{Data \& dictionary elemements} 
             \vspace{.25cm}
-                \includegraphics[width=.8\textwidth]{sparsecoding/bars-test_transpose.pdf}\\
+                \includegraphics[width=.81\textwidth]{sparsecoding/bars-test_transpose.pdf}\\
                 %
             \vspace{.05cm}
            \begin{itemize}
             \item \highlight{Data}: $N=2,000$ with $D=5\times5$ obs dims \& \highlight{$H=10$ latent dims/bars} gen. by each model, with
                 \highlight{GP-select} to preselect \highlight{$H\,' = 5$ dims}
-            \item \highlight{Shown}: GP-select \highlight{converges to GT params}, $W_{GP-select}$ % as w. hand-crafted sel functions ($W_{hand-craft}$) .
+            \item \highlight{Shown}: final EM it; GP-select \highlight{converges to GT params}, $W_{GP-select}$ % as w. hand-crafted sel functions ($W_{hand-craft}$) .
                     % Observed empirically: composition kernel flexibly subsumes other kernels,suggesting it a good choice for general use.
           \end{itemize}
 
-\vspace{-.2cm}
+\vspace{.2cm}
      \subhead{Gaussian mixture model} 
         %\textcolor{blocktbgn}{Gaussian mixture model} 
 %\vspace{-.1cm}
@@ -548,7 +551,7 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
             \item \highlight{Shown}: using the \textcolor{red}{wrong selection function can do harm} (i.e. miss patterns); sel. funcs need to be \textcolor{dg}{flexible} and possibly \textcolor{dg}{nonlinear}
           \end{itemize}
 
-\vspace{.2cm}
+\vspace{.3cm}
 
     \subhead{Translation invariant occlusive models [1]} 
        %\textcolor{blocktbgn}{Translation invariant occlusive models} 
@@ -560,7 +563,7 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
            \begin{itemize}
             \item \highlight{Problem}: locate objects in scene (\textbf{A}), with \textcolor{red}{massive latent space complexity -- $\#$ of obj. locations exponentiated by $\#$ of objects}.
             \item \highlight{Speed}: partial incomplete Cholesky approx to for faster GP regression computation, update GP hyperparams every 5 EM its
-            \item \highlight{Shown}: all 3 variants of GP-selection \textcolor{dg}{learn all objects} (\textbf{B}) with \textcolor{dg}{accuracy} equivalent to hand-crafted selection (\textbf{C} \& \textbf{D})
+            \item \highlight{Shown}: all 3 variants of GP-selection \textcolor{dg}{learn all objects} (\textbf{B}) with \textcolor{dg}{accuracy equivalent to hand-crafted selection} (\textbf{C} \& \textbf{D})
    
           \end{itemize}
 \vspace{-.9cm}
@@ -582,7 +585,7 @@ which directly reflects the \highlight{relevance of latent variable $s_h$}.
       \begin{column}{.52\linewidth}
         \scriptsize
         \lbrack1\rbrack \ Dai, Z. and Lücke, J. (2014). Autonomous document cleaning – a generative approach
-to reconstruct strongly corrupted scanned texts. IEEE Transactions on Pattern Analysis and Machine Intelligence, 36(10):1950–1962.\
+to reconstruct strongly corrupted scanned texts. IEEE Transactions on Pattern Analysis and Machine Intelligence (PAMI), 36(10):1950–1962.\
 
 %[3] M.J. Wainwright and M.I. Jordan. Graphical models, exponential families, and variational inference. Foundations and Trends in Machine Learning, 1(1-2), 2008.
 %[4] Daphne Koller and Nir Friedman. Probabilistic graphical models: principles and techniques. MIT press, 2009.
@@ -604,8 +607,10 @@ to reconstruct strongly corrupted scanned texts. IEEE Transactions on Pattern An
         %
         %We would like to thank bunnies of the world, and pony's.
         \scriptsize
-        \lbrack3\rbrack \ Another ref.\\
-        \lbrack4\rbrack \ One more!
+        \lbrack3\rbrack \ Bornschein, J., Henniges, M., and Lücke, J. (2013). Are V1 simple cells opti-
+mized for visual occlusions? A comparative study. PLoS Computational Biology, 9(6):e1003062.\\
+        \lbrack4\rbrack \ Sheikh, A.-S., Shelton, J., and Lücke, J. (2014). A truncated EM approach for spike-
+and-slab sparse coding. Journal of Machine Learning Research (JMLR), 15:2653–2687.
       \end{column}
     \end{columns}
     }
