@@ -1,9 +1,45 @@
+@Inproceedings {SchwaighoferEtAl2005,
+abstract     = {<p>We present a novel method for learning with Gaussian process regression in a
+                hierarchical Bayesian framework. In a first step, kernel matrices on a fixed set
+                of input points are learned from data using a simple and efficient EM algorithm.
+                This step is nonparametric, in that it does not require a parametric form of
+                covariance function. In a second step, kernel functions are fitted to approximate
+                the learned covariance matrix using a generalized Nystroem method, which results
+                in a complex, data driven kernel. We evaluate our approach as a recommendation
+                engine for art images, where the proposed hierarchical Bayesian method leads to
+                excellent prediction performance.</p>},
+author       = {Anton Schwaighofer and Volker Tresp and Kai Yu},
+booktitle    = {Advances in Neural Information Processing Systems 17 ({NIPS}), Vancouver,
+               British Columbia, Canada},
+pages     = {1209--1216},
+publisher    = {MIT Press},
+title        = {Learning Gaussian Process Kernels via Hierarchical Bayes},
+url          = {http://research.microsoft.com/apps/pubs/default.aspx?id=74492},
+year         = {2004},
+}
+
+
+@article{RuppEtAl2012,
+  title = {Fast and Accurate Modeling of Molecular Atomization Energies with Machine Learning},
+  author = {Rupp, Matthias and Tkatchenko, Alexandre and M\"uller, Klaus-Robert and von Lilienfeld, O. Anatole},
+  journal = {Phys. Rev. Lett.},
+  volume = {108},
+  issue = {5},
+  pages = {058301},
+  numpages = {5},
+  year = {2012},
+  month = {Jan},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.108.058301},
+  url = {http://link.aps.org/doi/10.1103/PhysRevLett.108.058301}
+}
+
+
 
 @Article{FinSch01,
  author    = {S. Fine and K. Scheinberg},
- title     = {Efficient {SVM} Training Using Low-Rank Kernel
-         Representations},
- journal   = jmlr,
+ title     = {Efficient {SVM} Training Using Low-Rank Kernel Representations},
+ journal   = {Journal of Machine Learning Research},
  year      = {2001},
  volume    = {2},
  pages     = {243--264}
@@ -37,7 +73,7 @@
   title =        "{Bayesian} Prediction of Deterministic Functions, With
                  Applications to the Design and Analysis of Computer
                  Experiments",
-  journal =      j-J-AM-STAT-ASSOC,
+  journal =      {J. American Statistical Association},
   volume =       "86",
   number =       "416",
   pages =        "953--963",
@@ -45,45 +81,48 @@
 }
 
 
-@Article{Wilkinsons2014,
+@techreport{Wilkinsons2014,
     author = {Wilkinson, Richard D.},
     day = {23},
     eprint = {1401.1436},
     month = feb,
     priority = {2},
-    title = {{Accelerating ABC methods using Gaussian processes}},
-    Eprint = {http://arxiv.org/abs/1401.1436},
+    title = {Accelerating {ABC} methods using Gaussian processes},
+    institution = {University of Sheffield},
+    note = {\emph{http://arxiv.org/abs/1401.1436}},
     year = {2014}
 }
 
 
-@article{MeedsWelling2014,
-  author    = {Edward Meeds and
-               Max Welling},
+@inproceedings{MeedsWelling2014,
+  author    = {Edward Meeds and Max Welling},
   title     = {{GPS-ABC:} Gaussian Process Surrogate Approximate Bayesian Computation},
-  journal   = {CoRR},
-  volume    = {abs/1401.2838},
+  booktitle = {Proceedings of the Thirtieth Conference on Uncertainty in Artificial
+               Intelligence ({UAI}), Quebec City, Quebec, Canada, July 23-27,
+               2014},
+  pages     = {593--602},  
   year      = {2014}
 }
 
-@Article{GuttmanCorander2015,
+@techreport{GuttmanCorander2015,
    author = {Gutmann, Michael U. and Corander, Jukka},
-   month = jan,
-   priority = {2},
    title = {{Bayesian Optimization for Likelihood-Free Inference of Simulator-Based Statistical Models}},
-   Eprint = {http://arxiv.org/abs/1501.03291},
+   institution = {University of Helsinki},
+   note = {\emph{http://arxiv.org/abs/1501.03291}},
    year = {2015}
 }
 
-@Article{SnoekEtAl2015,
-   author ={Snoek, Jasper, and Oren Rippel, and Kevin Swersky,and Ryan Kiros, and Nadathur Satish, and Narayanan Sundaram, Md. and Mostofa Ali and Patwary, Prabhat, and Adams, Ryan},
+
+@techreport{SnoekEtAl2015,
+   author ={Snoek, Jasper and Oren Rippel and Kevin Swersky and Ryan Kiros and Nadathur Satish and Narayanan Sundaram, Md. and Mostofa Ali and Patwary, Prabhat and Adams, Ryan},
+    institution = {Harvard University},
     title = {Scalable Bayesian Optimization Using Deep Neural Networks},
     year = {2015},
-    Eprint = {http://arxiv.org/abs/1502.05700}
+    note = {\emph{http://arxiv.org/abs/1502.05700}}
 }
 
 
-@ARTICLE\{OpperWinther2005,
+@ARTICLE{OpperWinther2005,
     author       = "M. Opper and O. Winther",
     title        = "Expectation Consistent Approximate Inference",
     year         = "2005",
@@ -104,7 +143,7 @@ We test the framework on toy benchmark problems for binary variables on fully co
     booktitle = {IN: ADVANCES IN NEURAL INFORMATION PROCESSING SYSTEMS 20},
     year = {2008},
     pages = {161--168},
-    publisher = {}
+    publisher = {MIT Press}
 }
 
 @TECHREPORT{zhang14divide,
@@ -120,7 +159,9 @@ We test the framework on toy benchmark problems for binary variables on fully co
 @inproceedings{WellingICML2014,
  author    = {Diederik P. Kingma and Max Welling},
  title     = {Efficient Gradient-Based Inference through Transformations between Bayes Nets and Neural Nets},
- booktitle = {International Conference on Machine Learning},
+ booktitle = {Proceedings of the 31th International Conference on Machine Learning,
+               {ICML} 2014, Beijing, China, 21-26 June 2014},
+ pages     = {1782--1790},
  year      = {2014},
    }
 
@@ -128,7 +169,9 @@ We test the framework on toy benchmark problems for binary variables on fully co
   title={Fastfood --- Computing Hilbert Space Expansions in Loglinear Time},
   author={Q.V. Le and T. Sarlos and A. J. Smola},
   year = 2013,
-  booktitle = {International Conference on Machine Learning},
+  booktitle = {Proceedings of the 30th International Conference on Machine Learning,
+               {ICML} 2013, Atlanta, GA, USA, 16-21 June 2013},
+  pages     = {244--252}
 }
 
 
@@ -155,21 +198,21 @@ abstract     = {<p>We present a framework for sparse Gaussian process (GP) metho
                 estimates of predictive probabilities (`error bars'), allows for Bayesian model
                 selection and is less complex in implementation.</p>},
 author       = {Neil Lawrence and Matthias Seeger and Ralf Herbrich},
-booktitle    = {Advances in Neural Information Processing Systems 15},
-month        = {January},
-pages        = {625-632},
+title     = {Fast Sparse Gaussian Process Methods: The Informative Vector Machine},
+  booktitle = {Advances in Neural Information Processing Systems 15 ({NIPS}), Vancouver, British
+               Columbia, Canada},
+  pages     = {609--616},
 publisher    = {MIT Press},
-title        = {Fast Sparse Gaussian Process Methods: The Informative Vector Machine},
 url          = {http://research.microsoft.com/apps/pubs/default.aspx?id=76038},
-year         = {2003},
+year = 2002
 }
 
 
-@misc{butt,
-Author = {Zhenwen Dai and Andreas Damianou and James Hensman and Neil Lawrence},
-Title = {Gaussian Process Models with Parallelization and GPU acceleration},
-Year = {2014},
-Eprint = {arXiv:1410.4984},
+@inproceedings{DaiEtAl2014,
+    Author = {Zhenwen Dai and Andreas Damianou and James Hensman and Neil Lawrence},
+    Title = {Gaussian Process Models with Parallelization and GPU acceleration. \textit{NIPS 2014, Workshop on Modern non-parametrics: automating the learning pipeline} },
+    year = {2014},
+    booktitle = {NIPS Workshop on Modern non-parametrics: automating the learning pipeline},
 }
 
 @article{GoodfellowEtAl2013,
@@ -186,26 +229,30 @@ Eprint = {arXiv:1410.4984},
 
 @inproceedings{HensmanEtAl2013,
 author = {Hensman, James and Fusi, N and Lawrence, ND},
-booktitle = {Uncertainty in Artificial Intelligence},
+booktitle = {Proceedings of the Twenty-Ninth Conference on Uncertainty in Artificial
+               Intelligence, {UAI} 2013, Bellevue, WA, USA, August 11-15, 2013},
 title = {{Gaussian processes for big data}},
 year = {2013}
 }
+
+
 @inproceedings{Hensman2012,
 author = {Hensman, James and Rattray, Magnus and Lawrence, Neil D},
-booktitle = {Advances in Neural Information Processing System},
+booktitle = {Advances in Neural Information Processing Systems 25 ({NIPS}), Lake Tahoe, Nevada, United States},
+pages     = {2897--2905},editor = {Bartlett, Peter L. and Pereira, Fernando C. N. and Burges, Christopher J. C. and Bottou, Léon and Weinberger, Kilian Q.},
 title = {{Fast Variational Inference in the Conjugate Exponential Family}},
 year = {2012}
 }
 
 
-@incollection{DaiLucke2012a,
+@inproceedings{DaiLucke2012a,
 	Author = {Dai, Z. and L\"{u}cke, J.},
 	Booktitle = {IEEE Conference on Computer Vision and Pattern Recognition},
 	Title = {Autonomous Cleaning of Corrupted Scanned Documents -- A Generative Modeling Approach},
     Pages = {3338--3345},
 	Year = {2012}}
 
-@incollection{DaiLucke2012b,
+@inproceedings{DaiLucke2012b,
 	Author = {Dai, Z. and L\"{u}cke, J.},
 	Booktitle = {IEEE Conference on Computer Vision and Pattern Recognition},
 	Title = {Unsupervised Learning of Translation Invariant Occlusive Components},
@@ -216,6 +263,7 @@ Pages = {2400-2407},
   title={What Are the Invariant Occlusive Components of Image Patches? A Probabilistic Generative Approach},
   author={Z. Dai and G. Exarchakis and J. L{\"u}cke},
   booktitle={Advances in Neural Information Processing Systems},
+  editor ={C.J.C. Burges and L. Bottou and M. Welling and Z. Ghahramani and K.Q. Weinberger.},
   pages={243--251},
   year={2013}
 }
@@ -233,7 +281,7 @@ Pages = {2400-2407},
 
 @inproceedings{ZoranWeiss2012,
   author = {Zoran, Daniel and Weiss, Yair},
-  booktitle = {NIPS},
+  booktitle = {Advances in Neural Information Processing System},
   editor = {Bartlett, Peter L. and Pereira, Fernando C. N. and Burges, Christopher J. C. and Bottou, Léon and Weinberger, Kilian Q.},
   pages = {1745-1753},
   title = {"Natural Images, Gaussian Mixtures and Dead Leaves".},
@@ -252,8 +300,10 @@ Pages = {2400-2407},
 @inproceedings{MnihGregor2014,
   title={Neural Variational Inference and Learning in Belief Networks},
   author={Mnih, Andriy and Gregor, Karol},
-  booktitle={Proceedings of the 31st International Conference on Machine Learning},
-  year={2014},
+  booktitle={Proceedings of the 31th International Conference on Machine Learning,
+               {ICML} 2014, Beijing, China, 21-26 June 2014},
+  pages     = {1791--1799},
+  year={2014}
 }
 
 @TECHREPORT{coil100,
@@ -322,30 +372,38 @@ redundant dictionaries, super-resolution and compressive sensing applications.}}
     pages = {2653-2687},
     year = {2014}}
 
-@article{SheltonEtAl2012,
+@inproceedings{SheltonEtAl2012,
 	Author = {J. Shelton and P. Sterne and J. Bornschein and A.-S. Sheikh and J. L\"ucke},
-	Journal = {Advances in Neural Information Processing Systems},
+	booktitle = {Advances in Neural Information Processing Systems 25 ({NIPS}), Lake Tahoe, Nevada, United States},
+    pages     = {2285--2293},
 	Title = {Why {MCA}? Nonlinear sparse coding with spike-and-slab prior for neurally plausible image encoding},
-	Volume = {25},
-	Year = {2012}}
+	Year = {2012}
+}
 
 @article{SheltonEtAl2013,
 	Author = {J. Shelton and A.-S. Sheikh and P. Sterne and J. Bornschein and J. L\"ucke},
-	Journal = {NIPS Workshop on High-dimensional Statistical Inference in the Brain},
+	Journal = {{NIPS} Workshop on High-dimensional Statistical Inference in the Brain},
 	Title = {Nonlinear spike-and-slab sparse coding for interpretable image encoding},
-	Year = {2013}}
+	Year = {2013}
+}
 
 
-@article{MairalEtAl2009,
+@inproceedings{MairalEtAl2009,
 	Author = {J. Mairal and F. Bach and J. Ponce and G. Sapiro and A. Zisserman},
-	Journal = {International Conference on Computer Vision},
+	booktitle = {Proceedings of the 26th Annual International Conference on Machine
+               Learning, {ICML} 2009, Montreal, Quebec, Canada, June 14-18, 2009},
+    booktitle = {{IEEE} 12th International Conference on Computer Vision, {ICCV} 2009,
+               Kyoto, Japan, September 27 - October 4, 2009},
+    pages     = {2272--2279},
 	Title = {Non-Local Sparse Models for Image Restoration},
 	Volume = {25},
 	Year = {2009}}
 
-@article{MairalEtAl2009b,
+@inproceedings{MairalEtAl2009b,
 	Author = {J. Mairal and F. Bach and J. Ponce and G. Sapiro},
-	Journal = {International Conference on Machine Learning},
+	booktitle = {Proceedings of the 26th Annual International Conference on Machine
+               Learning, {ICML} 2009, Montreal, Quebec, Canada, June 14-18, 2009},
+    pages     = {689--696},
 	Title = {Online Dictionary Learning for Sparse Coding},
 	Volume = {25},
 	Year = {2009}}
@@ -519,7 +577,8 @@ redundant dictionaries, super-resolution and compressive sensing applications.}}
 
 @inproceedings{TitsiasGredilla2011,
 	Author = {M. Titsias and M. L{\'a}zaro-Gredilla},
-	Booktitle = {Advances in Neural Information Processing Systems},
+	booktitle = {Advances in Neural Information Processing Systems 24 ({NIPS}), Granada, Spain},
+    pages     = {2510--2518},
 	Title = {Spike and Slab Variational Inference for Multi-Task and Multiple Kernel Learning},
 	Year = {2011}}
 
@@ -4334,7 +4393,7 @@ Olshausen, B., C. Cadieu, and D.K. Warland. ,
 	Acmid = {1390707},
 	Author = {M. Seeger},
 	Issn = {1532-4435},
-	Journal = {Journal of Machine Learning Research},
+	Journal = {J. of Machine Learning Research},
 	Month = {June},
 	Numpages = {55},
 	Pages = {759--813},
@@ -4361,12 +4420,16 @@ Olshausen, B., C. Cadieu, and D.K. Warland. ,
 	Title = {A Deterministic Algorithm for `Spike-and-Slab' Sparse Coding},
 	Year = {2011}}
 
-@article{SheltonEtAl2011,
+@inproceedings{SheltonEtAl2011,
 	Author = {J. Shelton and J. Bornschein and A.-S. Sheikh and P. Berkes and J. L\"ucke},
 	Journal = {Advances in Neural Information Processing Systems},
-	Title = {Select and Sample - A Model of Efficient Neural Inference and Learning},
-	Volume = {24},
-	Year = {2011}}
+	title     = {Select and Sample - {A} Model of Efficient Neural Inference and Learning},
+    booktitle = {Advances in Neural Information Processing Systems 24: 25th Annual
+               Conference on Neural Information Processing Systems 2011. Proceedings
+               of a meeting held 12-14 December 2011, Granada, Spain.},
+    pages     = {2618--2626},	
+	Year = {2011}
+}
 
 @article{ShenEtAl2011,
 	Author = {Kai Shen and Sina Tootoonian and Gilles Laurent},
