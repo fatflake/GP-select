@@ -1,0 +1,88 @@
+\documentclass[10pt]{letter}
+\sloppy
+\textwidth 6.25in
+\topmargin -1.2in
+\textheight 9.7in
+\oddsidemargin 0.00in
+\vspace{\bigskipamount}
+\pagestyle{empty}
+\address{
+Technische Universit\"at Berlin\\
+Department of Software Engineering\\and Theoretical Computer Science\\
+Sekretariat MAR 5-6\\
+Marchstrasse 23\\
+10587 Berlin\\
+Germany\\} 
+\signature{\vspace{-5mm}Jacquelyn A. Shelton, Jan Gasthaus, Dr. Zhenwen Dai, Prof. Dr. J\"org L\"ucke), and Prof. Dr. Arthur Gretton }
+\begin{document}
+%\flushleft
+%\renewcommand{\baselinestretch}{1.15}\small\normalsize %approx. double spacing
+\begin{letter}{
+The Editorial Board\\
+Computational Neuroscience\\
+\vspace{10mm}
+%\hspace{35mm}
+\textbf{Submission of manuscript entitled "GP-select: Accelerating EM using adaptive
+subspace preselection"}
+}
+
+% NC NOTES
+%
+% Cover Letter
+%
+% A cover letter must be provided with your submission. The following three items must be acknowledged:
+%
+% Title of the paper.
+% A statement that none of the material has been published or is under consideration for publication elsewhere.
+% For multi-author papers, the journal editors will assume that all the authors have been involved with the work and have approved the manuscript and agree to its submission
+%
+% - Concisely summarizes why your paper is a valuable addition to the scientific literature
+% - Briefly relates your study to previously published work
+% - Specifies the type of article you are submitting (for example, research article, systematic review, meta-analysis, clinical trial)
+% - Describes any prior interactions with PLOS regarding the submitted manuscript
+% - Suggests appropriate PLOS ONE Academic Editors to handle your manuscript (view a complete listing of our academic editors)
+% - Lists any recommended or opposed reviewers
+%
+%
+% Yeah the cover letter does not deserve that..,.
+% And besides since the paper wasn't at a conference the cover letter is pretty much decorative 
+% It's only useful if you're explaining why the journal version is different from the conference version
+% 
+
+\opening{Dear Neural Computation editorial board,}
+
+We would like to submit our manuscript titled ``GP-select: Accelerating EM using adaptive
+subspace preselection" for consideration to Neural Computation. 
+
+None of the work in manuscript has been either published or submitted elsewhere.
+
+Inference in probabilistic graphical models can be challenging in situations where there
+are a large number of hidden variables, each of which may take on one of several state values.
+
+Our work proposes a method based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and using this to obtain a compact approximation of the posterior distribution for EM.
+This lends our work to make several contributions: 
+
+(1) Inference is possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally infeasible.
+
+(2) We learn the selection function entirely from the observed data and current EM state via Gaussian process regression. This is by contrast with earlier approaches, where selection functions were manually-designed for each problem setting.
+
+(3) Our approach performs as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method, at a far lower computational cost.
+
+
+%represents the first study using sparse coding with continuous latent variables and max component combination. It focuses on the functional capabilities of the model, compares its properties to standard linear sparse coding on linear and natural data, and thereby highlights the crucial differences to the standard linear model. 
+
+
+Some potentially appropriate reviewers include: 
+
+Dr. Christoph Lampert, email, IST, Vienna
+
+Dr. Ed Meeds, ..
+
+Dr. Koa blabl, ...a
+
+
+\noindent \vspace{.1in}\closing{Sincerely,\vspace{-5mm}}
+\end{letter}
+\end{document}
+
+
