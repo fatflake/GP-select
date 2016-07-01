@@ -139,9 +139,11 @@ We test the framework on toy benchmark problems for binary variables on fully co
 
 @INPROCEEDINGS{Bottou08thetradeoffs,
     author = {Léon Bottou and Olivier Bousquet},
-    title = { The tradeoffs of large scale learning},
-    booktitle = {IN: ADVANCES IN NEURAL INFORMATION PROCESSING SYSTEMS 20},
+    title = {The tradeoffs of large scale learning},
+    booktitle = {Advances in Neural Information Processing Systems 20 ({NIPS}), Vancouver, British
+               Columbia, Canada},
     year = {2008},
+    editor = {J. C. Platt and D. Koller and Y. Singer and S. T. Roweis},
     pages = {161--168},
     publisher = {MIT Press}
 }
@@ -364,6 +366,22 @@ redundant dictionaries, super-resolution and compressive sensing applications.}}
     volume = {9},
     number = {6}}
 
+
+@article{SheltonEtAl2015,
+    author = {Shelton, Jacquelyn A. and Sheikh, Abdul-Saboor and Bornschein, J\"org and Sterne, Philip and L\"ucke, J\"org},
+    journal = {PLoS ONE},
+    publisher = {Public Library of Science},
+    title = {Nonlinear Spike-And-Slab Sparse Coding for Interpretable Image Encoding},
+    year = {2015},
+    month = {05},
+    volume = {10},
+    url = {http://dx.doi.org/10.1371%2Fjournal.pone.0124088},
+    pages = {1-25},
+    abstract = {<p>Sparse coding is a popular approach to model natural images but has faced two main challenges: modelling low-level image components (such as edge-like structures and their occlusions) and modelling varying pixel intensities. Traditionally, images are modelled as a sparse linear superposition of dictionary elements, where the probabilistic view of this problem is that the coefficients follow a Laplace or Cauchy prior distribution. We propose a novel model that instead uses a <italic>spike-and-slab prior</italic> and <italic>nonlinear combination of components</italic>. With the prior, our model can easily represent exact zeros for e.g. the absence of an image component, such as an edge, and a distribution over non-zero pixel intensities. With the nonlinearity (the nonlinear max combination rule), the idea is to target occlusions; dictionary elements correspond to image components that can occlude each other. There are major consequences of the model assumptions made by both (non)linear approaches, thus the main goal of this paper is to isolate and highlight differences between them. Parameter optimization is analytically and computationally intractable in our model, thus as a main contribution we design an exact Gibbs sampler for efficient inference which we can apply to higher dimensional data using latent variable preselection. Results on natural and artificial occlusion-rich data with controlled forms of sparse structure show that our model can extract a sparse set of edge-like components that closely match the generating process, which we refer to as <italic>interpretable</italic> components. Furthermore, the sparseness of the solution closely follows the ground-truth number of components/edges in the images. The linear model did not learn such edge-like components with any level of sparsity. This suggests that our model can adaptively well-approximate and characterize the meaningful generation process.</p>},
+    number = {5},
+    doi = {10.1371/journal.pone.0124088}
+}
+
 @article{SheikhEtAl2014,
     author = {A.-S. Sheikh and J. Shelton and J. L\"ucke},
     journal = {Journal of Machine Learning Research},
@@ -378,6 +396,17 @@ redundant dictionaries, super-resolution and compressive sensing applications.}}
     pages     = {2285--2293},
 	Title = {Why {MCA}? Nonlinear sparse coding with spike-and-slab prior for neurally plausible image encoding},
 	Year = {2012}
+}
+
+
+@inproceedings{SheltonEtAl2011,
+	Author = {J. Shelton and J. Bornschein and A.-S. Sheikh and P. Berkes and J. L\"ucke},
+	Journal = {Advances in Neural Information Processing Systems},
+	title     = {Select and Sample - {A} Model of Efficient Neural Inference and Learning},
+
+    booktitle = {Advances in Neural Information Processing Systems 24  ({NIPS}), Granada, Spain.},
+    pages     = {2618--2626},	
+	Year = {2011}
 }
 
 @article{SheltonEtAl2013,
@@ -4420,16 +4449,6 @@ Olshausen, B., C. Cadieu, and D.K. Warland. ,
 	Title = {A Deterministic Algorithm for `Spike-and-Slab' Sparse Coding},
 	Year = {2011}}
 
-@inproceedings{SheltonEtAl2011,
-	Author = {J. Shelton and J. Bornschein and A.-S. Sheikh and P. Berkes and J. L\"ucke},
-	Journal = {Advances in Neural Information Processing Systems},
-	title     = {Select and Sample - {A} Model of Efficient Neural Inference and Learning},
-    booktitle = {Advances in Neural Information Processing Systems 24: 25th Annual
-               Conference on Neural Information Processing Systems 2011. Proceedings
-               of a meeting held 12-14 December 2011, Granada, Spain.},
-    pages     = {2618--2626},	
-	Year = {2011}
-}
 
 @article{ShenEtAl2011,
 	Author = {Kai Shen and Sina Tootoonian and Gilles Laurent},
