@@ -32,15 +32,15 @@ We show that our approach performs as well as these bespoke selection functions 
 Inference in probabilistic graphical models can be challenging in situations where
 there are a large number of hidden variables, each of which may take on one of several
 state values. The Expectation Maximization (EM) algorithm is widely applied for inference when hidden variables
-are present, however inference can quickly become intractable as the dimensionality increases.
+are present, however inference can quickly become intractable as the dimensionality of hidden states increases.
 
 Expectation truncation (ET) \citep{LuckeEggert2010} is a meta algorithm for accelerating EM learning
 in graphical models, which restricts the inference performed during the E-step
 to an ``interesting'' subset of states of the latent variables,  %The subset is
 chosen per data point according to a \emph{selection function}.
-This subspace reduction can lead to great reduction in computation with no loss of accuracy.
+This subspace reduction can lead to great a reduction in computation with no loss of accuracy.
 In previous work, functions to select states of high posterior mass were 
-derived individually for each model of interest, in general by taking upper bounds or noiseless limits. 
+derived individually for each model of interest, e.g. by taking upper bounds or noiseless limits. 
 %hand-crafted to model the properties of the graphical model of interest, using intuition from noiseless limits or upper-bound results specific to the model 
 \citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,SheikhEtAl2014}.
 %derived separately and manually for each model by hand from upper bounds or noiseless limits" 
@@ -49,7 +49,7 @@ when EM has converged,
 the posterior mass is  concentrated in small volumes of the latent state space.
 %\footnote{Approaches using sparse priors (i.e. automatic relevance determination (ARD) prior) find sparse subsets of states across all observations in a final model, whereas ours provides relevant features for each observation (often different between observations), to guide EM iterations towards regions of high posterior probability in any model.}
 % (a property exploited by earlier ET approaches).
-This property is observed to hold in many visual data and general pattern recognition settings.
+This property is observed to hold in many visual data, auditory data, and general pattern recognition settings.
 
 For more complex graphical models, notably the hierarchical model of \citet{DaiLucke2014},  the design of suitable selection functions
 is extremely challenging: it requires both expert knowledge
@@ -99,7 +99,7 @@ with no expert knowledge required.
 %The novel problem setting of our work is 
 %the selection of relevant latent variables by learning a nonparametric relevance function, for use in expectation truncation (ET). 
 
-Our approach is the first to make ET a general purpose algorithm% using GPs to approximate intractable computations
+Our approach is the first to make ET a general purpose algorithm for discrete latents% using GPs to approximate intractable computations
 , whereas previously new versions of ET were required for every new latent variable model addressed. 
 For instance, in Section \ref{invec} we will show that preselection is crucial for efficient inference in complex models. 
 Although ET has already been successful in some models, this work shows that more complex models will crucially depend on an improved selection step and focuses on automating this step.
@@ -109,7 +109,7 @@ Although ET has already been successful in some models, this work shows that mor
 % XXX END CONSTRUCTION ZONE
 
 For empirical evaluation, 
-we have applied GP-select in a number of experimental benchmarks.
+we have applied GP-select in a number of experimental settings.
 First, we considered the case of sparse coding models (binary sparse coding,
 spike-and-slab, nonlinear spike-and-slab), where the relationship between the
 observed and latent variables is known to be complex and nonlinear.\footnote{Note that
@@ -129,7 +129,7 @@ We find that even for a simple model, it can be be essential to learn a nonlinea
 %this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
 %
 Finally, we present results
-for a recently published hierarchical model for  translation invariant occlusion components analysis
+for a recently published hierarchical model for  translation invariant occlusive components analysis
 \citep{DaiLucke2014}.
 The performance of our inference algorithm matches that of the complex
 hand-engineered selection function of the previous work, while being straightforward
@@ -202,7 +202,9 @@ by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{H \ti
 where each $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ is the $n$th vector in the $H$-dimensional latent space,
 and for each individual hidden variable $h=1,\dots,H$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
 Reduced latent spaces are denoted by $H'$, where $H' \ll H$. 
-Note that although we restrict ourselves to binary latent variables here, discrete variables with higher cardinality can easily be used by converting them into binary valued vectors of the requisite length.
+Note that although we restrict ourselves to binary latent variables here, 
+
+% discrete variables with higher cardinality can easily be used by converting them into binary valued vectors of the requisite length.
 % TODO add comment about generality? something about not necessarily being restricted in terms of models can consider, thi
 We denote the prior distribution over the latent variables with $p(\vec{s} | \theta)$ 
 and the likelihood of the data with $p(\vec{y} | \vec{s}, \theta)$.
@@ -236,10 +238,11 @@ the E-step becomes intractable and approximations are required.
 %
 Expectation truncation (ET) is a meta algorithm, which improves convergence of the expectation maximization (EM) algorithm \citep{LuckeEggert2010}.
 %
-The main idea underlying ET is that the posterior probability mass is concentrated in a smaller subspace of the full latent space.
-In other words, for a given data point $\vec{y}^{(n)}$ 
-only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant.
-A \textit{selection function} is used to identify this subset
+The main idea underlying ET is that the posterior probability mass is concentrated in a small subspace of the full latent space.
+This is the case, for instance, if for a given data point $\vec{y}^{(n)}$ 
+only a subset of the $H$ latent variables $s_h^{(n)}$ will be relevant. However, you can have concentrated posteriors even if all latents are relevant.
+
+A \textit{selection function} can be used to identify the subset
 % XXX new from reviews:
 of variables, denoted by $H'$ where $H' \ll H$, which in turn is used to define a subset, denoted $\mathcal{K}_n$, of the possible state configurations of the space per data point. 
 State configurations not in this space (of variables deemed to be non-relevant) are fixed to $0$ (assigned zero probability mass).
@@ -265,7 +268,7 @@ In order words, Eq.~\eqref{eq:sel-post} is proportional to Eq.~\eqref{eq:post} i
 The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for non-selected $h$ are assigned zero probability.
 % XXX
 The sum over $\Kn$ is much more efficient than the sum for the full posterior, since it need only be computed over the reduced set of latent variable states deemed relevant: the state configurations of the irrelevant variables are fixed to be zero.
-The variable selection parameter H' is selected based on compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it's been shown that much smaller values suffice (see previous ET papers, e.g. \citep{SheikhEtAl2014} App. B on complexity-accuracy trade-offs).
+The variable selection parameter H' is selected based on compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it's been shown that much smaller values suffice (see e.g. \citep{SheikhEtAl2014} App. B on complexity-accuracy trade-offs).
 
 %Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-aligned according to the latent states that are zero, the selection of which is much simpler than the general case.
 %FIXME 
@@ -319,7 +322,8 @@ of each variable, e.g.\ we try to learn $f$ as follows:
 %
 \begin{equation}
 \label{eq:affinity}
-f_h(\vec{y}^{(n)}) = \hat{\vec{p}}^{(n)} \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
+% remove vector p^:
+f_h(\vec{y}^{(n)}) = \hat{p_h}^{(n)} \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
 \end{equation}
 %
 meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
@@ -423,7 +427,7 @@ was a deterministic function derived  individually for each model
 %AG: that's WAY overkill :)
 %has been a manually-derived deterministic function constructed based on the structure of the considered model by hand 
 \citep[see e.g.][]{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
-BornscheinEtAl2013, SheikhEtAl2014}.
+BornscheinEtAl2013, SheikhEtAl2014, SheltonEtAl2015}.
 %
 We now generalize the selection approach:  %for inference in graphical models
 instead of predefining the form of $\Ss$ for variable selection, we want
@@ -502,7 +506,7 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 %
 
 Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func}, 
-we call entire process \textit{GP-select}. An outline is shown in Algorithm 1.
+we call the entire process \textit{GP-select}. An outline is shown in Algorithm 1.
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
 %
@@ -652,7 +656,7 @@ For each of these models, we run 10 repetitions the following set of experiments
 As hyperparameters of kernels are learned, the composition kernel (4) can adapt itself to the data and only use the kernel components required. 
 See the book by \citet{RasmussenGPbook} (Chapter 4, Secton 4.2.4) for a discussion on making new kernels.
 Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
-As inference with the hand-crafted selection functions has already been shown to converge to extract ground-truth parameters, we do not explicitly compare with this case.
+%As inference with the hand-crafted selection functions has already been shown to converge to extract ground-truth parameters, we do not explicitly compare with this case.
 For models \textbf{A} and \textbf{B}, inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractable in model \textbf{C}, inference was performed by drawing Gibbs samples from the truncated space.
 %AG: you already made the point below.
 %The number of selected latent variables was set to $H'=5$.
@@ -670,7 +674,7 @@ We run all models until convergence. %these experiments for $30$ EM iterations f
 Results are shown on artificial ground-truth data with $H=10$ latent variables and $H'=5$ preselected variables for: \textbf{A} Binary sparse coding, \textbf{B} Spike-and-slab sparse coding, and \textbf{C} Nonlinear spike-and-slab sparse coding.
 First column: Example data points $\vec{y}^{(n)}$ generated by each of the models.
 Middle column: Converged dictionary elements $W$ learned by the hand-crafted selection functions.
-Third column: Converged dictionary elements $W$ learned by the GP-select with $H'=5$ using the kernel with best performance (matching that of inference with hand-crafted selection function).
+Third column: Converged dictionary elements $W$ learned by GP-select with $H'=5$ using the kernel with best performance (matching that of inference with hand-crafted selection function).
 In all cases, the model using the GP-select function converged to the ground-truth solution, just as the hand-crafted selection functions did.
 }\label{fig:sparse}
 \end{center}
@@ -690,7 +694,7 @@ For the remaining models, GP-select converged to the ground-truth parameters wit
 
 %AG: where is the experiment for the below?
 Finally, we have observed empirically that the composition kernel is flexible enough to subsume all other kernels:
-the variance of the irrelevant kernels drops to zero in simulations.
+the variance of the irrelevant kernels dropped to zero in simulations.
 This suggests the composition kernel is a good choice  for general use. 
 %as the composition kernel is flexible enough to adapt to both linear and nonlinear relationships, this supports it as a reasonable general choice.
 
@@ -918,7 +922,7 @@ then compared these results with the ground-truth location of all of the objects
 %we collected the GP-selection after learning, and applied the GP selection function to the whole dataset again, then compared with the ground-truth location of all the objects in the datasets.
 %
 %
-The accuracy of the predicted locations was then computed by comparing the distance of all ground-truth object location to the location of the top candidate locations from each selection function.% and the ground-truth location. 
+The accuracy of the predicted locations was then computed by comparing the distance of all ground-truth object location to the location of the top candidate locations from each selection function. % and the ground-truth location. 
 See Figure~\ref{fig:inveca1} for a histogram of these distances and the corresponding accuracy for all selection functions. Note that the percentages in the histogram are plotted in log scale.
 %
 %
@@ -931,7 +935,7 @@ See Figure~\ref{fig:inveca1} for a histogram of these distances and the correspo
 %%%\comm{fix for new experiments -- really great speedup (fivefold from less frequent updates, plus factor of 100 from chol (since it's square in the number of features reduced))}
 Functions depicted in the figures: GP-select with no modifications (GP, red), the incomplete Cholesky decomposition (GP IChol, blue), with updated kernel hyperparameters every 5 EM iterations (GP every5, green), and with hand-crafted selection (hand-craft, cyan).
 \textbf{A} The log-scale histogram of the prediction accuracy for the four selection functions, measured by the distance each function's predicted object location was to the ground-truth object location. 
-All bars of the selection functions show equivalent accuracy for the various distances. 
+All bars of the selection functions show nearly equivalent accuracy for the various distances. 
 %the $x$-axis shows the distance from the ground-truth location in terms of pixels, and the $y$-axis shows the percentages.
 \textbf{B} The convergence of the pseudo log marginal likelihood [of the model parameters learned at each EM iteration] for the selection functions over all EM iterations. 
 }
@@ -990,21 +994,21 @@ is interleaved with the EM steps, and these functions
 are used in obtaining an approximate posterior distribution in the subsequent EM iteration.
 The functions themselves are learned via Gaussian process regression,
 and do not require domain-specific engineering, unlike previous selection functions.
-In experiments on simple and sparse coding models with interpretable output (spike-and-slab, Gaussian mixtures),
+In experiments on mixtures and sparse coding models with interpretable output,
 the learned selection functions behaved in accordance with our expectations for the posterior
 distribution over the latents.  
 
 The significant benefit we show empirically is that by learning the selection function in a general and flexible nonparametric way, we can avoid using expensive hand-engineered selection functions.
 Cost reduction is both in terms of required expertise in the problem domain, and computation time in identifying the relevant latent variables.
 Inference using our approach required 22.1 seconds on a single CPU core, versus  1830.9 seconds with the original hand-crafted function 
-for the complex hierarchical model of \citep{DaiLucke2014}.
+for the complex hierarchical model of \citep{DaiEtAl2013}.
 
 A major area where further performance gains might be expected is in
 improving computational performance, since we expect the greatest
 advantages of GP-select to occur for complex models at large scale. For instance,
  kernel ridge regression may be parallelized \citep{zhang14divide},
 or the problem may be solved in the primal via random Fourier features \citep{LeSarSmo13}.
-Furthermore, there are many recent development regarding the scaling up of GP inference to large-scale problems, e.g., sparse GP approximation
+Furthermore, there are many recent developments regarding the scaling up of GP inference to large-scale problems, e.g., sparse GP approximation
 ~\citep{sparseGP}, stochastic variational inference \citep{HensmanEtAl2013,Hensman2012}, using parallelization techniques and GPU acceleration \citep{DaiEtAl2014}, or in combination with stochastic gradient descent~\citep{Bottou08thetradeoffs}. 
 %XXX new rebuttals:
 For instance, for very large datasets where the main model is typically trained with mini-batch learning, stochastic variational inference can be used for GP fitting as in \citep{HensmanEtAl2013} and the kernel parameters can be efficiently updated each (or only every $T*$ few) iteration with respect to a mini-batch.
@@ -1013,7 +1017,7 @@ For instance, for very large datasets where the main model is typically trained 
 
 \iffalse
 \subsubsection*{Acknowledgements}
-We acknowledge funding by the German Research Foundation (DFG) under grant LU 1196/4-2 (JS), by the Cluster of Excellence EXC 1077/1 "Hearing4all" (JL), and by the RADIANT and WYSIWYD (EU FP7-ICT) projects (ZD).
+We acknowledge funding by the German Research Foundation (DFG) under grants LU 1196/4-2 (JS), LU 1196/5-1 (JL), by the Cluster of Excellence EXC 1077/1 "Hearing4all" (JL), and by the RADIANT and WYSIWYD (EU FP7-ICT) projects (ZD).
 \fi
 
 % XXX depending on submission target:
