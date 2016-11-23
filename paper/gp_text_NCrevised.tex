@@ -15,7 +15,7 @@
 We propose a nonparametric procedure to achieve fast inference in generative graphical models when the number of latent states is very large.
  The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and using this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally infeasible.
 We learn the selection function entirely from the observed data and current EM state via Gaussian process regression. This is by contrast with earlier approaches, where selection functions were manually-designed for each problem setting.
-We show that our approach performs as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method,  at a far lower computational cost.
+We show that our approach performs as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method, at a far lower computational cost.
 
 %Specifically, for the preselection step, a computationally efficient selection function is used to select the relevant latent variables from the full set, given an observation. This preselected set is then used to represent the posterior distribution with reduced support.
 \end{abstract}
@@ -48,12 +48,12 @@ derived individually for each model of interest, e.g. by taking upper bounds or 
 %derived separately and manually for each model by hand from upper bounds or noiseless limits" 
 The crucial underlying assumption remains that 
 when EM has converged,
-the posterior mass is  concentrated in small volumes of the latent state space.
+the posterior mass is concentrated in small volumes of the latent state space.
 %\footnote{Approaches using sparse priors (i.e. automatic relevance determination (ARD) prior) find sparse subsets of states across all observations in a final model, whereas ours provides relevant features for each observation (often different between observations), to guide EM iterations towards regions of high posterior probability in any model.}
 % (a property exploited by earlier ET approaches).
 This property is observed to hold in many visual data, auditory data, and general pattern recognition settings.
 
-For more complex graphical models, notably the hierarchical model of \citet{DaiLucke2014},  the design of suitable selection functions
+For more complex graphical models, notably the hierarchical model of \citet{DaiLucke2014}, the design of suitable selection functions
 is extremely challenging: it requires both expert knowledge
 on the problem domain and considerable computational resources to implement
  (indeed, the design of such functions for  particular problems
@@ -62,8 +62,7 @@ has been a major contribution in previous work on the topic).
 
 In the present work, we propose a generalization of the ET approach, where
 we avoid completely the challenge of problem-specific selection function design.
-Instead,
-we learn selection functions  adaptively and nonparametrically
+Instead, we learn selection functions  adaptively and nonparametrically
 from the data,
  while learning the model
 parameters  simultaneously using EM.
@@ -111,8 +110,7 @@ Although ET has already been successful in some models, this work shows that mor
 % END TODO
 % XXX END CONSTRUCTION ZONE
 
-For empirical evaluation, 
-we have applied GP-select in a number of experimental settings.
+For empirical evaluation, we have applied GP-select in a number of experimental settings.
 First, we considered the case of sparse coding models (binary sparse coding,
 spike-and-slab, nonlinear spike-and-slab), where the relationship between the
 observed and latent variables is known to be complex and nonlinear.\footnote{Note that
@@ -132,7 +130,7 @@ We find that even for a simple model, it can be be essential to learn a nonlinea
 %this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
 %
 Finally, we present results
-for a recently published hierarchical model for  translation invariant occlusive components analysis
+for a recent hierarchical model for  translation invariant occlusive components analysis
 \citep{DaiLucke2014}.
 The performance of our inference algorithm matches that of the complex
 hand-engineered selection function of the previous work, while being straightforward
@@ -599,8 +597,15 @@ Finally, we apply our approach to a recent hierarchical model for translation in
 
 \subsection{Sparse coding models}
 \label{sec:sparse-coding}
-Using hand-crafted functions to preselect latent variables, a variety of sparse coding models have been successfully scaled to high-dimensional  latent spaces with use of  selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and selection with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012, SheltonEtAl2015} inference approaches.
-In order to demonstrate our method, we consider three of these
+%
+\rev{Many types of natural data are composed of potentially many component types but any data point often only contains a very small number of this potentially large set of components. A prototypical example of such data are images or sounds. For images, there is a large number of different objects that can potentially appear in an image, but from those a relatively small number actually appears in any given image. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but 
+assigning non-zero (or significantly different from zero) values only to a small subset of components (acturally appearing components).}
+%
+%We hereby consider an object to be the same even if it appears at different positions or at different intensity levels. The property that there are only few components in any given data point can be modeled using the concept of sparsity, the property that a component’s identity is unchanged by it appearing intensity, position or other types of transformations can be modeled using mathematical models of intensity and transformation invariances.
+%
+A variety of sparse coding models have been successfully scaled to high-dimensional latent spaces with use of selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and selection with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012, SheltonEtAl2015} inference approaches. \rev{Latent variables were hereby selected using selection functions that were individually defined for any model.}
+%
+In order to demonstrate our method \rev{of autonomously learned selection functions}, we consider three of these
  sparse generative models,  and perform inference with our GP-select approach instead of a hand-crafted selection function. The models are:
 %
 %\begin{enumerate}
