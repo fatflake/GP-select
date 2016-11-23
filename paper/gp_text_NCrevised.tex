@@ -28,41 +28,42 @@ We show that our approach performs as well as these bespoke selection functions 
 %- Embed work in Landscape of Sexiness (TM)\\
 %- Discuss new stuff from Welling, old stuff... \\
 %- mention leverage score relation???
-
-
+%
 Inference in probabilistic graphical models can be challenging in situations where
 there are a large number of hidden variables, each of which may take on one of several
-state values. The Expectation Maximization (EM) algorithm is widely applied for inference when hidden variables
+state values. The Expectation Maximization (EM) algorithm is widely applied \rev{to infer model parameters} when hidden variables
 are present, however inference can quickly become intractable as the dimensionality of hidden states increases.
+%
+\rev{Consider, for instance, the floor of a nursery populated with different toys, and images of this floor large enough to contain a number
+of toys. A nursery easily has a hundred different toys and any subset of these hundred toys may appear in any image. For a hundred toys there is therefore a combinatorics of $2^{100}$ different combinations of toys that can make up an image. An inference task may now be to infer for any given image the toys it contains. If we approached this task using a probabilistic graphical model, we would define a basic such model using a set of one hunderd hidden variables (one for each toy). Given a specific image, inference would then take the form of computing the posterior probability for any combination of toys, and from this the most like combination of toys or the probabilities for the different toys can be computed. If done exactly, this process needed to evaluate all the $2^{100}$ different toy combinations which easily exceeds currently available computational resource. }
 
-Expectation truncation (ET) \citep{LuckeEggert2010} is a meta algorithm for accelerating EM learning
-in graphical models, which restricts the inference performed during the E-step
+Expectation truncation (ET) \citep{LuckeEggert2010} is an approximate EM algorithm for accelerating inference and learning 
+in graphical models. Its basic idea is to restrict the inference performed during the E-step
 to an ``interesting'' subset of states of the latent variables,  %The subset is
 chosen per data point according to a \emph{selection function}.
 This subspace reduction can lead to a significant decrease in computation with very little loss of accuracy
-(compared with the full model).
+(compared with the full model). \rev{For the toy example, we could for instance first analyze the colors of a given image. If the image would not contain the color "red", we could already assume red toys or partly red toys to be absent. Only in a second step we would then consider the combinatorics of the remaining toys. More features and more refined features would allow 
+for a reduction to still smaller sets of toys until the combinatorics of these selected toys becomes computationally tractable. The selection function of expectation truncation mathematically models the process of selecting the relevant hidden variables (the relevant toys); while truncated posterior distributions then model their remaining combinatorics (see further below).} 
+
 In previous work, functions to select states of high posterior mass were 
-derived individually for each model of interest, e.g. by taking upper bounds or noiseless limits. 
+derived individually for each graphical model of interest, e.g., by taking upper bounds or noiseless limits. 
 %hand-crafted to model the properties of the graphical model of interest, using intuition from noiseless limits or upper-bound results specific to the model 
-\citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,SheikhEtAl2014}.
+\citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,HennigesEtAl2014,SheikhEtAl2014}.
 %derived separately and manually for each model by hand from upper bounds or noiseless limits" 
-The crucial underlying assumption remains that 
-when EM has converged,
+The crucial underlying assumption remains that when EM has converged,
 the posterior mass is concentrated in small volumes of the latent state space.
 %\footnote{Approaches using sparse priors (i.e. automatic relevance determination (ARD) prior) find sparse subsets of states across all observations in a final model, whereas ours provides relevant features for each observation (often different between observations), to guide EM iterations towards regions of high posterior probability in any model.}
 % (a property exploited by earlier ET approaches).
-This property is observed to hold in many visual data, auditory data, and general pattern recognition settings.
+This property is observed to hold for many types of data in the auditory, visual or general pattern recognition domain.
 
-For more complex graphical models, notably the hierarchical model of \citet{DaiLucke2014}, the design of suitable selection functions
-is extremely challenging: it requires both expert knowledge
+\rev{The definition of appropriate selection functions for basic graphical models such as the one of the nursery floor example is already non-trivial. For models incorporating more and more detailed data properties, the definition of selections functions becomes still more demanding, however. For models that also capture mutual object occlusions \citep{HennigesEtAl2014} and/or the position (e.g., of toys) \citep{DaiLucke2014},} the design of suitable selection functions is extremely challenging: it requires both expert knowledge
 on the problem domain and considerable computational resources to implement
  (indeed, the design of such functions for  particular problems
 has been a major contribution in previous work on the topic).
 
-
 In the present work, we propose a generalization of the ET approach, where
 we avoid completely the challenge of problem-specific selection function design.
-Instead, we learn selection functions  adaptively and nonparametrically
+Instead, we learn selection functions  adaptively and non-parametrically
 from the data,
  while learning the model
 parameters  simultaneously using EM.
@@ -130,7 +131,7 @@ We find that even for a simple model, it can be be essential to learn a nonlinea
 %this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
 %
 Finally, we present results
-for a recent hierarchical model for  translation invariant occlusive components analysis
+for a recent hierarchical model for translation invariant occlusive components analysis
 \citep{DaiLucke2014}.
 The performance of our inference algorithm matches that of the complex
 hand-engineered selection function of the previous work, while being straightforward
@@ -598,15 +599,15 @@ Finally, we apply our approach to a recent hierarchical model for translation in
 \subsection{Sparse coding models}
 \label{sec:sparse-coding}
 %
-\rev{Many types of natural data are composed of potentially many component types but any data point often only contains a very small number of this potentially large set of components. A prototypical example of such data are images or sounds. For images, there is a large number of different objects that can potentially appear in an image, but from those a relatively small number actually appears in any given image. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but 
-assigning non-zero (or significantly different from zero) values only to a small subset of components (acturally appearing components).}
+\rev{Many types of natural data are composed of potentially many component types but any data point often only contains a very small number of this potentially large set of components. For the introductory example of toys on the nursery floor, for instance, there are many different toys that can {\em potentially} be in a given image but there is only a typically relatively small number of toys actually appearing in any one image.
+Another example is a sound played by a piano at a given time $t$. While the sound can contain sounds of any of the $88$ piano keys, there are only relatively few keys (typically much smaller then ten) that actually generated the sound. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but assigning non-zero (or significantly different from zero) values only to a small subset of components (the acturally appearing components).}
 %
 %We hereby consider an object to be the same even if it appears at different positions or at different intensity levels. The property that there are only few components in any given data point can be modeled using the concept of sparsity, the property that a component’s identity is unchanged by it appearing intensity, position or other types of transformations can be modeled using mathematical models of intensity and transformation invariances.
 %
-A variety of sparse coding models have been successfully scaled to high-dimensional latent spaces with use of selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} and selection with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012, SheltonEtAl2015} inference approaches. \rev{Latent variables were hereby selected using selection functions that were individually defined for any model.}
+A variety of sparse coding models have been successfully scaled to high-dimensional latent spaces with use of selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} or the use of selection combined with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012, SheltonEtAl2015} inference approaches. \rev{Latent variables were hereby selected using selection functions that were individually defined for each model.}
 %
 In order to demonstrate our method \rev{of autonomously learned selection functions}, we consider three of these
- sparse generative models,  and perform inference with our GP-select approach instead of a hand-crafted selection function. The models are:
+ sparse generative models, and perform inference with our GP-select approach instead of a hand-crafted selection function. The models are:
 %
 %\begin{enumerate}
 \begin{description}
