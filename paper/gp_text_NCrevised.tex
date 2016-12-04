@@ -78,9 +78,9 @@ used as an approximation to the posterior distribution.
 As such, the learned
 function does not have to be a completely accurate indication of latent
 variable predictivity,
-as long as the \emph{relative importance} of the states \rev{likely to contribute posterior probability mass} is preserved.
+as long as the \emph{relative importance} of the \rev{latent states likely to contribute posterior probability mass} is preserved.
 We use  Gaussian process
-regression \citep{RasmussenGPbook} to learn the selection function, though other regression techniques could
+regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could
 also be applied. The main advantage of GPs
 is that they have an analytic one-shot learning procedure, and that learning different
 functions based on the same inputs is computationally cheap, which makes adaptive learning
