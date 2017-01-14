@@ -31,7 +31,7 @@ We show that our approach performs as well as these bespoke selection functions 
 %
 Inference in probabilistic graphical models can be challenging in situations where
 there are a large number of hidden variables, each of which may take on one of several
-state values. The Expectation Maximization (EM) algorithm is widely applied \rev{to infer model parameters} when hidden variables
+state values. The Expectation Maximization (EM) algorithm is widely applied \rev{to learn model parameters} when hidden variables
 are present, however inference can quickly become intractable as the dimensionality of hidden states increases.
 %
 \rev{Consider, for instance, the floor of a nursery populated with different toys, and images of this floor large enough to contain a number
@@ -131,7 +131,7 @@ in the spike-and-slab case, and that simple linear regression is not
 sufficiently flexible in modeling the posterior shape.
 %
 Second, we illustrate GP-select on a simple Gaussian mixture model,
-where we can explicitly visualize the form of the learned regression function.
+where we can provide intuition and explicitly visualize the form of the learned regression function.
 We find that even for a simple model, it can be be essential to learn a nonlinear mapping.
 %this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
 %
@@ -592,7 +592,7 @@ spike-and-slab, nonlinear spike-and-slab), where the relationship between the
 observed and latent variables is known to be complex and nonlinear.
 %
 Second, we apply GP-select to a simple Gaussian mixture model,
-where we can explicitly visualize the form of the learned regression function.
+to both provide functional intuition of approach and to explicitly visualize the form of the learned regression function.
 %We find that even for a simple model, it can be be essential to learn a nonlinear mapping.
 %this matches well with our expectations for the model, and again reveals that it may be essential to learn a nonlinear mapping.
 %

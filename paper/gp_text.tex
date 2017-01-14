@@ -1,7 +1,7 @@
 % XXX for thesis:
-%\graphicspath{{figs/gp-select/}}
+\graphicspath{{figs/gp-select/}}
 % XXX OR FOR NEURO COMP:
-\graphicspath{{figs/}}
+%\graphicspath{{figs/}}
 
 \definecolor{Green}{rgb}{0,.80,0} 
 %\newcommand{\comm}[1]{} # commented out here, it's in diss.tex.  depending on paper, might need it here too
@@ -654,8 +654,8 @@ where $\vec{s}_h$ represents a singleton state in which only the entry $h$ is no
 
 We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models \textbf{A-C}:
 %the dataset consists of
-$N$ images of randomly selected overlapping 'bars' with varying intensities for models \textbf{B} and \textbf{C}, and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$ (e.g. following the spike-and-slab prior).
-On average, each data point contains $2$ bars, and we choose $H'=5$. With this choice,
+$N$ images of randomly selected overlapping 'bars' with varying intensities for models \textbf{B} and \textbf{C}, and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$ and we choose $H' = 5$, (e.g. following the spike-and-slab prior). 
+On average, each data point contains $2$ bars, i.e. ground-truth is $\pi H = 2$, and we choose $H'=5$. With this choice,
 we can select sufficiently many latents for virtually all data points.
 
 %(i.e. ground-truth is $H'=2$, but we allow the selection function to choose $H'=5$ per data point).
