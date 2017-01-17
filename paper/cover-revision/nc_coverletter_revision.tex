@@ -1,10 +1,17 @@
 \documentclass[10pt]{letter}
+
 \sloppy
 \textwidth 6.25in
 \topmargin -1.2in
 \textheight 9.7in
 \oddsidemargin 0.00in
 \usepackage{color}
+\usepackage{enumitem}
+%\definecolor{gray}{rgb}{0,.80,0} 
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5} 
+\newcommand{\rvr}[1]{\textcolor{gray}{#1}}
+
+\setlist[enumerate,1]{start=0} % only outer nesting level
 
 \vspace{\bigskipamount}
 \pagestyle{empty}
@@ -55,26 +62,75 @@ subspace preselection"}
 
 We would like to thank the editior as well as the reviewers for their insightful and helpful comments that we feel strengthen the manuscript.  We have addressed each point, enumerated below, and have additionally included code to illustrate intuitively how our method works. These changes are highlighted in \textcolor{blue}{blue} in the manuscript.
 
-Reviewer 1 modifications:
 
-\begin{enumerate}
-    \item Joerg? add crap?
+%%% TODO keep all original sentences and numbers reviewer right.  they won't remember, don't make them look!
+Reviewer 1 requests and replies:
+
+\begin{enumerate}[topsep=3pt,itemsep=2ex,partopsep=1ex,parsep=1ex]
+    %0
+    \item \rvr{\emph{My biggest suggestion is to include some practical motivation at the beginning of the document. In the introduction, the difficulties of having a large latent space are discussed, but it is natural in many problems we encounter in applications to actually have a small number of latent variables (with small support) determining the data. I would have really appreciated some discussion of the applications/datasets where the methods in this paper are relevant.}}
+
+We have added illustrative examples to the introduction in order to provide an early intuition for the used approach. We also motivate sparsity with two examples in Sec. 5.1 as suggested, provided more explanation to Sec. 5.3, and added pointers to potential application domains / typical tasks in introduction and Sec. 5.1. We agree that providing such examples and their task context makes our motivation clearer, and believe that our changes have improved the manuscript accordingly.
+%We have included a practical motivation in the Introduction as well as discussion/citations of possible application domains.
     
-    \item Modified the sentence as follows: 
+    %1
+    \item \rvr{\emph{P. 3, lines +5 -- +7, "The crucial..."  I think statements like this should be accompanied by a reference. It would also be interesting from a motivational standpoint to detail these applications/studies.}}
+
+
+
+True, we have added references cites and some explanation.
+
+    %2
+    \item \rvr{\emph{P. 3, line -4, "As such, the learned ..."  This sentence didn’t make sense to me during the first read through. I think I understand it in hindsight, after learning about how the affinity function models relative likelihoods (probabilities), but in the introduction, I think this sentence (as it currently stands) only adds confusion.}}
+
+Modified the sentence as follows: \\
 As such, the learned function does not have to be a completely accurate
 indication of latent variable predictivity, as long as the relative importance of the states
 likely to contribute posterior probability mass is preserved.
 
+    %3
+    \item \rvr{\emph{End of p. 3: It's not entirely clear at this point what the regression setup looks like, that is, what the inputs/covariates to the selection function are and what the outputs/responses are. I think it would help the unfamiliar reader make better use of this introduction if some further (brief) details on the regression setup were given here.}}
+
+To clarify the regression setup, we add that the selection function is learned by Gaussian process regression that regresses the expected values of the latents variables onto the observed data.
+%We modified this sentence to read:
+%We use  Gaussian process regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could also be applied. 
+
+    %4
+    \item \rvr{\emph{P. 4, line +1: "one-shot learning" ... I know what this means in some contexts but it"s not clear to me what exactly you mean by it here. For that matter, I find the first sentence here confusing.}}
+
+    **************88
+
+
+    %5
+    \item \rvr{\emph{P. 7: Last two sentences are a bit unclear, particularly the last sentence.}}
+
+"Note, however, that the posterior may still be concentrated even when all latents are relevant, since most of the probability mass may be concentrated on few of these."
+
+We have modified this sentence as follows:\\
+Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.
+
+    %6
+    \item \rvr{\emph{ P. 8, line +8,   "In [other] words... is proportional ..." : Is "proportional"  the correct word here? Assuming $\{ s \in K_n \}$, then elements of the sum in the denominator of Eq. (1) will still be missing from the sum in the denominator of Eq. (2). So it won't be proportional, I think. The term "approximation" still seems reasonable though.}}
+
+It is correct there are fewer terms in the denominator of (2), compared with (1). This affects the overall scaling of the terms. Eq. 1 still remains proportional to eq. 2 for the selected terms $s\in K_n$, however. \\
+We have added this clarification in the revision.
+
+    \item \rvr{\emph{Question}}
+
+
 \end{enumerate}
 
 
-Reviewer 2 modifications:
+Reviewer 2 requests and replies:
 
-\begin{enumerate}
+\begin{enumerate}[topsep=3pt,itemsep=2ex,partopsep=1ex,parsep=1ex]
+    \item \rvr{\emph{Question}}
+
+
     \item May be that we don't need enumerate for these mods because most are super minor
 \end{enumerate}
 
-Furthermore, as the Gaussian Mixture Model in Section 5.2 illustrates visually and intuitively how our approach works, and we can explicitly visualize the effect of different selection functions, we have included an iPython Notebook with a code illustration.
+Furthermore, we provide a reference to an illustrative iPython Notebook's link of the Gaussian Mixture Model in Section 5.2, which is github.com/blablabla ****. The GMM illustrates visually and intuitively how our approach works and we can explicitly visualize the effect of different selection functions. 
 
 \noindent \vspace{.1in}\closing{Sincerely,\vspace{-5mm}}
 \end{letter}
