@@ -1,10 +1,23 @@
 \documentclass[10pt]{letter}
+
 \sloppy
 \textwidth 6.25in
 \topmargin -1.2in
 \textheight 9.7in
 \oddsidemargin 0.00in
 \usepackage{color}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bbm}
+%\definecolor{gray}{rgb}{0,.80,0} 
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5} 
+\newcommand{\rvr}[1]{\textcolor{gray}{#1}}
+\newcommand{\rev}[1]{\textcolor{blue}{#1}}
+%\newcommand{\rev}[1]{\textcolor{black}{#1}}%%%% XXX for final version - make blue revisions black
+
+
+\setlist[enumerate,1]{start=0} % only outer nesting level
 
 \vspace{\bigskipamount}
 \pagestyle{empty}
@@ -55,26 +68,162 @@ subspace preselection"}
 
 We would like to thank the editior as well as the reviewers for their insightful and helpful comments that we feel strengthen the manuscript.  We have addressed each point, enumerated below, and have additionally included code to illustrate intuitively how our method works. These changes are highlighted in \textcolor{blue}{blue} in the manuscript.
 
-Reviewer 1 modifications:
 
-\begin{enumerate}
-    \item Joerg? add crap?
+%%% TODO keep all original sentences and numbers reviewer right.  they won't remember, don't make them look!
+Reviewer 1 requests and replies:
+
+\begin{enumerate}[topsep=3pt,itemsep=2ex,partopsep=1ex,parsep=1ex]
+    %0
+    \item \rvr{\emph{My biggest suggestion is to include some practical motivation at the beginning of the document. In the introduction, the difficulties of having a large latent space are discussed, but it is natural in many problems we encounter in applications to actually have a small number of latent variables (with small support) determining the data. I would have really appreciated some discussion of the applications/datasets where the methods in this paper are relevant.}}
+
+We have added illustrative examples to the introduction in order to provide an early intuition for the used approach. We also motivate sparsity with two examples in Sec. 5.1 as suggested, provided more explanation to Sec. 5.3, and added pointers to potential application domains / typical tasks in introduction and Sec. 5.1. We agree that providing such examples and their task context makes our motivation clearer, and believe that our changes have improved the manuscript accordingly.
+%We have included a practical motivation in the Introduction as well as discussion/citations of possible application domains.
     
-    \item Modified the sentence as follows: 
+    %1
+    \item \rvr{\emph{P. 3, lines +5 -- +7, "The crucial..."  I think statements like this should be accompanied by a reference. It would also be interesting from a motivational standpoint to detail these applications/studies.}}
+
+True, we have added references cites and some explanation.
+
+    %2
+    \item \rvr{\emph{P. 3, line -4, "As such, the learned ..."  This sentence didn’t make sense to me during the first read through. I think I understand it in hindsight, after learning about how the affinity function models relative likelihoods (probabilities), but in the introduction, I think this sentence (as it currently stands) only adds confusion.}}
+
+Modified the sentence as follows: \\
 As such, the learned function does not have to be a completely accurate
 indication of latent variable predictivity, as long as the relative importance of the states
 likely to contribute posterior probability mass is preserved.
 
+    %3
+    \item \rvr{\emph{End of p. 3: It's not entirely clear at this point what the regression setup looks like, that is, what the inputs/covariates to the selection function are and what the outputs/responses are. I think it would help the unfamiliar reader make better use of this introduction if some further (brief) details on the regression setup were given here.}}
+
+To clarify the regression setup, we add that the selection function is learned by Gaussian process regression that regresses the expected values of the latents variables onto the observed data.
+%We modified this sentence to read:
+%We use  Gaussian process regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could also be applied. 
+
+    %4
+    \item \rvr{\emph{P. 4, line +1: "one-shot learning" ... I know what this means in some contexts but it"s not clear to me what exactly you mean by it here. For that matter, I find the first sentence here confusing.}}
+
+       \rev{************** pony's reply!!!! }
+
+
+    %5
+    \item \rvr{\emph{P. 7: Last two sentences are a bit unclear, particularly the last sentence.}}
+
+"Note, however, that the posterior may still be concentrated even when all latents are relevant, since most of the probability mass may be concentrated on few of these."
+
+We have expanded the second to last sentence and modified the last sentence as follows:\\
+Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.
+
+    %6
+    \item \rvr{\emph{ P. 8, line +8,   "In [other] words... is proportional ..." : Is "proportional"  the correct word here? Assuming $\{ s \in K_n \}$, then elements of the sum in the denominator of Eq. (1) will still be missing from the sum in the denominator of Eq. (2). So it won't be proportional, I think. The term "approximation" still seems reasonable though.}}
+
+It is correct there are fewer terms in the denominator of (2), compared with (1). This affects the overall scaling of the terms. Eq. 1 still remains proportional to eq. 2 for the selected terms $s\in K_n$, however. \\
+We have added this clarification in the revision.
+
+    %7
+    \item \rvr{\emph{P. 9, caption of Fig. 1, last sentence: You say the affinity function "would return variables $s_1$ and $s_3$" , but I thought the affinity function doesn"t select variables, it merely weights them (by approximating their relative likelihoods given the data), right? I thought there is no "selection", in the hard sense, yet.}}
+
+    This was worded poorly and we have re-written the sentence as follows: \\
+Here, the variables $s_1$ and $s_3$ yield high affinity and would thus be considered relevant for $\vec{y}^{(n)}$.
+
+    %8
+    \item \rvr{\emph{Question}}
+
+    %9
+    \item \rvr{\emph{Question}}
+
+    %10
+    \item \rvr{\emph{Question}}
+
+    %11
+    \item \rvr{\emph{Question}}
+
+    %12
+    \item \rvr{\emph{Question}}
+
+    %13
+    \item \rvr{\emph{Question}}
+
+    %14
+    \item \rvr{\emph{P. 11, introduction of GPs: The affinity function is supposed to be returning a probability (the probability $P \{ s_h = 1 |   \}$, so do you mean to squash the GP through a sigmoid $\sigma(f(y^n)) \in (0,1)$? I dont think this is a detail you should omit. I guess pushing through the sigmoid changes inference as the marginal distribution is no longer Gaussian, if you wanted to avoid this, then perhaps instead use the GP as a generalized regression type of linkage model, such as:\\ \\
+inverse-sigmoid$( P\{ s = 1 |   \} ) \sim$ GP \\ \\
+GP regress to inverse sigmoid -- Perhaps one of these things is what you are actually doing? I think you should say so.
+Not sure what setup results in the update equation 
+Eq. (5).}}
+
+    
+    Indeed, this is a subtle point, and one we should have been clearer about: we do not use a sigmoid link, but merely do a GP regression of the expected indicator of $s$. This is, of course, not a good estimate of a probability (it can be negative, or greater than one), and we will emphasize this. From the selection perspective, however, it’s not really necessary to avoid these pathologies, and to use a sigmoid squashing function, as we only want an ordering of the variables. As you point out, GP classification with a properly defined likelihood will no longer have a marginal Gaussian distribution, and we would no longer be able to trivially express the posterior means of different functions with the same inputs, without considerable extra computation.
+
+See our reply to Reviewer 2, in point (1), who also had questions about this topic.
+
+    %15
+    \item \rvr{\emph{Question}}
+
+    %16
+    \item \rvr{\emph{Question}}
+
+    %17
+    \item \rvr{\emph{Question}}
+
+    %18
+    \item \rvr{\emph{Question}}
+
+    
+    %19
+    \item \rvr{\emph{Minor questions}}
+
 \end{enumerate}
 
 
-Reviewer 2 modifications:
 
-\begin{enumerate}
-    \item May be that we don't need enumerate for these mods because most are super minor
-\end{enumerate}
+Reviewer 2 requests and replies:
 
-Furthermore, as the Gaussian Mixture Model in Section 5.2 illustrates visually and intuitively how our approach works, and we can explicitly visualize the effect of different selection functions, we have included an iPython Notebook with a code illustration.
+\begin{itemize}[topsep=3pt,itemsep=2ex,partopsep=1ex,parsep=1ex]
+
+    %1
+    \item Query 1:\rvr{\emph{You're using Gaussian processes to regress probabilities. The GP doesn't
+seem like a very natural prior, since all your targets are between $0$ and
+$1$. Perhaps it would be more natural to regress on the logits of the
+probabilities, ie.\\
+\\
+$y = \log(p / (1-p))$\\
+\\
+which would make the targets of the GPs continuous-valued. I expect this
+could help quite a bit with the kernel-parameter estimation.}}
+
+
+    If the variables are clustered around either low or high probability then the logits will also be clustered around either $\log(0) \approx 1$ and $\log (1/0) \approx$ something large. In this case, the distortion and scaling will not change the monotonic relation between the regression output and the importance. Moreover, kernel parameter estimation was not really a problem in this work.
+
+    This is a point that Reviewer 1 also brought up in point (14), please also see our detailed response above.
+
+    %2
+    \item  Query 2: \rvr{\emph{In the GMM with Linear kernel, did you include a Constant (Bias) kernel
+also? If you didn;t, please replicate the experiment with a Constant/Bias
+kernel, as I suspect it would help a lot: the standard linear kernel does
+not include an offset. If you did include the Constant kernel, never
+mind!}}
+
+    Yes, a bias kernel was used. Please see the code/Notebook we link below - in Block 2 of the code, under section “GP-select” you’ll find the definition of the kernel we used.
+
+    \item \rvr{\emph{Notes, typos, minor issues}}
+    
+    We polished the text, correcting typos.
+
+    \item \rvr{\emph{Page 7. The last sentence on this page isn't clear, please expand.
+}}
+
+    Please see our reply to Reviewer 1 above, point (5), who voiced the same confusion.    
+
+    We have clarified and rewritten this sentence to read: \\
+    "Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents."
+
+    \item \rvr{\emph{Nitpick: Equation 2, perhaps instead of the delta function, you could use
+the 'one' operator? $\mathbb{I}(x) = 1$ if $x$ is true, $0$ otherwise.}}
+
+    We have substituted this notation for clearer formulation.
+
+\end{itemize}
+
+Lastly, as mentioned above, we provide demonstrative code: an illustrative iPython Notebook on Gaussian Mixture Models is located at \rev{https://github.com/fatflake/GP-select-Code/GMM\_demo.ipynb ********}, which we also refer to in Section 5.2 on GMMs. The GMM illustrates visually and intuitively how our approach works and we can explicitly visualize the effect of different selection functions. 
 
 \noindent \vspace{.1in}\closing{Sincerely,\vspace{-5mm}}
 \end{letter}

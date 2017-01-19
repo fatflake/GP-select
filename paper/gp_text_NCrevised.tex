@@ -38,8 +38,11 @@ are present, however inference can quickly become intractable as the dimensional
 of toys. A nursery easily contains a hundred different toys and any subset of these hundred toys may appear in any image. For one hundred toys there is therefore a combinatorics of $2^{100}$ different combinations of toys that can make up an image. An inference task may now be to infer, for any given image, the toys it contains. If we approached this task using a probabilistic graphical model, we would define a basic such model using a set of one hunderd hidden variables (one for each toy). Given a specific image, inference would then take the form of computing the posterior probability for any combination of toys, and from this, e.g., the probability of each toy to be in the image can be computed.
 If done exactly, this process needed to evaluate all the $2^{100}$ different toy combinations which easily exceeds currently available computational resource.}
 
-\rev{While there are also many tasks for which graphical models with few latent variables are sufficient, the requirement for many hidden variables like in the toy example is typical for visual, auditory and many other types of data with very rich structure. Related to this point, 
-graphical models for visual or auditory data are often a central building block for tasks such as denoising, inpainting or classification. Typically, the performance in these concrete tasks then increases with the number of latent variables that can be used (and which is usually limited by computational demands).}
+\rev{While there are also many tasks for which graphical models with few latent variables are sufficient, the requirement for many hidden variables like in the toy example is typical for visual, auditory and many other types of data with very rich structure. 
+%Related to this point, 
+Graphical models for such data 
+%%%% TODO change below to not be restricted to natural data?
+ are often a central building block for tasks such as denoising \citep{EladAharon2006,TitsiasGredilla2011}, inpainting \citep{MairalEtAl2009, MairalEtAl2009b,TitsiasGredilla2011},  classification \citep{RainaEtAl2007}, or collaborative filtering \citep{TitsiasGredilla2011}. Typically, the performance in these concrete tasks then increases with the number of latent variables that can be used (and which is usually limited by computational demands).}
 
 Expectation truncation (ET) \citep{LuckeEggert2010} is an approximate EM algorithm for accelerating inference and learning 
 in graphical models \rev{with many latents}. Its basic idea is to restrict the inference performed during the E-step
@@ -247,7 +250,8 @@ Expectation truncation (ET) is a meta algorithm, which improves convergence of t
 %
 The main idea underlying ET is that the posterior probability mass is concentrated in a small subspace of the full latent space.
 This is the case, for instance, if for a given data point $\vec{y}^{(n)}$ 
-only a subset of the $H$ latent variables $s_h^{(n)}$ are relevant. Note, however, that the posterior may still be concentrated  even when all latents are relevant, since most of the probability mass may be concentrated on few of these. 
+only a subset of the $H$ latent variables $s_h^{(n)}$ are relevant. 
+Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.
 
 A \textit{selection function} can be used to identify a  subset
 % XXX new from reviews:
@@ -273,6 +277,7 @@ $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
 In order words, Eq.~\eqref{eq:sel-post} is proportional to Eq.~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
 % FIXME TODO wtf, isn't this... opposite to what we want to say?
 The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for non-selected $h$ are assigned zero probability.
+This means that there are fewer terms in the denominator of Eq.~\eqref{eq:sel-post} compared with Eq.~\eqref{eq:post}, which affects the overall scaling of the terms. Eq.~\eqref{eq:sel-post} still remains proportional to Eq.~\eqref{eq:post} for the selected terms $s\in K_n$, however.
 % XXX
 The sum over $\Kn$ is much more efficient than the sum for the full posterior, since it need only be computed over the reduced set of latent variable states deemed relevant: the state configurations of the irrelevant variables are fixed to be zero.
 The variable selection parameter H' is selected based on compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it's been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
@@ -605,7 +610,10 @@ Finally, we apply our approach to a recent hierarchical model for translation in
 \label{sec:sparse-coding}
 %
 \rev{Many types of natural data are composed of potentially many component types but any data point often only contains a very small number of this potentially large set of components. For the introductory example of toys on the nursery floor, for instance, there are many different toys that can {\em potentially} be in a given image but there is only a typically relatively small number of toys {\em actually} appearing in any one image.
-Another example is a sound played by a piano at a given time $t$. While the sound can contain waveforms generated by pressing any of the $88$ piano keys, there are only relatively few keys (typically much smaller then ten) that actually generated the sound. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but assigning non-zero (or significantly different from zero) values only to a small subset of components (the acturally appearing components). Sparse coding algorithms are typically used for tasks such as denoising, inpainting, classification, transfer learning and are important models for neuro-sensory processing \citep[][and many more]{OlshausenField1997,MairalEtAl2009,ZylberbergEtAl2011,BornscheinEtAl2013,SheikhEtAl2014}.}
+Another example is a sound played by a piano at a given time $t$. While the sound can contain waveforms generated by pressing any of the $88$ piano keys, there are only relatively few keys (typically much smaller then ten) that actually generated the sound. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but assigning non-zero (or significantly different from zero) values only to a small subset of components (the acturally appearing components). 
+%%% TODO citations below %%%%
+Sparse coding algorithms are typically used for tasks such as denoising \citep{EladAharon2006,MairalEtAl2009}, inpainting \citep{MairalEtAl2009, MairalEtAl2009b,TitsiasGredilla2011}, classification 
+\citep[][e.g. MNIST data set \emph{http://yann.lecun.com/exdb/mnist/}, the flowers data set \emph{http://www.robots.ox.ac.uk/$\sim$vgg/data/flowers/}]{MNIST,TitsiasGredilla2011,RainaEtAl2007}, transfer learning \citep{RainaEtAl2007}, collaborative filtering \citep{TitsiasGredilla2011} and are important models for neuro-sensory processing \citep[][and many more]{OlshausenField1997,ZylberbergEtAl2011,BornscheinEtAl2013,SheikhEtAl2014}.}
 %
 %We hereby consider an object to be the same even if it appears at different positions or at different intensity levels. The property that there are only few components in any given data point can be modeled using the concept of sparsity, the property that a component’s identity is unchanged by it appearing intensity, position or other types of transformations can be modeled using mathematical models of intensity and transformation invariances.
 %
@@ -732,8 +740,9 @@ This suggests the composition kernel is a good choice  for general use.
 
 \subsection{Gaussian mixture model}
 %
-Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.
+Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized. A demonstration and code for this application is shown in \citep{GP-selectNotebook16}.
 %To illustrate the idea and benefit of this approach, we consider a simple motivating example: the problem setting posed by Gaussian mixture models.
+
 The model of the data likelihood is
 %
 \vspace{-.2cm}
