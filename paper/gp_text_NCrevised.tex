@@ -276,7 +276,7 @@ $\vec{y}^{(n)}$,
 and \rev{$\mathbb{I}(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ is true, $0$ otherwise.}
 %$\delta(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
 % XXX new from rebutts:
-In order words, Eq.~\eqref{eq:sel-post} is proportional to Eq.~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
+In other words, Eq.~\eqref{eq:sel-post} is proportional to Eq.~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
 The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for non-selected $h$ are assigned zero probability.
 \rev{This means that there are fewer terms in the denominator of Eq.~\eqref{eq:sel-post} compared with Eq.~\eqref{eq:post}, which affects the overall scaling of the terms. Eq.~\eqref{eq:sel-post} still remains proportional to Eq.~\eqref{eq:post} for the selected terms $s\in K_n$, however.}
 % XXX
@@ -568,7 +568,7 @@ we call the entire process \textit{GP-select}. An outline is shown in Algorithm 
     compute subset of relevant states $\Ss$: Eq. \eqref{eq:sel-func}\\ % get $\Kn$ 
 %3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
     compute truncated posterior $q_{n,t}(\vec{s}^{(n)})$ in E-step: Eq. \eqref{eq:sel-post}\\ % on reduced set $\Kn$
-    update model parameters in M-step\\ 
+    update model parameters in M-step, e.g. as in Sec. 5.1\\ 
     store $\langle s_h^{(n)}\rangle_{q_{n,t}}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
 %\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ 
     }\ENDFOR\\%\vspace{-.2cm}
@@ -898,7 +898,7 @@ The combination of the Cholesky approximation plus infrequent updates will have 
 %
 \begin{figure*}[t!]%[ht]
 \centering
-\includegraphics[width=.5\textwidth]{inveca/dataSamples.png}%{figs/inveca/invec_mod.pdf}
+\includegraphics[width=1\textwidth]{inveca/dataSamples.png}%{figs/inveca/invec_mod.pdf}
 \caption{COIL Dataset \citep{coil100}: 
 A handful of data points used in experiments with the Translation Invariant Occlusive (InvECA) model, showing the occluding objects to be learned.
 }

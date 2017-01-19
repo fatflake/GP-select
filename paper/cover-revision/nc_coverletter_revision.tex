@@ -102,7 +102,7 @@ To clarify the regression setup, we add that the selection function is learned b
     %4
     \item \rvr{\emph{P. 4, line +1: "one-shot learning" ... I know what this means in some contexts but it"s not clear to me what exactly you mean by it here. For that matter, I find the first sentence here confusing.}}
 
-       \rev{************** pony's reply!!!! }
+     The main advantage of GPs is that they do not need to be re-trained when only the output changes, as long as the inputs remain the same. This makes adaptive learning of a changing target function (given fixed inputs) computationally trivial.
 
 
     %5
@@ -153,12 +153,15 @@ The optimization of $q(n)$ in early iterations of EM starts from randomly initia
 For example, let's say that there are five $s_h$, where $h\in \{1,...,5\}$. We consider the case where only $s_1$   and $s_2$   are selected.  The $\mathcal{I}$ function will then return zeros for $s_3$, $s_4$, and $s_5$, but will  return both allowed possibilities $0$ or $1$ for $s_1$ and $s_2$. Thus a valid setting for the entire vector $\vec{s}$ can be $\vec{s}=[0 1 0 0 0]$, but not $\vec{s}=[0 1 1 0 0]$. We have clarified this in the text.
 
     %12
+    \item \rvr{\emph{P. 10, Eq. (4): In addition to the comment above, perhaps it's worth re-emphasizing here that the main task is the function approximation (being performed by GP regression) off. Some readers may get flustered with all these utility functions being introduced ($\gamma$ IO, etc.).}}
+
+\rev{Need to restate purpose of our smelly paper}
+
+    %13
     \item \rvr{\emph{P. 11, line +6: I think it's worth quickly presenting some examples of these previous, "hand-crafted"  selection functions. I only see examples being given on page 15, but I think it would be useful to give some here as well (or move them here).}}
 
 We have implemented a forward reference to the p. 15 descriptions, since we think it's easier to follow when these descriptions are presented along with the models and experiments that use them.
 
-    %13
-    \item \rvr{\emph{Question}}
 
     %14
     \item \rvr{\emph{P. 11, introduction of GPs: The affinity function is supposed to be returning a probability (the probability $P \{ s_h = 1 |   \}$, so do you mean to squash the GP through a sigmoid $\sigma(f(y^n)) \in (0,1)$? I dont think this is a detail you should omit. I guess pushing through the sigmoid changes inference as the marginal distribution is no longer Gaussian, if you wanted to avoid this, then perhaps instead use the GP as a generalized regression type of linkage model, such as:\\ \\
@@ -168,22 +171,35 @@ Not sure what setup results in the update equation
 Eq. (5).}}
 
     
-    Indeed, this is a subtle point, and one we should have been clearer about: we do not use a sigmoid link, but merely do a GP regression of the expected indicator of $s$. This is, of course, not a good estimate of a probability (it can be negative, or greater than one), and we will emphasize this. From the selection perspective, however, it’s not really necessary to avoid these pathologies, and to use a sigmoid squashing function, as we only want an ordering of the variables. As you point out, GP classification with a properly defined likelihood will no longer have a marginal Gaussian distribution, and we would no longer be able to trivially express the posterior means of different functions with the same inputs, without considerable extra computation.
+    Indeed, this is a subtle point, and one we should have been clearer about: we do not use a sigmoid link, but merely do a GP regression of the expected indicator of $s$. This is, of course, not a good estimate of a probability (it can be negative, or greater than one), and we will emphasize this. From the selection perspective, however, it's not really necessary to avoid these pathologies, and to use a sigmoid squashing function, as we only want an ordering of the variables. As you point out, GP classification with a properly defined likelihood will no longer have a marginal Gaussian distribution, and we would no longer be able to trivially express the posterior means of different functions with the same inputs, without considerable extra computation.
 
 See our reply to Reviewer 2, in point (1), who also had questions about this topic.
 
     %15
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 13, line +6: "update model parameters..."  Do you perform this, in general, by maximum likelihood with numeric optimization routines? Is this always straightfoward in your applications? Perhaps multivariate parameters could cause problems?}}
+
+Our approach only modifies the E-step in EM and we learn model parameters using the standard M-step formulation -- by maximizing the likelihood of each model's parameters given the posterior approximation $q(n)$, we obtain an update equation for each parameter. See our reply to question (16) below where we give specific M-step updates for the models/experiments in Section 5.1 in the paper.
 
     %16
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{Description of models A, B, C: Perhaps it"s also useful to have a "parameters"  line in these descriptions, to make it clear what is being updated in the M-step. Again, some details on how the M-step is being performed would probably be useful. For example, how do you update the matrix of elements W? Finally, I would have really liked to have seen some suggestions here regarding the applications/situations/datasets when each of these models are appropriate. Perhaps just a sentence on each?}}
+
+    We have added potential application domains of the models presented in Section 5.1 as well as
+    informaton about the M-step and the parameter update equations of models A, B, and C in Section 5.1.\\
+    \\
+    These parameter updates are:\\
+ 
+    \rev{ADD PARAMETERS HERE AND TO SECTION 5.1}
 
     %17
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 15, lines +14 and +15: Really confused here, did you mean to instead call these the affinity functions? The selection function is supposed to return a subset...}}
+
+    \rev{This sentence has been modified as follows:\\
+For model B, the affinity function was the data likelihood given a singleton state: $f_h (y (n) ) = p(y (n) |s = s h , Θ)$, where $s_h$ represents a singleton state in which only the entry h is non-zero which is what Equation (4) gives us. \\
+IS THIS TRUE?  NEED TO GO THROUGH MATH ON THAT PAGE   }
+
 
     %18
-    \item \rvr{\emph{P. 21, line +8: "Next, the subset of... according to the combinatorics..." Vague sentence.
-??????  What should this be?}}
+    \item \rvr{\emph{P. 21, line +8: "Next, the subset of... according to the combinatorics..." Vague sentence. ??????  What should this be?}}
 
 We have clarified this sentence with:\\
 "... according to the combinations of the possible locations and numbers of candidate objects."
@@ -218,12 +234,12 @@ could help quite a bit with the kernel-parameter estimation.}}
 
     %2
     \item  Query 2: \rvr{\emph{In the GMM with Linear kernel, did you include a Constant (Bias) kernel
-also? If you didn;t, please replicate the experiment with a Constant/Bias
+also? If you didn't, please replicate the experiment with a Constant/Bias
 kernel, as I suspect it would help a lot: the standard linear kernel does
 not include an offset. If you did include the Constant kernel, never
 mind!}}
 
-    Yes, a bias kernel was used. Please see the code/Notebook we link below - in Block 2 of the code, under section “GP-select” you’ll find the definition of the kernel we used.
+    Yes, a bias kernel was used. Please see the code/Notebook we link at the end of these responses - in Block 2 of the code, under commented  Section "GP-select" you'll find a comment above the definition of the kernel we used.
 
     \item \rvr{\emph{Notes, typos, minor issues}}
     
@@ -241,6 +257,34 @@ mind!}}
 the 'one' operator? $\mathbb{I}(x) = 1$ if $x$ is true, $0$ otherwise.}}
 
     We have substituted this notation for clearer formulation.
+
+
+    \item \rvr{\emph{Page 13, Algorithm 1. You've described a moderately complex initialization procedure, I think this should also be noted in Algorithm 1.}}
+
+We have clarified this in the algorithm.
+
+    \item \rvr{\emph{Experiments: under A, B, C, you've dropped the notation 'n' to denote independent observations.}}
+
+    We dropped the notation referring to each $n$ independently in order to make the the equations more concise in the experiments. We will clarify this point. \rev{CLARIFY THIS POINT IN THE TEXT}
+
+    \item \rvr{\emph{I guess that makes this clearer, but you should say so, and perhaps also note which parts of the model are common (i.e. parameters maxed in the M-step) amongst all observations.  \\
+Perhaps something like:\\
+latents: foo \\
+parameters: bar\\
+observations: baz}}
+
+    We have added the parameter equations to the models discussed in Section 5.1. Also see the reply to question (16) by Reviewer 1.
+
+
+    \item \rvr{\emph{Please make Figures 4 and 5 much bigger. Personally I'd be fine with Figure 5 filling a page.}}
+
+        \rev{NEED TO CUT OFF PIC 5, HALF}
+        We have enlarged Figure 4 and modified Figure 5 for easier viewing.
+
+    \item We have corrected the remaining typos, notation errors, etc. that you mention.
+    
+
+
 
 \end{itemize}
 
