@@ -126,19 +126,36 @@ We have added this clarification in the revision.
 Here, the variables $s_1$ and $s_3$ yield high affinity and would thus be considered relevant for $\vec{y}^{(n)}$.
 
     %8
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 9, line +9:   meaning that, for the relevant... the posterior probability $p_h$ exceeds some threshold.  This is confusing to me, why the talk of thresholding here? Eq. (3) merely models the conditional probability $P\{ s_h^n = 1 |   \}$, right? This is always a number in $(0,1)$ saying "threshold"  sounds like you're checking if this number is above a certain value, but I don't see that happening until the $\gamma( \cdot )$ and $\mathcal{I}( \cdot )$ functions are introduced on the next page.}}
+
+That’s right - we did not specify a threshold. We have corrected this text. 
+After eq. 3: “meaning that the relevant variables will have greater marginal posterior probability $p_h$.
 
     %9
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 9, lines +10 -- +13: "When the latent variables... this affinity function correctly isolates ..."  It"s not clear to me why this argument holds. Maybe another sentence or two explaining the argument here.}}
+
+\rev{*** \\
+We have added further clarifications to the text:\\
+When the latent variables s h=1 , . . . , s H in the marginal posterior probability p̂ (n) = p̂ h=1 , . . . , p̂ H are conditionally independent given a data point y (n) , this affinity function correctly isolates the most relevant variables in the posterior. \\
+NEW STUFF HERE.}
+
+See (Luecke and Eggert, 2010, "Expectation Truncation and the Benefits of Preselection In Training Generative Models") for more details on this concept. We added this reference to the text.
 
     %10
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 10, line +8: "This prevents ..."  Very confusing sentence; not sure what it's saying.}}
+
+We have clarified this in the paper with the additional text:\\
+The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that the EM with GP-select does not "get stuck" assigning higher probability values to a given $s_h$ with an initially high probability value and therefore always be deemed relevant (simply due to it's initialization). Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm a chance to see possibly unused variables which are actually relevant for $\vec{y}^{(n)}$.
 
     %11
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 10, line +11: Definition of the function $\mathcal{I}( \cdot )$ ... Its unclear how this function is picking the support of the latent states. $f( \cdot )$ models the relative likelihoods, $\gamma( , ; H' )$ sorts these and retains the indices of the top $H'$, then how does $\mathcal{I}( \cdot )$) choose elements of $2'{1 ,...,H}$? Algorithmically speaking, not sure I understand how to implement this.}}
+
+For example, let's say that there are five $s_h$, where $h\in \{1,...,5\}$. We consider the case where only $s_1$   and $s_2$   are selected.  The $\mathcal{I}$ function will then return zeros for $s_3$, $s_4$, and $s_5$, but will  return both allowed possibilities $0$ or $1$ for $s_1$ and $s_2$. Thus a valid setting for the entire vector $\vec{s}$ can be $\vec{s}=[0 1 0 0 0]$, but not $\vec{s}=[0 1 1 0 0]$. We have clarified this in the text.
 
     %12
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 11, line +6: I think it's worth quickly presenting some examples of these previous, "hand-crafted"  selection functions. I only see examples being given on page 15, but I think it would be useful to give some here as well (or move them here).}}
+
+We have implemented a forward reference to the p. 15 descriptions, since we think it's easier to follow when these descriptions are presented along with the models and experiments that use them.
 
     %13
     \item \rvr{\emph{Question}}
@@ -165,7 +182,11 @@ See our reply to Reviewer 2, in point (1), who also had questions about this top
     \item \rvr{\emph{Question}}
 
     %18
-    \item \rvr{\emph{Question}}
+    \item \rvr{\emph{P. 21, line +8: "Next, the subset of... according to the combinatorics..." Vague sentence.
+??????  What should this be?}}
+
+We have clarified this sentence with:\\
+"... according to the combinations of the possible locations and numbers of candidate objects."
 
     
     %19
@@ -223,9 +244,10 @@ the 'one' operator? $\mathbb{I}(x) = 1$ if $x$ is true, $0$ otherwise.}}
 
 \end{itemize}
 
-Lastly, as mentioned above, we provide demonstrative code: an illustrative iPython Notebook on Gaussian Mixture Models is located at \rev{https://github.com/fatflake/GP-select-Code/GMM\_demo.ipynb ********}, which we also refer to in Section 5.2 on GMMs. The GMM illustrates visually and intuitively how our approach works and we can explicitly visualize the effect of different selection functions. 
+Lastly, as mentioned above, we provide demonstrative code: an illustrative iPython Notebook on Gaussian Mixture Models is located at \rev{https://github.com/fatflake/GP-select-Code/GMM\_demo.ipynb}, which we also refer to in Section 5.2 on GMMs. The GMM example illustrates visually and intuitively how our approach works and we can explicitly visualize the effect of different selection functions. 
 
 \noindent \vspace{.1in}\closing{Sincerely,\vspace{-5mm}}
+
 \end{letter}
 \end{document}
 

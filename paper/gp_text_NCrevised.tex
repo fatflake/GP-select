@@ -4,6 +4,7 @@
 \graphicspath{{figs/}}
 
 \newcommand{\rev}[1]{\textcolor{blue}{#1}}
+%\newcommand{\rev}[1]{\textcolor{black}{#1}}%%%% XXX for final version - make blue revisions black
 \definecolor{Green}{rgb}{0,.80,0} 
 %\newcommand{\comm}[1]{} # commented out here, it's in diss.tex.  depending on paper, might need it here too
 %\newcommand{\comm}[1]{\textcolor{Green}{[#1]}} % ---XXX comment out when DONE with revisions ---
@@ -111,7 +112,7 @@ with no expert knowledge required.
 %the selection of relevant latent variables by learning a nonparametric relevance function, for use in expectation truncation (ET). 
 
 Our approach is the first to make ET a general purpose algorithm for discrete latents,% using GPs to approximate intractable computations
- whereas previously new versions of ET were required for every new latent variable model addressed. 
+ whereas previous version of ET had to be hand-modified for each every new latent variable model addressed. 
 For instance, in Section \ref{invec} we will show that preselection is crucial for efficient inference in complex models. 
 Although ET has already been successful in some models, this work shows that more complex models will crucially depend on an improved selection step and focuses on automating this step.
 % XXX Although ET has already been successful for e.g. the sparse coding models discussed in Section \ref{sec:sparse-coding}, more complex models will crucially depend on an improved  selection step, which this work focuses on. % (makes kind of sound like our contributions are minimal:) The present work automates this step.
@@ -250,8 +251,8 @@ Expectation truncation (ET) is a meta algorithm, which improves convergence of t
 %
 The main idea underlying ET is that the posterior probability mass is concentrated in a small subspace of the full latent space.
 This is the case, for instance, if for a given data point $\vec{y}^{(n)}$ 
-only a subset of the $H$ latent variables $s_h^{(n)}$ are relevant. 
-Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.
+only a subset of the $H$ latent variables \rev{$s_h^{(n)},s_1^{(n)},s_2^{(n)},\dots,s_H^{(n)}$} are relevant. 
+\rev{Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.}
 
 A \textit{selection function} can be used to identify a  subset
 % XXX new from reviews:
@@ -264,23 +265,23 @@ The posterior distribution~\eqref{eq:post} can then be approximated by a truncat
 \begin{align}
 \label{eq:sel-post}
 p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
-&\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\delta(\vec{s}^{(n)}\in\,\,\Kn)}
+&\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\rev{\mathbb{I}}(\vec{s}^{(n)}\in\,\,\Kn)} % delta notation gone
    %{\ disS\hspace{-1.5mm}\int_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-8mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)\,d\vec{s}\Prime^{(n)}}
 {\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-3mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)},
 \end{align}
 \normalsize
 %
 where $\Kn$ contains the latent states of the $H'$ relevant variables for data point
-$\vec{y}^{(n)}$, and $\delta(\vec{s}\in\mathcal{K}_n)=1$ if
-$\vec{s}\in\mathcal{K}_n$ and zero otherwise.
+$\vec{y}^{(n)}$, 
+and \rev{$\mathbb{I}(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ is true, $0$ otherwise.}
+%$\delta(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
 % XXX new from rebutts:
 In order words, Eq.~\eqref{eq:sel-post} is proportional to Eq.~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
-% FIXME TODO wtf, isn't this... opposite to what we want to say?
 The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for non-selected $h$ are assigned zero probability.
-This means that there are fewer terms in the denominator of Eq.~\eqref{eq:sel-post} compared with Eq.~\eqref{eq:post}, which affects the overall scaling of the terms. Eq.~\eqref{eq:sel-post} still remains proportional to Eq.~\eqref{eq:post} for the selected terms $s\in K_n$, however.
+\rev{This means that there are fewer terms in the denominator of Eq.~\eqref{eq:sel-post} compared with Eq.~\eqref{eq:post}, which affects the overall scaling of the terms. Eq.~\eqref{eq:sel-post} still remains proportional to Eq.~\eqref{eq:post} for the selected terms $s\in K_n$, however.}
 % XXX
 The sum over $\Kn$ is much more efficient than the sum for the full posterior, since it need only be computed over the reduced set of latent variable states deemed relevant: the state configurations of the irrelevant variables are fixed to be zero.
-The variable selection parameter H' is selected based on compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it's been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
+The variable selection parameter $H'$ is selected based on compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it's been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
 
 %Note that $\Kn$ is not an arbitrary set of the possible states, but is axis-aligned according to the latent states that are zero, the selection of which is much simpler than the general case.
 %FIXME 
@@ -317,7 +318,7 @@ The variable selection parameter H' is selected based on compute resources avail
 \caption{Illustration of the affinity function for selection.
 The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ latent variable (top), 
 which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom). 
-Here, the affinity would return variables $s_1$ and $s_3$ as being relevant for $\vec{y}^{(n)}$. 
+Here, \rev{the variables $s_1$ and $s_3$ yield high affinity and would thus be considered relevant for $\vec{y}^{(n)}$.} 
 %simple graphical model, all $s_{h=1},\dots, s_{H}$ leading to one $\vec{y}^{(n)}$, some plot of marginal posterior, a few are "high" and thus selected?
 }\label{fig:graph-affinity}
 \end{center}
@@ -338,12 +339,14 @@ of each variable, e.g.\ we try to learn $f$ as follows:
 f_h(\vec{y}^{(n)}) = \hat{p}_h^{(n)} \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
 \end{equation}
 %
-meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
-exceeds some threshold. %and is closer to zero for the rest. 
+%meaning that, for the relevant variables, the marginal posterior probability $p_h$ 
+\rev{meaning that the relevant variables will have greater marginal posterior probability $p_h$.}
+%exceeds some threshold. %and is closer to zero for the rest. 
 See Figure~\ref{fig:graph-affinity} for a simplified illustration. 
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
+\rev{See \cite{LuckeEggert2010} for more details on this concept.}
 Even when this strong assumption does not hold in practice (which is often the case), however,
 the affinity can still correctly highlight relevant variables,
 and has been empirically shown to be quite effective even when dependencies exist (see e.g. source separation tasks in \citep{SheikhEtAl2014}).
@@ -364,6 +367,8 @@ $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we d
 To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
 This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
 iterations. 
+\rev{The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that the EM with GP-select does not "get stuck" assigning higher probability values to a given $s_h$ with an initially high probability value and therefore always be deemed relevant (simply due to it's initialization). Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm a chance to see possibly unused variables which are actually relevant for $\vec{y}^{(n)}$.}
+%
 $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ deemed by the affinity to be relevant to the $n$th data point.
 %
 %(i.e. all $h=1,\dots,H'$ latent variables sorted by estimated relevance).
@@ -381,6 +386,7 @@ $H'$-dimensional subset of selected relevant latent states $\Kn$ for each data p
 %
 All `non-relevant' variable states $s_h$ for all variables $h\not\in I$ are effectively set to $0$ in Equation~\eqref{eq:sel-post} 
 by not being present in the state set $\Kn$.
+\rev{For example, let's say that there are five $s_h$, where $h\in \{1,...,5\}$. We consider the case where only $s_1$   and $s_2$   are selected.  The $\mathcal{I}$ function will then return zeros for $s_3$, $s_4$, and $s_5$, but will  return both allowed possibilities $0$ or $1$ for $s_1$ and $s_2$. Thus a valid setting for the entire vector $\vec{s}$ can be $\vec{s}=[0 1 0 0 0]$, but not $\vec{s}=[0 1 1 0 0]$.}
 %to $0$, and returns the set of $H'$ selected relevant latent states' indices $\Kn$.
 % with the "non-relevant" variables set to $0$ ($\mathcal{K}_n = \{\vec{s}^{(n)}\,|\,\mbox{for all}\ h\not\in I:\ s_h=0 \}$).
 %
@@ -439,7 +445,7 @@ was a deterministic function derived  individually for each model
 %AG: that's WAY overkill :)
 %has been a manually-derived deterministic function constructed based on the structure of the considered model by hand 
 \citep[see e.g.][]{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
-BornscheinEtAl2013, SheikhEtAl2014, SheltonEtAl2015}.
+BornscheinEtAl2013, SheikhEtAl2014, SheltonEtAl2015}, \rev{specific examples of which will be shown in Section 5.1}.
 %
 We now generalize the selection approach:  %for inference in graphical models
 instead of predefining the form of $\Ss$ for variable selection, we want
@@ -553,15 +559,15 @@ we call the entire process \textit{GP-select}. An outline is shown in Algorithm 
 \begin{algorithmic}
 
 \FOR{EM iterations $t=1,\dots,T$}\STATE{%\vspace{-.4cm}   
-Initialize all latent variables expectations hs (n) i q are initialized randomly
+\rev{initialize all latent variables expectations $\langle s_h^{(n)}\rangle_{q_{n,t}}$}
     \FOR{data point $n=1,\dots, N$}
     \STATE{
-    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: \eqref{eq:gp-loo}\\
+    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: Eq. \eqref{eq:gp-loo}\\
 %2. sort and reduce indices to $H'$\\
  %   2.2. include uniformly chosen indices\\
-    compute subset of relevant states $\Ss$: \eqref{eq:sel-func}\\ % get $\Kn$ 
+    compute subset of relevant states $\Ss$: Eq. \eqref{eq:sel-func}\\ % get $\Kn$ 
 %3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
-    compute truncated posterior $q_{n,t}(\vec{s}^{(n)})$, E-step: \eqref{eq:sel-post}\\ % on reduced set $\Kn$
+    compute truncated posterior $q_{n,t}(\vec{s}^{(n)})$ in E-step: Eq. \eqref{eq:sel-post}\\ % on reduced set $\Kn$
     update model parameters in M-step\\ 
     store $\langle s_h^{(n)}\rangle_{q_{n,t}}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
 %\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ 
@@ -740,7 +746,7 @@ This suggests the composition kernel is a good choice  for general use.
 
 \subsection{Gaussian mixture model}
 %
-Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized. A demonstration and code for this application is shown in \citep{GP-selectNotebook16}.
+Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.  \rev{Furthermore, with this flexibility we can explicitly visualize the effect of different selection functions.A demonstration and code for this application is shown in \citep{GP-selectNotebook16}.}
 %To illustrate the idea and benefit of this approach, we consider a simple motivating example: the problem setting posed by Gaussian mixture models.
 
 The model of the data likelihood is
@@ -853,7 +859,11 @@ Now that we have verified that GP-select can be applied to various generative gr
 %Especially considering multiple objects in a scene, the complexity of latent space becomes the number of locations to the power of the number of objects.
 Inference in such a massive latent space heavily relies on the idea of variable selection to reduce the number of candidate objects and locations. In particular, hand-engineered selection functions that consider \emph{translational invariance} have been successfully applied to this type of model~\citep{DaiLucke2012b,DaiLucke2014,DaiEtAl2013}.
 %
-The selection function used so far for reducing latent space complexity in this model has been constructed as follows: first, the candidate locations of all the objects in the model are predicted, and then a subset of candidate objects that might appear in the image are selected according to the predicted locations.  Next, the subset of states $\Kn$ is constructed according to the combinatorics of the different locations of all the candidate objects.
+The selection function used so far for reducing latent space complexity in this model has been constructed as follows.
+First, the candidate locations of all the objects in the model are predicted.
+Then a subset of candidate objects that might appear in the image are selected according to those predicted locations.  
+Next, the subset of states $\Kn$ is constructed 
+\rev{according to the combinations of the possible locations and numbers of candidate objects}.
 % --- Then the true posterior probabilities are estimated for this preselected latent subspace, while considering the posterior probabilities in the rest space to be zero.
 The posterior distribution is then computed following Equation~\eqref{eq:sel-post}.
 
