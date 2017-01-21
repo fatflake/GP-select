@@ -16,6 +16,22 @@
 \newcommand{\rev}[1]{\textcolor{blue}{#1}}
 %\newcommand{\rev}[1]{\textcolor{black}{#1}}%%%% XXX for final version - make blue revisions black
 
+% ---------- math commands ----------
+\newcommand{\x}{\ensuremath{\times}}
+\newcommand{\disT}{\textstyle}
+\newcommand{\disS}{\displaystyle}
+\newcommand{\prob}[2]{p(#1 \, | \, #2)}  % nicely space p(1 | 2)
+\newcommand{\Prime}{\,'}  % nicely space p(1 | 2)
+\newcommand{\One}{I}
+\renewcommand{\vec}[1]{{\mathbf{#1}}}
+\newcommand{\Kn}{\mathcal{K}_{n}}
+\newcommand{\Ih}{\mathcal{I}_{n}}
+\newcommand{\Sh}{\mathcal{S}_{h}}
+\newcommand{\Ss}{\mathcal{S}}
+\newcommand{\II}{{\cal I}}
+\newcommand{\E}[1]{\left\langle{}#1\right\rangle} % expectations
+%--------------------------------------
+
 
 \setlist[enumerate,1]{start=0} % only outer nesting level
 
@@ -100,8 +116,9 @@ To clarify the regression setup, we add that the selection function is learned b
 %We use  Gaussian process regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could also be applied. 
 
     %4
-    \item \rvr{\emph{P. 4, line +1: "one-shot learning" ... I know what this means in some contexts but it"s not clear to me what exactly you mean by it here. For that matter, I find the first sentence here confusing.}}
+    \item \rvr{\emph{P. 4, line +1: "one-shot learning" ... I know what this means in some contexts but it's not clear to me what exactly you mean by it here. For that matter, I find the first sentence here confusing.}}
 
+    We have reworded this sentence to clarify this confusion:\\
      The main advantage of GPs is that they do not need to be re-trained when only the output changes, as long as the inputs remain the same. This makes adaptive learning of a changing target function (given fixed inputs) computationally trivial.
 
 
@@ -134,12 +151,16 @@ After eq. 3: “meaning that the relevant variables will have greater marginal p
     %9
     \item \rvr{\emph{P. 9, lines +10 -- +13: "When the latent variables... this affinity function correctly isolates ..."  It"s not clear to me why this argument holds. Maybe another sentence or two explaining the argument here.}}
 
-\rev{*** \\
-We have added further clarifications to the text:\\
-When the latent variables s h=1 , . . . , s H in the marginal posterior probability p̂ (n) = p̂ h=1 , . . . , p̂ H are conditionally independent given a data point y (n) , this affinity function correctly isolates the most relevant variables in the posterior. \\
-NEW STUFF HERE.}
+We have expanded the text to include the following:\\
+To see this, consider the full joint $p(s_1,...s_H\, |\, y,\Theta)$ in the case when a subset $\II$ of latents has value one, i.e., $s_h=1$ for all $h\in\II$. We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by the product of the marginals:
+%
+\begin{equation}
+\label{eq:marginals-product}
+\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).
+\end{equation} 
+%
+If the affinity function correctly estimates the marginals, then discarding those ($H-H'$) marginal with lowest values (i.e. setting their values to zero) means discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents).
 
-See (Luecke and Eggert, 2010, "Expectation Truncation and the Benefits of Preselection In Training Generative Models") for more details on this concept. We added this reference to the text.
 
     %10
     \item \rvr{\emph{P. 10, line +8: "This prevents ..."  Very confusing sentence; not sure what it's saying.}}
@@ -184,9 +205,34 @@ Our approach only modifies the E-step in EM and we learn model parameters using 
     \item \rvr{\emph{Description of models A, B, C: Perhaps it"s also useful to have a "parameters"  line in these descriptions, to make it clear what is being updated in the M-step. Again, some details on how the M-step is being performed would probably be useful. For example, how do you update the matrix of elements W? Finally, I would have really liked to have seen some suggestions here regarding the applications/situations/datasets when each of these models are appropriate. Perhaps just a sentence on each?}}
 
     We have added potential application domains of the models presented in Section 5.1 as well as
-    informaton about the M-step and the parameter update equations of models A, B, and C in Section 5.1.\\
-    \\
-    These parameter updates are:\\
+    informaton about the M-step and the parameter update equations of models A, B, and C in Section 5.1. These parameter updates are also shown below.\\
+
+    Model \textbf{A}. \textit{Binary Sparse coding}:
+    \begin{align}
+\disT{}W &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\,, \nonumber\\
+% sigma 
+\disT{}\sigma^2 &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
+% pi
+\pi &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
+\end{align}
+
+    Model \textbf{B}.  \textit{Spike-and-slab sparse coding}:
+    \begin{align}
+\disT{}W &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\,, \nonumber\\
+% sigma 
+\disT{}\sigma^2 &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
+% pi
+\pi &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
+\end{align}
+
+    Model \textbf{C}. \textit{Nonlinear Spike-and-slab sparse coding}:
+    \begin{align}
+\disT{}W &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\,, \nonumber\\
+% sigma 
+\disT{}\sigma^2 &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
+% pi
+\pi &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
+\end{align}
  
     \rev{ADD PARAMETERS HERE AND TO SECTION 5.1}
 
@@ -265,7 +311,7 @@ We have clarified this in the algorithm.
 
     \item \rvr{\emph{Experiments: under A, B, C, you've dropped the notation 'n' to denote independent observations.}}
 
-    We dropped the notation referring to each $n$ independently in order to make the the equations more concise in the experiments. We will clarify this point. \rev{CLARIFY THIS POINT IN THE TEXT}
+    We dropped the notation referring to each $n$ independently in order to make the the equations more concise in the experiments. We will clarify this point.
 
     \item \rvr{\emph{I guess that makes this clearer, but you should say so, and perhaps also note which parts of the model are common (i.e. parameters maxed in the M-step) amongst all observations.  \\
 Perhaps something like:\\
@@ -273,13 +319,12 @@ latents: foo \\
 parameters: bar\\
 observations: baz}}
 
-    We have added the parameter equations to the models discussed in Section 5.1. Also see the reply to question (16) by Reviewer 1.
+    We have added the parameter equations to the models discussed in Section 5.1. Also, see the reply to question (16) by Reviewer 1 where we show these parameters.
 
 
     \item \rvr{\emph{Please make Figures 4 and 5 much bigger. Personally I'd be fine with Figure 5 filling a page.}}
 
-        \rev{NEED TO CUT OFF PIC 5, HALF}
-        We have enlarged Figure 4 and modified Figure 5 for easier viewing.
+        We have enlarged Figure 4 and modified and enlarged Figure 5 for easier viewing of the image components.
 
     \item We have corrected the remaining typos, notation errors, etc. that you mention.
     
