@@ -82,7 +82,7 @@ subspace preselection"}
 
 \opening{Dear Neural Computation editorial board,}
 
-We would like to thank the editior as well as the reviewers for their insightful and helpful comments that we feel strengthen the manuscript.  We have addressed each point, enumerated below, and have additionally included code to illustrate intuitively how our method works. These changes are highlighted in \textcolor{blue}{blue} in the manuscript.
+We would like to thank the editior as well as the reviewers for their insightful and helpful comments that we feel strengthen the manuscript.  We have addressed each point, enumerated below, and have additionally provided code to illustrate intuitively how our method works. These changes are highlighted in \textcolor{blue}{blue} in the manuscript.
 
 
 %%% TODO keep all original sentences and numbers reviewer right.  they won't remember, don't make them look!
@@ -152,21 +152,39 @@ After eq. 3: “meaning that the relevant variables will have greater marginal p
     \item \rvr{\emph{P. 9, lines +10 -- +13: "When the latent variables... this affinity function correctly isolates ..."  It"s not clear to me why this argument holds. Maybe another sentence or two explaining the argument here.}}
 
 We have expanded the text to include the following:\\
-To see this, consider the full joint $p(s_1,...s_H\, |\, y,\Theta)$ in the case when a subset $\II$ of latents has value one, i.e., $s_h=1$ for all $h\in\II$. We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by the product of the marginals:
+% 1st iteration:
+%To see this, consider the full joint $p(s_1,...s_H\, |\, y,\Theta)$ in the case when a subset $\II$ of latents has value one, i.e., $s_h=1$ for all $h\in\II$. We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by the product of the marginals:
 %
+%\begin{equation}
+%\label{eq:marginals-product}
+%\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).\\
+% 2nd iteration:
+%\sum_{\vec{s} \text{with} s_h=0 \text{for all}\, h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 | \vec{y}, \Theta)).
+%\end{equation} 
+%
+%If the affinity function correctly estimates the marginals, then discarding those ($H-H'$) marginal with lowest values (i.e. setting their values to zero) means discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents).
+%------
+
+To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Eq. (2)). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+
 \begin{equation}
 \label{eq:marginals-product}
-\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).
+% 1st iteration:
+%\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).\\
+\sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
 \end{equation} 
-%
-If the affinity function correctly estimates the marginals, then discarding those ($H-H'$) marginal with lowest values (i.e. setting their values to zero) means discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents).
+
+We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). 
+
+
 
 
     %10
     \item \rvr{\emph{P. 10, line +8: "This prevents ..."  Very confusing sentence; not sure what it's saying.}}
 
 We have clarified this in the paper with the additional text:\\
-The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that the EM with GP-select does not "get stuck" assigning higher probability values to a given $s_h$ with an initially high probability value and therefore always be deemed relevant (simply due to it's initialization). Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm a chance to see possibly unused variables which are actually relevant for $\vec{y}^{(n)}$.
+The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always be deemed relevant. Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm an opportunity to evaluate possibly unused variables (those initialized with small probability values) which are actually relevant for $\vec{y}^{(n)}$..
+
 
     %11
     \item \rvr{\emph{P. 10, line +11: Definition of the function $\mathcal{I}( \cdot )$ ... Its unclear how this function is picking the support of the latent states. $f( \cdot )$ models the relative likelihoods, $\gamma( , ; H' )$ sorts these and retains the indices of the top $H'$, then how does $\mathcal{I}( \cdot )$) choose elements of $2'{1 ,...,H}$? Algorithmically speaking, not sure I understand how to implement this.}}
@@ -176,7 +194,11 @@ For example, let's say that there are five $s_h$, where $h\in \{1,...,5\}$. We c
     %12
     \item \rvr{\emph{P. 10, Eq. (4): In addition to the comment above, perhaps it's worth re-emphasizing here that the main task is the function approximation (being performed by GP regression) off. Some readers may get flustered with all these utility functions being introduced ($\gamma$ IO, etc.).}}
 
-\rev{Need to restate purpose of our smelly paper}
+We reiterated the main purpose in the text as follows:\\
+The main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
+$\Kn$. 
+This is performed using GP regression in order to compute the truncated posterior Eq. (2) on the reduced support $\Kn$.
+With the combined effort of the above utility functions, we have concisely defined the function $\mathcal{S}(\vec{y}^{(n)})$ in Eq.(5) to perform this selection.
 
     %13
     \item \rvr{\emph{P. 11, line +6: I think it's worth quickly presenting some examples of these previous, "hand-crafted"  selection functions. I only see examples being given on page 15, but I think it would be useful to give some here as well (or move them here).}}
@@ -199,7 +221,9 @@ See our reply to Reviewer 2, in point (1), who also had questions about this top
     %15
     \item \rvr{\emph{P. 13, line +6: "update model parameters..."  Do you perform this, in general, by maximum likelihood with numeric optimization routines? Is this always straightfoward in your applications? Perhaps multivariate parameters could cause problems?}}
 
-Our approach only modifies the E-step in EM and we learn model parameters using the standard M-step formulation -- by maximizing the likelihood of each model's parameters given the posterior approximation $q(n)$, we obtain an update equation for each parameter. See our reply to question (16) below where we give specific M-step updates for the models/experiments in Section 5.1 in the paper.
+Our approach only modifies the E-step in EM and we learn model parameters in the usual M-step by maximizing their likelihood given the data (or rather, maximizing the free-energy with $q_n$ fixed). 
+%by maximizing the likelihood of each model's parameters given the posterior approximation $q(n)$, 
+In the applications we present, the parameters can be solved exactly, or by using e.g. Gibbs sampling (see Shelton et al, 2011, 2012 and Sheik and Luecke, 2016 for examples that avoid computational intractabilities and/or accelerate inference by sampling from the truncated posterior), for the M-step update equations. See our reply to question (16) below where we give specific M-step updates for the models/experiments in Section 5.1 in the paper.
 
     %16
     \item \rvr{\emph{Description of models A, B, C: Perhaps it"s also useful to have a "parameters"  line in these descriptions, to make it clear what is being updated in the M-step. Again, some details on how the M-step is being performed would probably be useful. For example, how do you update the matrix of elements W? Finally, I would have really liked to have seen some suggestions here regarding the applications/situations/datasets when each of these models are appropriate. Perhaps just a sentence on each?}}
@@ -224,6 +248,7 @@ Our approach only modifies the E-step in EM and we learn model parameters using 
 % pi
 \pi &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
 \end{align}
+**** Add sentence about the parameters from M-step just being the max likelihood of the given model
 
     Model \textbf{C}. \textit{Nonlinear Spike-and-slab sparse coding}:
     \begin{align}
@@ -252,7 +277,17 @@ We have clarified this sentence with:\\
 
     
     %19
-    \item \rvr{\emph{Minor questions}}
+    \item \rvr{\emph{ P. 4: first sentence of second paragraph ("Our approach is the first to make ET a general purpose algorithm for discrete latents, whereas previousy new versions of ET were required for every new latent variable model addressed.") needs editing.}}
+
+We have reworded this sentence as follows:\\
+Our approach is the first to make ET a general purpose algorithm for discrete latent variables, 
+ whereas previously, ET had to be modified by hand for each latent variable model addressed. 
+
+    %20
+    \item -- 25. \rvr{\emph{Minor points and suggestions}}
+
+        We have addressed and modified the text according to these suggestions. 
+
 
 \end{enumerate}
 
