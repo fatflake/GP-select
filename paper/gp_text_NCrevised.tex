@@ -348,7 +348,7 @@ See Figure~\ref{fig:graph-affinity} for a simplified illustration.
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
-\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Equation\eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Equation\eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
 %
 \begin{equation}
 \label{eq:marginals-product}
@@ -423,7 +423,7 @@ The \textit{affinity based selection function} to obtain the set of states $\Kn$
 \mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
 \end{equation}
 %
-\rev{The main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
+\rev{To summarize, the main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
 $\Kn$. 
 This is performed using GP regression in order to compute the truncated posterior Equation \eqref{eq:sel-post} on the reduced support $\Kn$.
 With the combined effort of the above utility functions, we have concisely defined the function $\mathcal{S}(\vec{y}^{(n)})$ in Equation \eqref{eq:sel-func} to perform this selection.}
@@ -543,9 +543,9 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 %
 
 Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func} 
-\rev{, for namely $ \mathcal{S}(\vec{y}^{(n)}) \;=\;   \mathcal{I} \left[  \gamma \left[ \langle s_h^{(n)}\rangle_{q_n} - \frac{ [ K^{-1} \langle\vec{s}_{h}\rangle_{q_n} ]_{nn} }{ [ K^{-1} ]_{nn} } \right]  \right] 
+\rev{, $$\mathcal{S}(\vec{y}^{(n)}) \;=\;   \mathcal{I} \left[  \gamma \left[ \langle s_h^{(n)}\rangle_{q_n} - \frac{ [ K^{-1} \langle\vec{s}_{h}\rangle_{q_n} ]_{nn} }{ [ K^{-1} ]_{nn} } \right]  \right] 
 \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] 
-\;=\; \mathcal{K}_n$,} 
+\;=\; \mathcal{K}_n$$} 
 we call the entire process \textit{GP-select}. An outline is shown in Algorithm 1.
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:

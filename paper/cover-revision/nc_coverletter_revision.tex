@@ -204,7 +204,7 @@ We have expanded the text to include the following:\\
 %If the affinity function correctly estimates the marginals, then discarding those ($H-H'$) marginal with lowest values (i.e. setting their values to zero) means discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents).
 %------
 
-To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Eq. (2)). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Eq. (2)). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
 
 \begin{equation}
 \label{eq:marginals-product}
@@ -213,7 +213,7 @@ To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case 
 \sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
 \end{equation} 
 
-We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). 
+We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginals with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). 
 
 
 
@@ -234,7 +234,7 @@ For example, let's say that there are five $s_h$, where $h\in \{1,...,5\}$. We c
     \item \rvr{\emph{P. 10, Eq. (4): In addition to the comment above, perhaps it's worth re-emphasizing here that the main task is the function approximation (being performed by GP regression) off. Some readers may get flustered with all these utility functions being introduced ($\gamma$ IO, etc.).}}
 
 We reiterated the main purpose in the text as follows:\\
-The main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
+To summarize, the main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
 $\Kn$. 
 This is performed using GP regression in order to compute the truncated posterior Eq. (2) on the reduced support $\Kn$.
 With the combined effort of the above utility functions, we have concisely defined the function $\mathcal{S}(\vec{y}^{(n)})$ in Eq.(5) to perform this selection.
