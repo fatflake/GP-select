@@ -85,10 +85,11 @@ variable predictivity,
 as long as the \emph{relative importance} of the \rev{latent states likely to contribute posterior probability mass} is preserved.
 We use  Gaussian process
 regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could
-also be applied. The main advantage of GPs
-is that they have an analytic one-shot learning procedure, and that learning different
-functions based on the same inputs is computationally cheap, which makes adaptive learning
-of a changing target function efficient. We term this part of our approach
+also be applied. 
+The main advantage of GPs is that they do not need to be re-trained when only the output changes, as long as the inputs remain the same. 
+This makes adaptive learning of a changing target function (given fixed inputs) computationally trivial.
+%The main advantage of GPs is that they have an analytic one-shot learning procedure, and that learning different functions based on the same inputs is computationally cheap, which makes adaptive learning of a changing target function efficient. 
+We term this part of our approach
 \textit{GP-select}.
 Our nonparametric generalization of  ET may be applied as a black-box
 meta algorithm for accelerating inference in  generative graphical models,
@@ -111,8 +112,8 @@ with no expert knowledge required.
 %The novel problem setting of our work is 
 %the selection of relevant latent variables by learning a nonparametric relevance function, for use in expectation truncation (ET). 
 
-Our approach is the first to make ET a general purpose algorithm for discrete latents,% using GPs to approximate intractable computations
- whereas previous version of ET had to be hand-modified for each every new latent variable model addressed. 
+Our approach is the first to make ET a general purpose algorithm for discrete latent variables,% using GPs to approximate intractable computations
+ whereas previously, ET had to be modified by hand for each latent variable model addressed. 
 For instance, in Section \ref{invec} we will show that preselection is crucial for efficient inference in complex models. 
 Although ET has already been successful in some models, this work shows that more complex models will crucially depend on an improved selection step and focuses on automating this step.
 % XXX Although ET has already been successful for e.g. the sparse coding models discussed in Section \ref{sec:sparse-coding}, more complex models will crucially depend on an improved  selection step, which this work focuses on. % (makes kind of sound like our contributions are minimal:) The present work automates this step.
@@ -221,11 +222,12 @@ We denote the prior distribution over the latent variables with $p(\vec{s} | \th
 and the likelihood of the data with $p(\vec{y} | \vec{s}, \theta)$.
 Using these expressions, the posterior distribution over latent variables is 
 %
+\rev{WOULD WE RATHER DROP THE $^{(n)}$ NOTATION ALL TOGETHER? IT'S SO CUMBERSOME AND UGLY....}
 \vspace{-.1cm}
 \begin{equation}
 \label{eq:post}
-p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s} | \Theta) \, p(\vec{y}^{(n)} | \vec{s}^{(n)}, \Theta)}
-{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}} p(\vec{s}\Prime | \Theta) \, p(\vec{y} | \vec{s}\Prime, \Theta)}.
+p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s}^{(n)} | \Theta) \, p(\vec{y}^{(n)} | \vec{s}^{(n)}, \Theta)}
+{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime\,^{(n)}} p(\vec{s}\Prime\,^{(n)} | \Theta) \, p(\vec{y}^{(n)} | \vec{s}\Prime\,^{(n)}, \Theta)}.
 \end{equation}
 \vspace{-.5cm}
 
@@ -276,9 +278,9 @@ $\vec{y}^{(n)}$,
 and \rev{$\mathbb{I}(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ is true, $0$ otherwise.}
 %$\delta(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ and zero otherwise.
 % XXX new from rebutts:
-In other words, Eq.~\eqref{eq:sel-post} is proportional to Eq.~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
+In other words, Equation~\eqref{eq:sel-post} is proportional to Equation~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
 The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for non-selected $h$ are assigned zero probability.
-\rev{This means that there are fewer terms in the denominator of Eq.~\eqref{eq:sel-post} compared with Eq.~\eqref{eq:post}, which affects the overall scaling of the terms. Eq.~\eqref{eq:sel-post} still remains proportional to Eq.~\eqref{eq:post} for the selected terms $s\in K_n$, however.}
+\rev{This means that there are fewer terms in the denominator of Equation~\eqref{eq:sel-post} compared with Equation~\eqref{eq:post}, which affects the overall scaling of the terms. Equation~\eqref{eq:sel-post} still remains proportional to Equation~\eqref{eq:post} for the selected terms $s\in K_n$, however.}
 % XXX
 The sum over $\Kn$ is much more efficient than the sum for the full posterior, since it need only be computed over the reduced set of latent variable states deemed relevant: the state configurations of the irrelevant variables are fixed to be zero.
 The variable selection parameter $H'$ is selected based on compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it's been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
@@ -346,13 +348,24 @@ See Figure~\ref{fig:graph-affinity} for a simplified illustration.
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
-\rev{See \cite{LuckeEggert2010} for more details on this concept.}
+\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Equation\eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+%
+\begin{equation}
+\label{eq:marginals-product}
+% 1st iteration:
+%\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).\\
+\sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
+\end{equation} 
+%
+We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). }
+%
+%\rev{See \cite{LuckeEggert2010} for more details on this concept.}
 Even when this strong assumption does not hold in practice (which is often the case), however,
 the affinity can still correctly highlight relevant variables,
-and has been empirically shown to be quite effective even when dependencies exist (see e.g. source separation tasks in \citep{SheikhEtAl2014}).
+and has been empirically shown to be quite effective when dependencies exist (see e.g. source separation tasks in \citep{SheikhEtAl2014}).
 
 
-%XXX Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
+%Using these concepts, we define a general selection function to isolate the relevant regions $\Kn$ as follows.
 %First, we define $f_h(\vec{y}^{(n)})$ as a function that takes the input of a single data
 %point $\vec{y}^{(n)}$ and predicts the probability that the latent variable
 %$s_h$ is equal to $1$ for this particular data point, such that each data point
@@ -363,11 +376,11 @@ Next, using all $\hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$
 %approximated marginal posterior probabilities 
 from the affinity function 
 $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we define 
- $\gamma\,(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices. % XXX changed rom rebuttal. states' indices. %, (where $H' \ll H$.
+ $\gamma\,(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order \rev{[of probability $\hat{p}^{(n)}$]} and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices. % XXX changed rom rebuttal. states' indices. %, (where $H' \ll H$.
 To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
 This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
 iterations. 
-\rev{The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that the EM with GP-select does not "get stuck" assigning higher probability values to a given $s_h$ with an initially high probability value and therefore always be deemed relevant (simply due to it's initialization). Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm a chance to see possibly unused variables which are actually relevant for $\vec{y}^{(n)}$.}
+\rev{The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always be deemed relevant. Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm an opportunity to evaluate possibly unused variables (those initialized with small probability values) which are actually relevant for $\vec{y}^{(n)}$.}
 %
 $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ deemed by the affinity to be relevant to the $n$th data point.
 %
@@ -403,14 +416,19 @@ Again, the goal is for the states $\Kn$ to contain most of the probability mass
 $\prob{\vec{s}}{\vec{y}}$ and to be significantly smaller than the entire
 latent space.  
 %
-The \textit{affinity based selection function}  can be expressed as
+The \textit{affinity based selection function} to obtain the set of states $\Kn$ can be expressed as
 %
 \vspace{-.1cm}
 \begin{equation}\label{eq:sel-func}
 \mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
 \end{equation}
 %
-% MOVED PART ABOUT SELECTION TO NEXT S$EC XXX
+\rev{The main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
+$\Kn$. 
+This is performed using GP regression in order to compute the truncated posterior Equation \eqref{eq:sel-post} on the reduced support $\Kn$.
+With the combined effort of the above utility functions, we have concisely defined the function $\mathcal{S}(\vec{y}^{(n)})$ in Equation \eqref{eq:sel-func} to perform this selection.}
+
+% MOVED PART ABOUT SELECTION TO NEXT S$EC 
 
 %Using such subsets $\mathcal{K}_n$, Equation~\eqref{eq:sel-post} results in good approximations to the full posteriors.
 %redundant: When the set $\Kn$ fulfills the above property of containing the indices of the states with concentrated posterior mass, Equation~\eqref{eq:sel-post} is a good approximation of the full posterior.
@@ -425,8 +443,8 @@ The truncated posterior can be computed using any standard inference method,
 %posterior distribution by computing the true posterior on the truncated space $q_n(\vec{s})$~\eqref{eq:sel-post}.
 %With the truncated posterior $q(\vec{s})$, inference can be performed using any standard method, 
 such as exact inference or e.g. Gibbs sampling from $q(\vec{s})$  %for a further approximation. % sampling approximation of the truncated posterior.
-if inference is still intractable or further computational reduction is desired.
-The result of the E-step is then used to update the model parameters in the M-step. 
+if inference is still intractable or further computational accerleration is desired.
+The result of the E-step is then used to update the model parameters \rev{with maximum likelihood} in the M-step. 
 
 % To summarize, in each iteration of EM, the following occurs: 
 %prior to the E-step, the selection function $\Sh$~\eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
@@ -483,14 +501,14 @@ Specifically, we train on $p_h$ from the previous EM iteration (where $p_h$ is e
 training data of 
 %$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}_{\text{prev-it}}\rangle^{(n)}_{q(\vec{s})}) | n = 1,\dots, N \}$.
 $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}^{(n)}\rangle_{q}) | n = 1,\dots, N \}$, 
-where we recall that $q_{n}(\vec{s}^{(n)})$ is the approximate posterior distribution for $\vec{s}^{(n)}$ in Eq.~\eqref{eq:sel-post}.
+where we recall that $q_{n}(\vec{s}^{(n)})$ is the approximate posterior distribution for $\vec{s}^{(n)}$ in Equation~\eqref{eq:sel-post}.
 %
 %output of the previous iteration of the % EM parameter inference algorithm, $q(\vec{S})$, or rather, the expectations of
 %This means that in the very first EM iteration contains no actual information from the posterior distribution, and 
 In the first EM iteration, the expectations $\langle\vec{s}^{(n)}\rangle_{q}$ are initialized randomly;
 in each subsequent EM iteration, the %true
 expectations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
-The EM algorithm is run for $T$ iterations and the hyperparameters of the kernel are optimized by maximum likelihood every $T^*$ EM iterations.
+The EM algorithm is run for $T$ iterations and the hyperparameters of the kernel are optimized by maximum likelihood every $T\ast$ EM iterations.
 
 For each data point $n$ and latent variable $h$ we compute the predicted mean of the GP by leaving 
 this data point out of the training set and considering all others, which is called leave-one-out (LOO) prediction.
@@ -524,7 +542,10 @@ Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variabl
 %
 %
 
-Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func}, 
+Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func} 
+\rev{, for namely $ \mathcal{S}(\vec{y}^{(n)}) \;=\;   \mathcal{I} \left[  \gamma \left[ \langle s_h^{(n)}\rangle_{q_n} - \frac{ [ K^{-1} \langle\vec{s}_{h}\rangle_{q_n} ]_{nn} }{ [ K^{-1} ]_{nn} } \right]  \right] 
+\;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] 
+\;=\; \mathcal{K}_n$,} 
 we call the entire process \textit{GP-select}. An outline is shown in Algorithm 1.
 
 %Using LOO prediction leads to the following expression of the \textit{GP selection function} for the $n$th data point:
@@ -568,11 +589,11 @@ we call the entire process \textit{GP-select}. An outline is shown in Algorithm 
     compute subset of relevant states $\Ss$: Eq. \eqref{eq:sel-func}\\ % get $\Kn$ 
 %3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
     compute truncated posterior $q_{n,t}(\vec{s}^{(n)})$ in E-step: Eq. \eqref{eq:sel-post}\\ % on reduced set $\Kn$
-    update model parameters in M-step, e.g. as in Sec. 5.1\\ 
+    update model parameters \rev{in M-step, e.g. as in Sec. 5.1}\\ 
     store $\langle s_h^{(n)}\rangle_{q_{n,t}}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
 %\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ 
     }\ENDFOR\\%\vspace{-.2cm}
-    optimize kernel hyperparams every $T^{*}$ EM iterations
+    optimize kernel hyperparams every $T\ast$ EM iterations
 }%\vspace{-.2cm}
 \ENDFOR
 \end{algorithmic}
@@ -626,48 +647,115 @@ Sparse coding algorithms are typically used for tasks such as denoising \citep{E
 A variety of sparse coding models have been successfully scaled to high-dimensional latent spaces with use of selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} or the use of selection combined with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012, SheltonEtAl2015} inference approaches. \rev{Latent variables were hereby selected using selection functions that were individually defined for each model.}
 %
 In order to demonstrate our method \rev{of autonomously learned selection functions}, we consider three of these
- sparse generative models, and perform inference with our GP-select approach instead of a hand-crafted selection function.
-\rev{The models are relevant for different tasks such as classification (e.g., binary sparse coding), source separations and denoising (linear spike-and-slab sparse coding) or sparse encoding and extraction of interpretable image components (non-linear sparse coding).}
+ sparse generative models, and perform inference in EM with our GP-select approach instead of a hand-crafted selection function.
+\rev{The models are relevant for different tasks such as classification (e.g., binary sparse coding), source separations and denoising (linear spike-and-slab sparse coding) or sparse encoding and extraction of interpretable image components (nonlinear sparse coding). 
+Note that when it is obvious from context, we drop the notation referring to each $n$ data point independently in order to make the the equations more concise.}
 
-The models are:
+The models \rev{and their parameters} are:
 %
 %\begin{enumerate}
 \begin{description}
+%
+%%% BSC %%%
 \item[\textbf{A.}] \textit{Binary sparse coding}:
 %
 \vspace{-.1cm}
 \begin{align}
-\text{latents: } \,\,\,\vec{s} \sim Bern(\vec{s} | \pi) &= \disT\prod_{h=1}^H \pi^{s_h} \big( 1 - \pi \big)^{1-s_h},\nonumber \\
-\text{observations:  }\,\,\,    \vec{y} &\sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One),\nonumber%\label{eq:bsc}
+\text{latents: } \,\,\,         \vec{s} &\sim Bern(\vec{s} | \pi) = \disT\prod_{h=1}^H \pi^{s_h} \big( 1 - \pi \big)^{1-s_h}\nonumber \\
+\text{observations:  }\,\,\,    \vec{y} &\sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)\nonumber \\ 
+\rev{\text{parameters: }} \,\,\,  % W update
+\disT{}\rev{W} &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\, \nonumber\\
+% sigma 
+\rev{\disT{}\sigma^2} &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
+% pi
+\rev{\pi} &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
 \end{align}
 %
-where $W \in \mathrm{R}^{D \times H}$ denotes the dictionary elements and $\pi$ parameterizes the sparsity (see e.g.~\citep{HennigesEtAl2010}).
+where $W \in \mathrm{R}^{D \times H}$ denotes the components / dictionary elements and $\pi$ parameterizes the sparsity (see e.g.~\citep{HennigesEtAl2010}).
 %\
 % XXX 
 %\vspace{.4cm}
+%
+%%% spike and slab %%%
 \item[\textbf{B.}] \textit{Spike-and-slab sparse coding}:
 \vspace{-.2cm}
 \begin{align}
 \text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z}
-\quad\mathrm{where}\quad \vec{b}\sim Bern(\vec{b} | \pi)
+\text{\quad}\mathrm{where\;}\quad \vec{b}\sim Bern(\vec{b} | \pi)
 \:\mathrm{and} \:
-\vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h),\nonumber\\
+\vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h)\nonumber\\
 %\sim \odot 
-\text{observations:} & \,\,\, \vec{y} \sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)\nonumber%\label{eq:gsc}
+\text{\quad}\text{observations:} & \,\,\, \vec{y} \sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)\text{\quad}\text{\quad}\nonumber\\%\label{eq:gsc}
+\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\rev{\text{\;\;parameters: }} \,\,\,   %\nonumber\\
+%%% GSC JMLR paper M-step eqjuations:
+% W update
+  &\rev{W} = \frac{\sum_{n=1}^{N} \yVecN \E{\sVec\odot\zVec}^{\TT}_n}
+  {\sum_{n=1}^{N} \E{(\sVec\odot\zVec)(\sVec\odot\zVec)^{\TT}}_n } \nonumber\\
+%
+% pi update
+&\rev{\piVec} =
+\frac{1}{N}\sum_{n=1}^{N}\E{\sVec}_n \nonumber\\
+%
+% sigma update
+&\rev{\sigma^2} =
+    \sum_{n=1}^{N} \Big[\E{(\sVec\odot\zVec)(\sVec\odot\zVec)^{\TT}}_n 
+    \ssb -  \E{\sVec\,\sVec^{\TT}}_n \ssb \odot \muVec\muVec^{\TT} \Big] 
+    \odot \Big(\sum_{n=1}^{N}\Big[\E{\sVec\,\sVec^{\TT}}_n \Big]\Big)^{-1} \nonumber\\
+%
+% mu prior update
+&\rev{\mu_{pr}}  = \frac{\sum_{n=1}^{N} \E{\sVec\odot\zVec}_n}{\sum_{n=1}^{N}\E{\sVec}_n}  \nonumber\\
+%
+% sigma prior update
+&\rev{\sigma^{2}_{pr}} = \frac{1}{N}\sum_{n=1}^{N}\Big[ \yVecN(\yVecN)^{\TT}
+        - W\big[\E{(\sVec\odot\zVec)}_n\E{(\sVec\odot\zVec)}_n^{\TT}\big]W^{\TT}\Big]  \nonumber
 \end{align}
 where the point-wise multiplication of the two latent vectors, i.e., $(\vec{s}\odot\vec{z})_h = s_h\,z_h$
 generates a `spike-and-slab' distributed variable ($\vec{s}\odot\vec{z}$), that has either continuous values or exact zero entries (e.g. \citep{TitsiasGredilla2011,GoodfellowEtAl2013,SheikhEtAl2014}).
+% FIXME FIXME FIXME
 %
+%%% SSMCA %%%
 \item[\textbf{C.}] \textit{Nonlinear Spike-and-slab sparse coding}:
 \vspace{-.2cm}
+%
 \begin{align}\label{eq:ssmca}
-\text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z}
-\quad\mathrm{where}\quad \vec{b}\sim Bern(\vec{b} | \pi)
-\:\mathrm{and} \:
-\vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h),\nonumber\\
- \text{observations:}\,\,\, &\vec{y} \sim \mathcal{N}(\vec{y}; \max_{h}\{s_h\vec{W}_{h}\}, \sigma^2\One)\nonumber
+\text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z} \nonumber
+\quad\mathrm{where}\quad \vec{b}\sim Bern(\vec{b} | \pi)\nonumber\\
+\:&\mathrm{and} \:
+\vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu_{pr}} , \sigma^2) \nonumber\\ %\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\nonumber\\
+ \text{observations:}\,\,\, &\vec{y} \sim \mathcal{N}(\vec{y}; \max_{h}\{s_h\vec{W}_{h}\}, \sigma^2\One)\nonumber\\
+%
+%
+\rev{\text{\quad parameters: }} \,\,\,\nonumber %\,\,\, &\nonumber
+% m-step updates
+%
+% W 
+&\rev{\hat{W}_{hd}}   = \frac{\langle s_h y_d \rangle^*}{\langle s_d^2 \rangle^*} 
+ \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
+ %\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
+% pi%
+\text{\quad}\text{\quad}\rev{\hat{\pi}} = \langle \mathbb{I}(s) \rangle  \text{\quad}\nonumber\\
+%
+% sigma 
+&\rev{\hat{\sigma}^2} = \left\langle W_{dh} s_h - y_d^{(n)}\right\rangle^\ast \nonumber\\
+%
+% mu prior
+&\rev{\hat{\mu}_{\pr}} = \langle s_h \rangle^* 
+ \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
+% sigma prior
+\rev{\hat{\sigma}^2_{\pr}} = \langle (s_h - \hat{\mu}_{\pr})^2 \rangle^* \nonumber\\
+% sigma 
+%%%%%&\rev{\hat{\sigma}^2} = \left\langle W_{dh} s_h - y_d^{(n)}\right\rangle^\ast \nonumber\\
+%
+%
+&\rev{\text{Where expectations $\langle \,.\, \rangle^*$ mean:}}\nonumber\\
+%
+&\rev{\langle f(s) \rangle^\ast} = \sum_n \frac{ \int_s \, p(\vec{s}|\vec{y}^{(n)},\Theta) \, f(\vec{s}) \, \mathbb{I}(\text{h is max}) \, d\vec{s} }
+                                       { \int_s \, p(\vec{s}|\vec{y}^{(n)},\Theta) \, \mathbb{I}(\text{h is max}) \, d\vec{s} } \nonumber
 \end{align}
-for which the mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max_{h}\{s_h\vec{W}_{h}\}$, where $\max_{h}$ is a nonlinearity that considers all $H$ latent components and takes the $h$ yielding the maximum value for $s_h\vec{W}_{h}$ \citep{LuckeSahani2008,SheltonEtAl2012,BornscheinEtAl2013,SheltonEtAl2015}, instead of centering the data at the linear combination of $\sum_h s_h\vec{W}_h=W\vec{s}$.
+%
+\rev{where $\mathbb{I}$ is the indicator function denoting the domain to integrate over, namely where $h$ is the maximum.
+Using $\langle f(s) \rangle^\ast$ allows for the condensed expression of the update equations shown above.}
+The mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max_{h}\{s_h\vec{W}_{h}\}$, where $\max_{h}$ is a nonlinearity that considers all $H$ latent components and takes the $h$ yielding the maximum value for $s_h\vec{W}_{h}$ \citep{LuckeSahani2008,SheltonEtAl2012,BornscheinEtAl2013,SheltonEtAl2015}, instead of centering the data at the linear combination of $\sum_h s_h\vec{W}_h=W\vec{s}$.
 %
 \end{description}
 %\end{enumerate}
@@ -684,6 +772,7 @@ where $\vec{s}_h$ represents a singleton state in which only the entry $h$ is no
 %, and it does not take into account  the probability of the state itself  (i.e., $p(\vec{s}_h\,|\,\Theta)$).
 %repeat: We will train GP regression for our flexible selection approach, where, for all models, the targets of the training data is the expected values of the latents.
 
+\rev{The goal of these experiments is to demonstrate the performance of GP-select and the effects/benefits of using different selection functions. To do this, we consider artifical data generated according to each sparse coding model and thus with known ground-truth parameters. As discussed above, we could also apply the sparse coding models using GP-select to other application domains listed, but that is not the focus of these experiments.} 
 We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models \textbf{A-C}:
 %the dataset consists of
 $N$ images of randomly selected overlapping 'bars' with varying intensities for models \textbf{B} and \textbf{C}, and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$ and we choose $H' = 5$, (e.g. following the spike-and-slab prior). 
@@ -746,7 +835,8 @@ This suggests the composition kernel is a good choice  for general use.
 
 \subsection{Gaussian mixture model}
 %
-Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.  \rev{Furthermore, with this flexibility we can explicitly visualize the effect of different selection functions.A demonstration and code for this application is shown in \citep{GP-selectNotebook16}.}
+Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.  \rev{Furthermore, the GMMs flexibility allows us to explicitly visualize the effect of different selection functions.
+A demonstration and code for the GMM application is shown in \citep{GP-selectNotebook16}.}
 %To illustrate the idea and benefit of this approach, we consider a simple motivating example: the problem setting posed by Gaussian mixture models.
 
 The model of the data likelihood is
@@ -871,8 +961,7 @@ This selection system is very costly: the selection function has parameters whic
 it needs to scan through the entire image, considering all possible locations, which becomes computationally demanding for large-scale experiments.
 %
 %In this experiment, we follow a similar design to use a GP regression model as a general selection. Different from the applications in previous models,
-In translation invariant models, instead of predicting the existence of a component, the selection function has to predict all possible locations a component could be.
-To maximally exploit the capabilities of GP-selection function, we directly use the GP regression model to \textit{predict the possible locations} of a component \textit{without introducing any knowledge of translation invariance} into the selection function. In this work, a GP regression model is fitted from the input image to marginal posterior probabilities of individual components appearing at all possible locations. Therefore, the input to the GP-selection function is the image to be inferred and the output is a score for each possible location of each component in the model.
+To maximally exploit the capabilities of the GP-selection function, we directly use the GP regression model to \textit{predict the possible locations} of a component \textit{without introducing any knowledge of translation invariance} into the selection function. In this work, a GP regression model is fitted from the input image to marginal posterior probabilities of individual components appearing at all possible locations. Therefore, the input to the GP-selection function is the image to be inferred and the output is a score for each possible location of each component in the model.
 For example, when learning $10$ components in a $D=30\times 30$ pixel image patch, the output dimensionality of GP-select is $9000$.
 This task is computationally feasible, since GP models scale linearly with output dimensionality.
 The inference of components' locations with GP-select is significantly faster than the selection function in the original work, as it avoids explicitly scanning through the image.
@@ -887,7 +976,7 @@ resulting in a cost of $O(N\times Q)$, where $Q << N$ is the rank of the Cholesk
 %We follow the approach of \cite{FinSch01}
 %\citep[][section 5]{SonGreBicLowGue11} 
 %for the low-rank approximation of the inversion of covariance matrix (incomplete Choleksy decomposition). 
-Second, we may reduce the frequency of kernel hyperparameter updates to only every $T^*$ EM iterations, where a $T^* > 1$ represents a corresponding computation reduction.
+Second, we may reduce the frequency of kernel hyperparameter updates to only every $T\ast*$ EM iterations, where a $T\ast* > 1$ represents a corresponding computation reduction.
 % to correspondingly reduce the average time by a factor of $5$.
 The combination of the Cholesky approximation plus infrequent updates will have the following benefits: a factor of five speedup for infrequent updates, and a factor of $(N-Q)^2$ speedup from incomplete Cholesky, where $Q$ is the rank of the Cholesky approximation and $N$ is the number of original data points. 
 
@@ -913,7 +1002,7 @@ When the objects overlap, they occlude each other with a different random depth 
 In total, $N=2000$ images were generated in the dataset (examples shown in Figure~ \ref{fig:inveca-data}).%\ref{fig:inveca}\textbf{A}).
 
 The task of the InvECA model is to discover the visual components (i.e. the images of $16$ objects) from the image set without any label information. 
-We compare the visual components learned by using \emph{four different selection functions in the InvECA model}: the hand-crafted selection function used in the original work by ~\citet{DaiLucke2012b}, GP-select updated every iteration, GP-select updated every $T*=5$ iterations, and GP-select with incomplete Cholesky decomposition updated every iteration, or $T*=1$ (in this manner we isolate the improvements due to Cholesky from those due to infrequent updates). 
+We compare the visual components learned by using \emph{four different selection functions in the InvECA model}: the hand-crafted selection function used in the original work by ~\citet{DaiLucke2012b}, GP-select updated every iteration, GP-select updated every $T*=5$ iterations, and GP-select with incomplete Cholesky decomposition updated every iteration, or $T\ast=1$ (in this manner we isolate the improvements due to Cholesky from those due to infrequent updates). 
 In these experiments, the parameters of GP-select are optimized at the end of each $T*$ EM iteration(s), using a maximum of $20$ gradient updates.
 The number of objects to be learned is $H=20$ and the algorithm pre-selects $H'=5$ objects for each data point.
 %there were $H'=5$ preselected objects.
@@ -924,11 +1013,12 @@ The kernel used was the composition kernel, as suggested in Section 4.1, althoug
 %
 \begin{figure*}[t!]%[ht]
 \centering
-\includegraphics[width=\textwidth]{inveca/params_j.pdf}%{figs/inveca/invec_mod.pdf}
+\includegraphics[width=\textwidth]{inveca/params_j_2blocks.pdf}%{figs/inveca/invec_mod.pdf}
 \caption{Image components and their masks learned by GP-select with the Translation Invariant model. GP-select learned all objects in the dataset.
 The first row shows the mask of each component, %/ object / feature, 
 the second row shows the learned image components, % feature representations %/ object, 
 and the third row shows only the area of the learned components that had a mask $>0.5$.
+\rev{For the second three-row block of images, the same titles of the first three-row block hold.}
 }
 \label{fig:inveca-params}
 %\end{center}
