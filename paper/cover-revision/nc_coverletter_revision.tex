@@ -32,6 +32,44 @@
 \newcommand{\E}[1]{\left\langle{}#1\right\rangle} % expectations
 \newcommand{\pr}{\mathrm{pr}}%$\mu_{\text{pr_gt}}
 %--------------------------------------
+% ------from GSC paper ------
+\newcommand{\sVec}{\vec{s}}
+\newcommand{\sVecN}{\vec{s}^{(n)}}
+\newcommand{\sVecPrime}{\vec{s}^{\,\prime}}
+\newcommand{\zVec}{\vec{z}}
+\newcommand{\zVecPrime}{\vec{z}^{\,\prime}}
+\newcommand{\yVec}{\vec{y}}
+\newcommand{\yVecN}{\vec{y}^{\,(n)}}
+\newcommand{\piVec}{\vec{\pi}}
+\newcommand{\Wt}{\tilde{W}}
+\newcommand{\SCal}{\mathcal{S}}
+\newcommand{\kappaVec}{\vec{\kappa}}
+\newcommand{\muVec}{\vec{\mu}}
+\newcommand{\kappaVecN}{\kappaVec^{(n)}}
+\newcommand{\muVecN}{\muVec^{(n)}}
+\newcommand{\HPrime}{H^{\prime}}
+\newcommand{\KK}{{\cal K}}
+\newcommand{\KKn}{\KK_n}
+\newcommand{\RRR}{\mathbb{R}}
+\newcommand{\ThetaGen}{\Theta^{\mathrm{gen}}}
+\newcommand{\ThetaOld}{\Theta^{\mathrm{old}}}
+\newcommand{\ThetaOLD}{\Theta^{\mathrm{old}}}
+\newcommand{\NGauss}{{\cal N}}
+\newcommand{\Bernoulli}{\mathcal{B}}
+\newcommand{\Scal}{{\cal S}}
+\newcommand{\sig}{\sigma}
+\newcommand{\dz}{\mathrm{d}\zVec}
+\newcommand{\TT}{\mathrm{T}}
+\newcommand{\refp}[1]{(\ref{#1})}
+\newcommand{\ssb}{\hspace{-2mm}}
+\newcommand{\nuv}{\vec \nu}
+\newcommand{\Sigmad}{\Sigma}
+\newcommand{\Sigmah}{\Psi}
+\newcommand{\BigO}{\mathcal{O}}
+\newcommand{\trace}{\mathrm{Tr}}
+\newcommand{\Qn}{Q^{(n)}}
+\newcommand{\DKL}{D_{KL}}
+% -----end GSC paper --------
 
 
 \setlist[enumerate,1]{start=0} % only outer nesting level
@@ -234,7 +272,7 @@ In the applications we present, the parameters can be solved exactly, or by usin
 
     Model \textbf{A}. \textit{Binary Sparse coding}:
     \begin{align}
-\disT{}W &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\,, \nonumber\\
+\disT{}W &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\, \nonumber\\
 % sigma 
 \disT{}\sigma^2 &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
 % pi
@@ -243,31 +281,48 @@ In the applications we present, the parameters can be solved exactly, or by usin
 
     Model \textbf{B}.  \textit{Spike-and-slab sparse coding}:
     \begin{align}
-\disT{}W &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\,, \nonumber\\
-% sigma 
-\disT{}\sigma^2 &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
-% pi
-\pi &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
+%%% GSC JMLR paper M-step eqjuations:
+% W update
+  &W = \frac{\sum_{n=1}^{N} \yVecN \E{\sVec\odot\zVec}^{\TT}_n}
+  {\sum_{n=1}^{N} \E{(\sVec\odot\zVec)(\sVec\odot\zVec)^{\TT}}_n } \nonumber\\
+%
+% pi update
+&\piVec =
+\frac{1}{N}\sum_{n=1}^{N}\E{\sVec}_n \nonumber\\
+%
+% sigma update
+&\Sigmad =
+    \sum_{n=1}^{N} \Big[\E{(\sVec\odot\zVec)(\sVec\odot\zVec)^{\TT}}_n 
+    \ssb -  \E{\sVec\,\sVec^{\TT}}_n \ssb \odot \muVec\muVec^{\TT} \Big] 
+    \odot \Big(\sum_{n=1}^{N}\Big[\E{\sVec\,\sVec^{\TT}}_n \Big]\Big)^{-1} \nonumber\\
+%
+% mu prior update
+&\mu_{pr}  = \frac{\sum_{n=1}^{N} \E{\sVec\odot\zVec}_n}{\sum_{n=1}^{N}\E{\sVec}_n}  \nonumber\\
+%
+% sigma prior update
+&\sigma^{2}_{pr} = \frac{1}{N}\sum_{n=1}^{N}\Big[ \yVecN(\yVecN)^{\TT}
+        - W\big[\E{(\sVec\odot\zVec)}_n\E{(\sVec\odot\zVec)}_n^{\TT}\big]W^{\TT}\Big]  \nonumber
 \end{align}
 
 
     Model \textbf{C}. \textit{Nonlinear Spike-and-slab sparse coding}:
     \begin{align}
 % m-step updates
-&\rev{\hat{W}_{hd}}   = \frac{\langle s_h y_d \rangle^*}{\langle s_d^2 \rangle^*}, 
- \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
-% pi%
-\rev{\hat{\pi}} = \langle \delta(s) \rangle,  \text{\quad}\text{\quad}\text{\quad}\nonumber\\
-&\rev{\hat{\mu}_{\pr}} = \langle s_h \rangle^*, 
- \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
-% sigma prior
-\rev{\hat{\sigma}^2_{\pr}} = \langle (s_h - \hat{\mu}_{\pr})^2 \rangle^* \nonumber\\
+&\hat{W}_{hd}   = \frac{\langle s_h y_d \rangle^*}{\langle s_d^2 \rangle^*}\ 
+\text{\quad}
 % sigma 
-&\rev{\hat{\sigma}^2} = \left\langle W_{dh} s_h - y_d^{(n)}\right\rangle^\ast \nonumber
+&\hat{\sigma}^2 = \left\langle W_{dh} s_h - y_d^{(n)}\right\rangle^\ast \nonumber\\
+%
+% pi%
+&\hat{\pi} = \langle \delta(s) \rangle  \text{\quad}\text{\quad}\text{\quad}\nonumber\\
+%
+% mu prior
+&\hat{\mu}_{\pr} = \langle s_h \rangle^* 
+ \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad} 
+&\hat{\sigma}^2_{\pr} = \langle (s_h - \hat{\mu}_{\pr})^2 \rangle^* \nonumber
 %
 \end{align}
- 
-    \rev{ADD PARAMETERS HERE AND TO SECTION 5.1}
+
 
     %17
     \item \rvr{\emph{P. 15, lines +14 and +15: Really confused here, did you mean to instead call these the affinity functions? The selection function is supposed to return a subset...}}
