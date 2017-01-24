@@ -760,13 +760,13 @@ The mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max_{h}\{s_h\
 \end{description}
 %\end{enumerate}
 
-In the above models, inference with the truncated posterior of Equation~\eqref{eq:sel-post} using manually-derived selection functions has yielded results as good as or more robust than exact inference (converging less frequently to local optima than exact inference; see earlier references for details).
-For models \textbf{A} and \textbf{C}, the selection function was the cosine similarity between the weights $\vec{W}_h$ (e.g. dictionary elements, components, etc.) associated with each latent variable $s_h$ and 
+In the above models, inference with the truncated posterior of Equation~\eqref{eq:sel-post} using manually-derived selection functions $\mathcal{S}_h(\vec{y}^{(n)})$ to obtain the subset of states $\Kn$ [of selected relevant variables $\vec{s}$], Equation~\eqref{eq:sel-func}, has yielded results as good as or more robust than exact inference (converging less frequently to local optima than exact inference; see earlier references for details).
+For models \textbf{A} and \textbf{C}, the constructed function used to approximate $\vec{f}(\vec{y}^{(n)}$ was the cosine similarity between the weights $\vec{W}_h$ (e.g. dictionary elements, components, etc.) associated with each latent variable $s_h$ and 
 each data point $\vec{y}^{(n)}$: 
-$  \mathcal{S}_h(\vec{y}^{(n)}) = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$.
+$  \vec{f}(\vec{y}^{(n)} = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$.
 %, with $\disT ||\vec{W}_{h}||=\sqrt{\sum_{d=1}^D(W_{dh})^2}$.
-For model \textbf{B}, the  selection function was the data likelihood given a singleton state:
- $\mathcal{S}_h(\vec{y}^{(n)}) = p(\vec{y}^{(n)} | \vec{s}=\vec{s}_h, \Theta)$, 
+For model \textbf{B}, the affinity function constructed was the data likelihood given a singleton state:
+ $\vec{f}(\vec{y}^{(n)} = p(\vec{y}^{(n)} | \vec{s}=\vec{s}_h, \Theta)$, 
 %
 where $\vec{s}_h$ represents a singleton state in which only the entry $h$ is non-zero.
 %, and it does not take into account  the probability of the state itself  (i.e., $p(\vec{s}_h\,|\,\Theta)$).
