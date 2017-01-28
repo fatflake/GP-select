@@ -760,7 +760,7 @@ The mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max_{h}\{s_h\
 \end{description}
 %\end{enumerate}
 
-In the above models, inference with the truncated posterior \rev{of Equation~\eqref{eq:sel-post} using manually-derived selection functions} \rev{$\mathcal{S}_h(\vec{y}^{(n)})$} \rev{to obtain the subset of states} \rev{$\Kn$} \rev{[of selected relevant variables} \rev{$\vec{s}(\vec{y}^{(n)})$}\rev{], Equation~\eqref{eq:sel-func},} has yielded results as good as or more robust than exact inference (converging less frequently to local optima than exact inference; see earlier references for details).
+In the above models, inference with the truncated posterior \rev{of Equation~\eqref{eq:sel-post} using hand-crafted selection functions} \rev{$\mathcal{S}_h(\vec{y}^{(n)})$} \rev{to obtain the subset of states} \rev{$\Kn$} \rev{[of selected relevant variables} \rev{$\vec{s}(\vec{y}^{(n)})$}\rev{], shown in Equation~\eqref{eq:sel-func},} has yielded results as good as or more robust than exact inference (converging less frequently to local optima than exact inference; see earlier references for details).
 For models \textbf{A} and \textbf{C}, the \rev{hand-constructed function approximating} \rev{$\vec{f}(\vec{y}^{(n)})$}\rev{, for substituion in Equation~\eqref{eq:sel-func},} was the cosine similarity between the weights $\vec{W}_h$ (e.g. dictionary elements, components, etc.) associated with each latent variable $s_h$ and each data point $\vec{y}^{(n)}$: 
 %
 \rev{$\vec{f}(\vec{y}^{(n)})$} \rev{$ = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$}.
