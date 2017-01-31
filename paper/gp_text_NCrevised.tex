@@ -353,8 +353,8 @@ When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal post
 \begin{equation}
 \label{eq:marginals-product}
 % 1st iteration:
-%\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).\\
 \sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
+%\sumCond{\vec{s}}{\text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
 \end{equation} 
 %
 We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). }
@@ -380,7 +380,7 @@ $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we d
 To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
 This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
 iterations. 
-\rev{The optimization of $q_{(n)}$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always be deemed relevant. Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm an opportunity to evaluate possibly unused variables (those initialized with small probability values) which are actually relevant for $\vec{y}^{(n)}$.}
+\rev{The optimization of $q_{(n)}$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always be deemed relevant. Thus to avoid this, we randomly select a few extra hidden indices $H' + \frac{H'}{10}$ to give the algorithm an opportunity to evaluate possibly unused variables (those initialized with small probability values) which are actually relevant for $\vec{y}^{(n)}$.}
 %
 $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ deemed by the affinity to be relevant to the $n$th data point.
 %
