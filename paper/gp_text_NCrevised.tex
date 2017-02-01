@@ -54,7 +54,7 @@ This subspace reduction can lead to a significant decrease in computational dema
 for a reduction to still smaller sets of toys until the combinatorics of these selected toys becomes computationally tractable. The selection function of expectation truncation mathematically models the process of selecting the relevant hidden variables (the relevant toys); while truncated posterior distributions then model their remaining combinatorics (see further below).} 
 
 In previous work, functions to select states of high posterior mass were 
-derived individually for each graphical model of interest, e.g., by taking upper bounds or noiseless limits. 
+derived individually for each graphical model of interest, e.g., by taking upper bounds or noiseless limits  
 %hand-crafted to model the properties of the graphical model of interest, using intuition from noiseless limits or upper-bound results specific to the model 
 \citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,HennigesEtAl2014,SheikhEtAl2014}.
 %derived separately and manually for each model by hand from upper bounds or noiseless limits" 
@@ -347,13 +347,13 @@ See Figure~\ref{fig:graph-affinity} for a simplified illustration.
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
-\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, y,\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Equation\eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, \vec{y},\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Equation \eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
 %
 \begin{equation}
 \label{eq:marginals-product}
 % 1st iteration:
-%\sum_{\vec{s}\not\in\II, \,s_h=1 \,\forall\, h\in\II}p(s_1,...,s_h \,|\, y, \Theta) = \prod_{h\in\II}p(s_h=1 \,|\, y, \Theta).\\
 \sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
+%\sumCond{\vec{s}}{\text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
 \end{equation} 
 %
 We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). }
@@ -379,7 +379,7 @@ $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we d
 To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
 This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
 iterations. 
-\rev{The optimization of $q(n)$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always be deemed relevant. Thus to avoid this, we randomly select a few extra hidden indices $H' + .10\times H'$ to give the algorithm an opportunity to evaluate possibly unused variables (those initialized with small probability values) which are actually relevant for $\vec{y}^{(n)}$.}
+\rev{The optimization of $q_{(n)}$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always be deemed relevant. Thus to avoid this, we randomly select a few extra hidden indices $H' + \frac{H'}{10}$ to give the algorithm an opportunity to evaluate possibly unused variables (those initialized with small probability values) which are actually relevant for $\vec{y}^{(n)}$.}
 %
 $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ deemed by the affinity to be relevant to the $n$th data point.
 %
@@ -636,7 +636,7 @@ Finally, we apply our approach to a recent hierarchical model for translation in
 \label{sec:sparse-coding}
 %
 \rev{Many types of natural data are composed of potentially many component types but any data point often only contains a very small number of this potentially large set of components. For the introductory example of toys on the nursery floor, for instance, there are many different toys that can {\em potentially} be in a given image but there is only a typically relatively small number of toys {\em actually} appearing in any one image.
-Another example is a sound played by a piano at a given time $t$. While the sound can contain waveforms generated by pressing any of the $88$ piano keys, there are only relatively few keys (typically much smaller then ten) that actually generated the sound. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but assigning non-zero (or significantly different from zero) values only to a small subset of components (the acturally appearing components). 
+Another example is a sound played by a piano at a given time $t$. While the sound can contain waveforms generated by pressing any of the $88$ piano keys, there are only relatively few keys (typically much smaller than ten) that actually generated the sound. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potenial data components) but assigning non-zero (or significantly different from zero) values only to a small subset of components (the acturally appearing components). 
 %%% TODO citations below %%%%
 Sparse coding algorithms are typically used for tasks such as denoising \citep{EladAharon2006,MairalEtAl2009}, inpainting \citep{MairalEtAl2009, MairalEtAl2009b,TitsiasGredilla2011}, classification 
 \citep[][e.g. MNIST data set \emph{http://yann.lecun.com/exdb/mnist/}, the flowers data set \emph{http://www.robots.ox.ac.uk/$\sim$vgg/data/flowers/}]{MNIST,TitsiasGredilla2011,RainaEtAl2007}, transfer learning \citep{RainaEtAl2007}, collaborative filtering \citep{TitsiasGredilla2011} and are important models for neuro-sensory processing \citep[][and many more]{OlshausenField1997,ZylberbergEtAl2011,BornscheinEtAl2013,SheikhEtAl2014}.}
@@ -648,7 +648,7 @@ A variety of sparse coding models have been successfully scaled to high-dimensio
 In order to demonstrate our method \rev{of autonomously learned selection functions}, we consider three of these
  sparse generative models, and perform inference in EM with our GP-select approach instead of a hand-crafted selection function.
 \rev{The models are relevant for different tasks such as classification (e.g., binary sparse coding), source separations and denoising (linear spike-and-slab sparse coding) or sparse encoding and extraction of interpretable image components (nonlinear sparse coding). 
-Note that when it is obvious from context, we drop the notation referring to each $n$ data point independently in order to make the the equations more concise.}
+Note that when it is obvious from context, we drop the notation referring to each $n$ data point independently in order to make the equations more concise.}
 
 The models \rev{and their parameters} are:
 %
@@ -660,7 +660,7 @@ The models \rev{and their parameters} are:
 %
 \vspace{-.1cm}
 \begin{align}
-\text{latents: } \,\,\,         \vec{s} &\sim Bern(\vec{s} | \pi) = \disT\prod_{h=1}^H \pi^{s_h} \big( 1 - \pi \big)^{1-s_h}\nonumber \\
+\text{latents: } \,\,\,         \vec{s} &\sim \mathrm{Bern}(\vec{s} | \pi) = \disT\prod_{h=1}^H \pi^{s_h} \big( 1 - \pi \big)^{1-s_h}\nonumber \\
 \text{observations:  }\,\,\,    \vec{y} &\sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)\nonumber \\ 
 \rev{\text{parameters: }} \,\,\,  % W update
 \disT{}\rev{W} &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\, \nonumber\\
@@ -680,7 +680,7 @@ where $W \in \mathrm{R}^{D \times H}$ denotes the components / dictionary elemen
 \vspace{-.2cm}
 \begin{align}
 \text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z}
-\text{\quad}\mathrm{where\;}\quad \vec{b}\sim Bern(\vec{b} | \pi)
+\text{\quad}\mathrm{where\;}\quad \vec{b}\sim \mathrm{Bern}(\vec{b} | \pi)
 \:\mathrm{and} \:
 \vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h)\nonumber\\
 %\sim \odot 
@@ -718,7 +718,7 @@ generates a `spike-and-slab' distributed variable ($\vec{s}\odot\vec{z}$), that 
 %
 \begin{align}\label{eq:ssmca}
 \text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z} \nonumber
-\quad\mathrm{where}\quad \vec{b}\sim Bern(\vec{b} | \pi)\nonumber\\
+\quad\mathrm{where}\quad \vec{b}\sim \mathrm{Bern}(\vec{b} | \pi)\nonumber\\
 \:&\mathrm{and} \:
 \vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu_{pr}} , \sigma^2) \nonumber\\ %\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\nonumber\\
  \text{observations:}\,\,\, &\vec{y} \sim \mathcal{N}(\vec{y}; \max_{h}\{s_h\vec{W}_{h}\}, \sigma^2\One)\nonumber\\

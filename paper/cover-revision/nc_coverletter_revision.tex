@@ -131,7 +131,7 @@ Reviewer 1 requests and replies:
     %0
     \item \rvr{\emph{My biggest suggestion is to include some practical motivation at the beginning of the document. In the introduction, the difficulties of having a large latent space are discussed, but it is natural in many problems we encounter in applications to actually have a small number of latent variables (with small support) determining the data. I would have really appreciated some discussion of the applications/datasets where the methods in this paper are relevant.}}
 
-We have added illustrative examples to the introduction in order to provide an early intuition for the used approach. We also motivate sparsity with two examples in Sec. 5.1 as suggested, provided more explanation to Sec. 5.3, and added pointers to potential application domains / typical tasks in introduction and Sec. 5.1. We agree that providing such examples and their task context makes our motivation clearer, and believe that our changes have improved the manuscript accordingly.
+We have added illustrative examples to the introduction in order to provide an early intuition for the used approach. We also motivate sparsity with two examples in Sec. 5.1 as suggested, provided more explanation to Sec. 5.3, and added pointers to potential application domains / typical tasks in introduction and Sec. 5.1. We agree that providing such examples and their task contexts makes our motivation clearer, and believe that our changes have improved the manuscript accordingly.
 %We have included a practical motivation in the Introduction as well as discussion/citations of possible application domains.
     
     %1
@@ -150,7 +150,7 @@ likely to contribute posterior probability mass is preserved.
     %3
     \item \rvr{\emph{End of p. 3: It's not entirely clear at this point what the regression setup looks like, that is, what the inputs/covariates to the selection function are and what the outputs/responses are. I think it would help the unfamiliar reader make better use of this introduction if some further (brief) details on the regression setup were given here.}}
 
-To clarify the regression setup, we add that the selection function is learned by Gaussian process regression that regresses the expected values of the latents variables onto the observed data.
+To clarify the regression setup, we add that the selection function is learned by Gaussian process regression that regresses the expected values of the latent variables onto the observed data.
 %We modified this sentence to read:
 %We use  Gaussian process regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could also be applied. 
 
@@ -262,7 +262,7 @@ See our reply to Reviewer 2, in point (1), who also had questions about this top
 
 Our approach only modifies the E-step in EM and we learn model parameters in the usual M-step by maximizing their likelihood given the data (or rather, maximizing the free-energy with $q_n$ fixed). 
 %by maximizing the likelihood of each model's parameters given the posterior approximation $q(n)$, 
-In the applications we present, the parameters can be solved exactly, or by using e.g. Gibbs sampling (see Shelton et al, 2011, 2012 and Sheik and Luecke, 2016 for examples that avoid computational intractabilities and/or accelerate inference by sampling from the truncated posterior), for the M-step update equations. See our reply to question (16) below where we give specific M-step updates for the models/experiments in Section 5.1 in the paper.
+In the applications we present, the parameters can be solved exactly, or by using e.g. Gibbs sampling (see Shelton et al, 2011, 2012, and Sheikh and L\"ucke, 2016, for examples that avoid computational intractabilities and/or accelerate inference by sampling from the truncated posterior), for the M-step update equations. See our reply to question (16) below where we give specific M-step updates for the models/experiments in Section 5.1 in the paper.
 
     %16
     \item \rvr{\emph{Description of models A, B, C: Perhaps it"s also useful to have a "parameters"  line in these descriptions, to make it clear what is being updated in the M-step. Again, some details on how the M-step is being performed would probably be useful. For example, how do you update the matrix of elements W? Finally, I would have really liked to have seen some suggestions here regarding the applications/situations/datasets when each of these models are appropriate. Perhaps just a sentence on each?}}
