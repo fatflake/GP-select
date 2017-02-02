@@ -121,7 +121,7 @@ subspace preselection"}
 
 \opening{Dear Neural Computation editorial board,}
 
-We would like to thank the editior as well as the reviewers for their insightful and helpful comments that we feel strengthen the manuscript.  We have addressed each point, enumerated below, and have additionally provided code to illustrate intuitively how our method works. These changes are highlighted in \textcolor{blue}{blue} in the manuscript.
+We would like to thank the editor as well as the reviewers for their insightful and helpful comments that we feel strengthen the manuscript.  We have addressed each point, enumerated below, and have additionally provided code to illustrate intuitively how our method works. These changes are highlighted in \textcolor{blue}{blue} in the manuscript.
 
 
 %%% TODO keep all original sentences and numbers reviewer right.  they won't remember, don't make them look!
@@ -172,7 +172,7 @@ Even when the probability mass is supported everywhere, it may still be largely 
     %6
     \item \rvr{\emph{ P. 8, line +8,   "In [other] words... is proportional ..." : Is "proportional"  the correct word here? Assuming $\{ s \in K_n \}$, then elements of the sum in the denominator of Eq. (1) will still be missing from the sum in the denominator of Eq. (2). So it won't be proportional, I think. The term "approximation" still seems reasonable though.}}
 
-It is correct there are fewer terms in the denominator of (2), compared with (1). This affects the overall scaling of the terms. Eq. 1 still remains proportional to eq. 2 for the selected terms $s\in K_n$, however. 
+It is correct there are fewer terms in the denominator of (2), compared with (1). This affects the overall scaling of the terms. Eq. 1 still remains proportional to Eq. 2 for the selected terms $s\in K_n$, however. 
 We have added this clarification in the revision.
 
     %7
@@ -185,7 +185,7 @@ Here, the variables $s_1$ and $s_3$ yield high affinity and would thus be consid
     \item \rvr{\emph{P. 9, line +9:   meaning that, for the relevant... the posterior probability $p_h$ exceeds some threshold.  This is confusing to me, why the talk of thresholding here? Eq. (3) merely models the conditional probability $P\{ s_h^n = 1 |   \}$, right? This is always a number in $(0,1)$ saying "threshold"  sounds like you're checking if this number is above a certain value, but I don't see that happening until the $\gamma( \cdot )$ and $\mathcal{I}( \cdot )$ functions are introduced on the next page.}}
 
 That’s right - we did not specify a threshold. We have corrected this text. 
-After eq. 3: “meaning that the relevant variables will have greater marginal posterior probability $p_h$.
+After Eq. 3: meaning that the relevant variables will have greater marginal posterior probability $p_h$.
 
     %9
     \item \rvr{\emph{P. 9, lines +10 -- +13: "When the latent variables... this affinity function correctly isolates ..."  It"s not clear to me why this argument holds. Maybe another sentence or two explaining the argument here.}}
