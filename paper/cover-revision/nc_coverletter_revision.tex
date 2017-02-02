@@ -83,7 +83,7 @@ Sekretariat MAR 5-6\\
 Marchstrasse 23\\
 10587 Berlin\\
 Germany\\} 
-\signature{\vspace{-5mm}Jacquelyn A. Shelton, Jan Gasthaus, Dr. Zhenwen Dai, Prof. Dr. J\"org L\"ucke, and Prof. Dr. Arthur Gretton }
+\signature{\vspace{-5mm}Jacquelyn A. Shelton, Jan Gasthaus, Zhenwen Dai, J\"org L\"ucke, and Arthur Gretton}
 \begin{document}
 %\flushleft
 %\renewcommand{\baselinestretch}{1.15}\small\normalsize %approx. double spacing
@@ -150,7 +150,7 @@ likely to contribute posterior probability mass is preserved.
     %3
     \item \rvr{\emph{End of p. 3: It's not entirely clear at this point what the regression setup looks like, that is, what the inputs/covariates to the selection function are and what the outputs/responses are. I think it would help the unfamiliar reader make better use of this introduction if some further (brief) details on the regression setup were given here.}}
 
-To clarify the regression setup, we add that the selection function is learned by Gaussian process regression that regresses the expected values of the latent variables onto the observed data.
+To clarify the regression setup, we add that the selection function is learned by Gaussian process regression that regresses the expected values of the latent variables from the observed data.
 %We modified this sentence to read:
 %We use  Gaussian process regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could also be applied. 
 
@@ -172,7 +172,7 @@ Even when the probability mass is supported everywhere, it may still be largely 
     %6
     \item \rvr{\emph{ P. 8, line +8,   "In [other] words... is proportional ..." : Is "proportional"  the correct word here? Assuming $\{ s \in K_n \}$, then elements of the sum in the denominator of Eq. (1) will still be missing from the sum in the denominator of Eq. (2). So it won't be proportional, I think. The term "approximation" still seems reasonable though.}}
 
-It is correct there are fewer terms in the denominator of (2), compared with (1). This affects the overall scaling of the terms. Eq. 1 still remains proportional to eq. 2 for the selected terms $s\in K_n$, however. \\
+It is correct there are fewer terms in the denominator of (2), compared with (1). This affects the overall scaling of the terms. Eq. 1 still remains proportional to eq. 2 for the selected terms $s\in K_n$, however. 
 We have added this clarification in the revision.
 
     %7
