@@ -1080,7 +1080,7 @@ The accuracy of the predicted locations was then computed by comparing the dista
 \includegraphics[width=\textwidth]{inveca/accuracy.pdf}%{figs/inveca/invec_mod.pdf}
 \caption{Accuracy of the four selection functions in the Translation Invariant model.
 %%%\comm{fix for new experiments -- really great speedup (fivefold from less frequent updates, plus factor of 100 from chol (since it's square in the number of features reduced))}
-Functions depicted in the figures: GP-select with no modifications (GP, red), the incomplete Cholesky decomposition (GP IChol, blue), with updated kernel hyperparameters every 5 EM iterations (GP every5, green), and with hand-crafted selection (hand-craft, cyan).
+Functions depicted in the figures: GP-select with no modifications (GP, red), the incomplete Cholesky decomposition (GP IChol, blue), with updated kernel hyperparameters every $5$ EM iterations (GP every5, green), and with hand-crafted selection (hand-craft, cyan).
 \textbf{A} The log-scale histogram of the prediction accuracy for the four selection functions, measured by the distance each function's predicted object location was to the ground-truth object location. 
 All bars of the selection functions show nearly equivalent accuracy for the various distances. 
 %the $x$-axis shows the distance from the ground-truth location in terms of pixels, and the $y$-axis shows the percentages.
@@ -1094,7 +1094,7 @@ All bars of the selection functions show nearly equivalent accuracy for the vari
 \begin{figure}[ht!]
 \ContinuedFloat
 \centering
-\caption{After about 40 EM iterations, all four selection function versions of the algorithm converged to the same likelihood. Both figures show equivalent performance of the GP-select approaches with the hand-crafted function, but 
+\caption{After about $40$ EM iterations, all four selection function versions of the algorithm converged to the same likelihood. Both figures show equivalent performance of the GP-select approaches with the hand-crafted function, but 
 %show that the accuracy/performance of inference with all GP-select functions is equivalent to the hand-crafted selection function.
 'GP IChol' represents a factor of $100$ speedup vs. 'GP', and 'GP every5' represents a factor of $5$ speedup.}
 % \lipsum[4-8]
