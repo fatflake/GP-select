@@ -328,8 +328,8 @@ This is the case, for instance, if for a given data point $\vec{y}^{(n)}$
 only a subset of the $H$ latent variables \rev{$s_1^{(n)},s_2^{(n)},\dots,s_H^{(n)}$} are relevant. 
 \rev{Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.}
 
-A \textit{selection function} can be used to identify a subset of size $H'$ ($H' \ll H$)
-of salient variables, which in turn is used to define a subset $\mathcal{K}_n \subseteq \{0,1\}^H$ of the possible state configurations of the latent variables $\mathbf{s}^{(n)}$ for each data point. 
+A \textit{selection function} can be used to identify a subset $I \subseteq \{1,2,\ldots,H\} $ of size $H'$ ($H' \ll H$)
+of salient variables, which in turn is used to define a subset $\mathcal{K}_n = \{\vec{s} \mid \vec{s} \in 2^H \land \forall h \notin I: s_h = 0 \} \subseteq \{0,1\}^H$ of the possible state configurations of the latent variables $\mathbf{s}^{(n)}$ for each data point. 
 This subset contains only state configurations where the values of the variables not identified to be relevant by the selection function are fixed to $0$. 
 % (assigned zero probability mass under the selection function).
 %
@@ -384,11 +384,11 @@ See Figure~\ref{fig:graph-affinity} for a simplified illustration.
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
 %
-\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, \vec{y},\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in\II$ (compare Equation \eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, \vec{y},\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in I$ (compare Equation \eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
 %
 \begin{equation}
 \label{eq:marginals-product}
-\sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in\II} p(s_1,...s_H \, | \, \vec{y}, \Theta) = \prod_{h\not\in\II} (1 - p(s_h=1 \,|\, \vec{y}, \Theta)).
+\sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in I} p(s_1,...s_H \, | \, \vec{y}, \Theta) = 1 - \prod_{h\not\in I}p(s_h=1 \,|\, \vec{y}, \Theta).
 \end{equation} 
 %
 We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). }
@@ -400,15 +400,15 @@ and has been empirically shown to be quite effective when dependencies exist (se
 Next, using all $\hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$  
 from the affinity function 
 $\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we define 
- $\gamma\,(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order \rev{[of probability $\hat{p}^{(n)}$]} and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices. 
+ $\gamma\,(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order \rev{[of probability $\hat{p}^{(n)}$]} and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices.
+ $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ chosen by the affinity to be relevant to the $n$th data point.
 To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
 This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
 iterations. 
-\rev{\rev{The optimization of $q_{(n)}$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. Thus it is important that selection-based EM does not "get stuck" assigning higher probability values to $s_h$ selected due to an initially high probability value and therefore always assigned zero value under the selection function.
-%deemed relevant. 
-To avoid this, we randomly select a few extra hidden indices $H' + \frac{H'}{10}$ to give the algorithm an opportunity to evaluate possibly unused variables which might be relevant for $\vec{y}^{(n)}$.}}
+\rev{\rev{The rationale for this is that the optimization of $q_{(n)}$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. If the affinity function itself is based on the posterior approximation (as it will be in the algorithm described in Section \ref{gp-select}), it has a tendency
+to not select indices that were previously not selected. Thus in order for selection-based EM to not ``get stuck'', it is important select a few extra hidden indices randomly, to give the algorithm an opportunity to evaluate possibly unused variables which might be relevant for $\vec{y}^{(n)}$.}}
 %
-$\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ chosen by the affinity to be relevant to the $n$th data point.
+
 Finally, using the indices $I$ from $\gamma$, we define $\mathcal{I}(I)$ to return an 
 $H'$-dimensional subset of selected relevant latent states $\Kn$ for each data point $\vec{y}^{(n)}$. 
 %
@@ -473,16 +473,16 @@ to approximate $p_h^{(n)}$ for the entire $H\times N$ set of latent variables $\
 Thus, prior to each E-step in each EM iteration, within each calculation of the selection function, we calculate the affinity  using a GP to regress the expected values of the latent variables $\langle \vec{S} \rangle$ from the observed data $\vec{Y}$.  
 Specifically, we train on $p_h$ from the previous EM iteration (where $p_h$ is equal to $\langle s_h \rangle$), for 
 training data of 
-$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}^{(n)}\rangle_{q}) | n = 1,\dots, N \}$, 
+$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}^{(n)}\rangle_{q_n(\vec{s}^{(n)})} | n = 1,\dots, N \}$, 
 where we recall that $q_{n}(\vec{s}^{(n)})$ is the approximate posterior distribution for $\vec{s}^{(n)}$ in Equation~\eqref{eq:sel-post}.
 \rev{Note that we do not use a sigmoid link, hence this is clearly not a correct estimate of a probability (it can be negative, or greater than one). From the selection perspective, however, it is not necessary to avoid these pathologies, as we only want an ordering of the variables. A correct GP classification approach with a properly defined likelihood will no longer have a marginal Gaussian distribution, and we would no longer be able to trivially express the posterior means of different functions with the same inputs, without considerable extra computation.}
 
 In the first EM iteration, the expectations $\langle\vec{s}^{(n)}\rangle_{q}$ are initialized randomly;
 in each subsequent EM iteration, the 
 expectations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
-The EM algorithm is run for $T$ iterations and the hyperparameters of the kernel are optimized by maximum likelihood every $T\ast$ EM iterations.
+The EM algorithm is run for $T$ iterations and the hyperparameters of the kernel are optimized by maximum likelihood every $T^\ast$ EM iterations.
 
-For each data point $n$ and latent variable $h$ we compute the predicted mean of the GP by leaving 
+For each data point $n$ and latent variable $s_h$ we compute the predicted mean of the GP by leaving 
 this data point out of the training set and considering all others, which is called leave-one-out (LOO) prediction.
 It can be shown that this can be implemented efficiently \citep[see Section 5.4.2 in ][]{RasmussenGPbook}, 
 and we use this result to update the predicted affinity as follows:
