@@ -294,7 +294,7 @@ binary latent variables
 by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{H \times N}$ 
 where each $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ is the $n$th vector in the $H$-dimensional latent space,
 and for each individual hidden variable $h=1,\dots,H$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
-Reduced latent spaces are denoted by $H'$, where $H' \ll H$. 
+The number of dimensions in the reduced latent space is denoted by $H'$, where $H' \ll H$. 
 Note that although we restrict ourselves to binary latent variables here, 
 the procedure could in principle be generalized to variables with higher cardinality (e.g. see \citep{ExarchakisEtAl2012}).
 We denote the prior distribution over the latent variables as $p(\vec{s} | \theta)$ 
@@ -305,7 +305,7 @@ Using these expressions, the posterior distribution over latent variables is
 \begin{equation}
 \label{eq:post}
 p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s}^{(n)} | \Theta) \, p(\vec{y}^{(n)} | \vec{s}^{(n)}, \Theta)}
-{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime\,^{(n)}} p(\vec{s}\Prime\,^{(n)} | \Theta) \, p(\vec{y}^{(n)} | \vec{s}\Prime\,^{(n)}, \Theta)}.
+{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime} p(\vec{s}\Prime\ | \Theta) \, p(\vec{y}^{(n)} | \vec{s}\Prime, \Theta)}.
 \end{equation}
 \vspace{-.5cm}
 
@@ -325,12 +325,13 @@ Expectation truncation (ET) is a meta algorithm, which improves convergence of t
 %
 The main idea underlying ET is that the posterior probability mass is concentrated in a small subspace of the full latent space.
 This is the case, for instance, if for a given data point $\vec{y}^{(n)}$ 
-only a subset of the $H$ latent variables \rev{$s_h^{(n)},s_1^{(n)},s_2^{(n)},\dots,s_H^{(n)}$} are relevant. 
+only a subset of the $H$ latent variables \rev{$s_1^{(n)},s_2^{(n)},\dots,s_H^{(n)}$} are relevant. 
 \rev{Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.}
 
-A \textit{selection function} can be used to identify a  subset
-of salient variables, denoted by $H'$ where $H' \ll H$, which in turn is used to define a subset, denoted $\mathcal{K}_n$, of the possible state configurations of the space per data point. 
-State configurations not in this space (of variables not identified to be relevant) are fixed to $0$ (assigned zero probability mass under the selection function).
+A \textit{selection function} can be used to identify a subset of size $H'$ ($H' \ll H$)
+of salient variables, which in turn is used to define a subset $\mathcal{K}_n \subseteq \{0,1\}^H$ of the possible state configurations of the latent variables $\mathbf{s}^{(n)}$ for each data point. 
+This subset contains only state configurations where the values of the variables not identified to be relevant by the selection function are fixed to $0$. 
+% (assigned zero probability mass under the selection function).
 %
 The posterior distribution in Equation~\eqref{eq:post} can then be approximated by a truncated posterior distribution, computed on the reduced support,
 %
@@ -338,20 +339,19 @@ The posterior distribution in Equation~\eqref{eq:post} can then be approximated 
 \begin{align}
 \label{eq:sel-post}
 p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
-&\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\rev{\mathbb{I}}(\vec{s}^{(n)}\in\,\,\Kn)} b
-{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime^{(n)}\in\mathcal{K}_n}\hspace{-3mm} p(\vec{s}\Prime^{(n)},\vec{y}^{(n)}|\,\Theta)},
+&\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\rev{\mathbb{I}}(\vec{s}^{(n)}\in\,\,\Kn)}
+{\disS\sum_{\vec{s} \Prime\in\mathcal{K}_n} \hspace{-1mm} p(\vec{s}\Prime,\vec{y}^{(n)}|\,\Theta)},
 \end{align}
 \normalsize
 %
-where $\Kn$ contains the latent states of the $H'$ relevant variables for data point
-$\vec{y}^{(n)}$,
-and \rev{$\mathbb{I}(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathca4l{K}_n$ is true, and $0$ otherwise. Furthermore, $b$ is a term that does not depend on $s^(n).}
-In other words, Equation~\eqref{eq:sel-post} is proportional to Equation~\eqref{eq:post} if $s \in \Kn$ (and zero otherwise). 
-The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for non-selected $h$ are assigned zero probability.
-\rev{This means that there are fewer terms in the denominator of Equation~\eqref{eq:sel-post} compared with Equation~\eqref{eq:post}, which affects the overall scaling of the terms. Equation~\eqref{eq:sel-post} still remains proportional to Equation~\eqref{eq:post} for the selected terms $s\in K_n$, however.}
+where $\mathbb{I}(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ is true, and $0$ otherwise. 
+In other words, Equation~\eqref{eq:sel-post} is proportional to Equation~\eqref{eq:post} if $\vec{s}^{(n)} \in \Kn$ (and zero otherwise), so that the approximate posterior $q_n(\vec{s}^{(n)};\Theta)$ assigns zero mass
+to states $\vec{s}^{(n)} \notin \Kn$. The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for some non-selected $h$ are assigned zero probability.
+\rev{This means that there are fewer terms in the denominator of Equation~\eqref{eq:sel-post} compared with Equation~\eqref{eq:post}, thus reducing the computational complexity. Equation~\eqref{eq:sel-post} still remains proportional to Equation~\eqref{eq:post} for the remaining states $\vec{s} \in \Kn$, however.}
 % XXX
-The sum over $\Kn$ is much more efficient than the sum for the full posterior, since it need only be computed over the reduced set of latent variable states deemed relevant: the state configurations of the irrelevant variables are fixed to be zero.
-The variable selection parameter $H'$ is selected based on the compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it has been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
+As there are only $2^{H'}$ terms in the sum over $\Kn$, computing this posterior approximation is much more efficient than computing the exact normalizing constant for the full posterior (containing $2^H$ terms).
+%since it need only be computed over the reduced set of latent variable states deemed relevant: the state %configurations of the irrelevant variables are fixed to be zero.
+The number of latent dimensions to select, $H'$, is chosen based on the compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it has been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
 
 
 \subsection{ET with affinity} 
@@ -369,7 +369,7 @@ Here, \rev{the variables $s_1$ and $s_3$ yield high affinity and would thus be c
 One way of constructing a selection function 
 is by first ranking the latent variables according to an 
 \emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$ 
-which directly reflects the relevance of the latent variable $s_h$. 
+which directly reflects the relevance of the latent variable $s^{(n)}_h$. 
 %
 A natural choice for such a function is the one that approximates the marginal posterior probability 
 of each variable, e.g.\ we try to learn $f$ as follows:
@@ -379,7 +379,7 @@ of each variable, e.g.\ we try to learn $f$ as follows:
 f_h(\vec{y}^{(n)}) = \hat{p}_h^{(n)} \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
 \end{equation}
 %
-\rev{meaning that the relevant variables will have greater marginal posterior probability $p_h$.}
+\rev{meaning that the relevant variables will have greater marginal posterior probability $p_h^{(n)}$.}
 See Figure~\ref{fig:graph-affinity} for a simplified illustration. 
 %
 When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
