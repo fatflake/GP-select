@@ -1,0 +1,613 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2016/dev) (preloaded format=pdflatex 2016.10.12)  13 MAR 2017 15:22
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**NECO-07-16-2662R2-Source.tex
+(./NECO-07-16-2662R2-Source.tex
+LaTeX2e <2015/01/01> patch level 2
+Babel <3.9m> and hyphenation patterns for 78 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2013/01/14 v2.14 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks14
+\ex@=\dimen103
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen104
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count87
+LaTeX Info: Redefining \frac on input line 210.
+\uproot@=\count88
+\leftroot@=\count89
+LaTeX Info: Redefining \overline on input line 306.
+\classnum@=\count90
+\DOTSCASE@=\count91
+LaTeX Info: Redefining \ldots on input line 378.
+LaTeX Info: Redefining \dots on input line 381.
+LaTeX Info: Redefining \cdots on input line 466.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen105
+LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
+\macc@depth=\count92
+\c@MaxMatrixCols=\count93
+\dotsspace@=\muskip10
+\c@parentequation=\count94
+\dspbrk@lvl=\count95
+\tag@help=\toks15
+\row@=\count96
+\column@=\count97
+\maxfields@=\count98
+\andhelp@=\toks16
+\eqnshift@=\dimen106
+\alignsep@=\dimen107
+\tagshift@=\dimen108
+\tagwidth@=\dimen109
+\totwidth@=\dimen110
+\lineht@=\dimen111
+\@envbody=\toks17
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks18
+LaTeX Info: Redefining \[ on input line 2665.
+LaTeX Info: Redefining \] on input line 2666.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks19
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 94.
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count99
+))
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2014/10/28 v1.1a Standard LaTeX Color (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 142.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen114
+)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip46
+\bibsep=\skip47
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count100
+)
+(/usr/share/texlive/texmf-dist/tex/latex/rotating/rotating.sty
+Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@r@tfl@t=\count101
+\rotFPtop=\skip48
+\rotFPbot=\skip49
+\rot@float@box=\box28
+\rot@mess@toks=\toks20
+)
+(/usr/share/texlive/texmf-dist/tex/latex/bbm-macros/bbm.sty
+Package: bbm 1999/03/15 V 1.2 provides fonts for set symbols - TH
+LaTeX Font Info:    Overwriting math alphabet `\mathbbm' in version `bold'
+(Font)                  U/bbm/m/n --> U/bbm/bx/n on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathbbmss' in version `bold'
+(Font)                  U/bbmss/m/n --> U/bbmss/bx/n on input line 35.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.sty
+Package: subfigure 2002/03/15 v2.1.5 subfigure package
+\subfigtopskip=\skip50
+\subfigcapskip=\skip51
+\subfigcaptopadj=\dimen115
+\subfigbottomskip=\skip52
+\subfigcapmargin=\dimen116
+\subfiglabelskip=\skip53
+\c@subfigure=\count102
+\c@lofdepth=\count103
+\c@subtable=\count104
+\c@lotdepth=\count105
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.cfg)
+\subfig@top=\skip54
+\subfig@bottom=\skip55
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count106
+\float@exts=\toks21
+\float@box=\box29
+\@float@everytoks=\toks22
+\@floatcapt=\box30
+)
+\@float@every@algorithm=\toks23
+\c@algorithm=\count107
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithmic.sty
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+\c@ALC@unique=\count108
+\c@ALC@line=\count109
+\c@ALC@rem=\count110
+\c@ALC@depth=\count111
+\ALC@tlm=\skip56
+\algorithmicindent=\skip57
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup5
+\symAMSb=\mathgroup6
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen117
+\captionmargin@=\dimen118
+\captionwidth=\dimen119
+\caption@tempdima=\dimen120
+\caption@indent=\dimen121
+\caption@parindent=\dimen122
+\caption@hangindent=\dimen123
+)
+\c@ContinuedFloat=\count112
+Package caption Info: float package is loaded.
+Package caption Info: rotating package is loaded.
+Package caption Info: subfigure package is loaded.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+
+! LaTeX Error: Option clash for package setspace.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.99 \captionsetup
+                  [table]{font=doublespacing}
+? q
+OK, entering \batchmode...
+ (./NECO-07-16-2662R2-Source.aux)
+\openout1 = `NECO-07-16-2662R2-Source.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 154.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count113
+\scratchdimen=\dimen124
+\scratchbox=\box31
+\nofMPsegments=\count114
+\nofMParguments=\count115
+\everyMPshowfont=\toks24
+\MPscratchCnt=\count116
+\MPscratchDim=\dimen125
+\MPnumerator=\count117
+\makeMPintoPDFobject=\count118
+\everyMPtoPDFconversion=\toks25
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+
+Overfull \hbox (2.28525pt too wide) in paragraph at lines 155--156
+[] \OT1/ptm/m/n/12 1 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 157--158
+
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 162.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 162.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 162.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 162.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 162.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 165.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 165.
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <7> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 166.
+
+Overfull \hbox (23.82802pt too wide) in paragraph at lines 161--170
+\OT1/ptm/b/n/14.4 Jacquelyn A. Shelton$[]$, Jan Gasthaus$[]$, Zhen-wen Dai$[]$,
+ J[]org L[]ucke$[]$,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 174--177
+
+ []
+
+ [1
+
+{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 192.
+ [2] [3] [4] [5] [6] [7] [8] [9]
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.1.eps>
+(epstopdf)                    date: 2017-03-10 18:06:56
+(epstopdf)                    size: 545609 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.1-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:07:56
+(epstopdf)                    size: 343463 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.1
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.1.eps>
+(epstopdf)             \includegraphics on input line 378.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.1-eps-converted-to.pdf, id=45, 550.055pt x 430.60875p
+t>
+File: NECO-07-16-2662R2-Figure.1-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.1-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.1-eps-converted-to.pdf used o
+n input line 378.
+(pdftex.def)             Requested size: 223.007pt x 174.57956pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+ [10] [11 <./NECO-07-16-2662R2-Figure.1-eps-converted-to.pdf>]
+Overfull \hbox (32.53343pt too wide) in paragraph at lines 419--430
+[]\OT1/ptm/m/n/12 Next, us-ing all $[]\OML/cmm/m/it/12 ; [] ; []$ \OT1/ptm/m/n/
+12 from the affin-ity func-tion $\OT1/cmr/bx/n/12 f\OT1/cmr/m/n/12 (\OT1/cmr/bx
+/n/12 y[]\OT1/cmr/m/n/12 ) = (\OML/cmm/m/it/12 f[]\OT1/cmr/m/n/12 (\OT1/cmr/bx/
+n/12 y[]\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; [] ; f[]\OT1/cmr/m/n/12 (\OT1/cmr/b
+x/n/12 y[]\OT1/cmr/m/n/12 ))$\OT1/ptm/m/n/12 ,
+ []
+
+ [12] [13] [14] [15] [16] [17] [18]
+Overfull \hbox (58.07011pt too wide) in paragraph at lines 630--630
+[] 
+ []
+
+ [19] [20] [21]
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.2.eps>
+(epstopdf)                    date: 2017-03-10 18:06:58
+(epstopdf)                    size: 2319428 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.2-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:08:04
+(epstopdf)                    size: 1001135 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.2
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.2.eps>
+(epstopdf)             \includegraphics on input line 700.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.2-eps-converted-to.pdf, id=118, 748.7975pt x 423.5825
+pt>
+File: NECO-07-16-2662R2-Figure.2-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.2-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.2-eps-converted-to.pdf used o
+n input line 700.
+(pdftex.def)             Requested size: 333.4674pt x 188.63904pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+ [22] [23 <./NECO-07-16-2662R2-Figure.2-eps-converted-to.pdf>] [24]
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.3.eps>
+(epstopdf)                    date: 2017-03-10 18:06:58
+(epstopdf)                    size: 5520346 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.3-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:08:09
+(epstopdf)                    size: 3678933 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.3
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.3.eps>
+(epstopdf)             \includegraphics on input line 749.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.3-eps-converted-to.pdf, id=158, 2212.265pt x 988.6937
+6pt>
+File: NECO-07-16-2662R2-Figure.3-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.3-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.3-eps-converted-to.pdf used o
+n input line 749.
+(pdftex.def)             Requested size: 416.83269pt x 186.28479pt.
+ [25 <./NECO-07-16-2662R2-Figure.3-eps-converted-to.pdf>] [26] [27]
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.4.eps>
+(epstopdf)                    date: 2017-03-10 18:06:58
+(epstopdf)                    size: 264274 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.4-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:08:10
+(epstopdf)                    size: 74402 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.4
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.4.eps>
+(epstopdf)             \includegraphics on input line 802.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.4-eps-converted-to.pdf, id=235, 210.7875pt x 53.19875
+pt>
+File: NECO-07-16-2662R2-Figure.4-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.4-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.4-eps-converted-to.pdf used o
+n input line 802.
+(pdftex.def)             Requested size: 416.83269pt x 105.20313pt.
+ [28 <./NECO-07-16-2662R2-Figure.4-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.5.eps>
+(epstopdf)                    date: 2017-03-10 18:06:58
+(epstopdf)                    size: 796901 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.5-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:08:10
+(epstopdf)                    size: 327846 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.5
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.5.eps>
+(epstopdf)             \includegraphics on input line 824.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.5-eps-converted-to.pdf, id=245, 372.39125pt x 170.637
+5pt>
+File: NECO-07-16-2662R2-Figure.5-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.5-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.5-eps-converted-to.pdf used o
+n input line 824.
+(pdftex.def)             Requested size: 416.83269pt x 191.00853pt.
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.6.eps>
+(epstopdf)                    date: 2017-03-10 18:06:58
+(epstopdf)                    size: 765277 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.6-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:08:11
+(epstopdf)                    size: 198867 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.6
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.6.eps>
+(epstopdf)             \includegraphics on input line 840.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.6-eps-converted-to.pdf, id=246, 615.29875pt x 279.042
+5pt>
+File: NECO-07-16-2662R2-Figure.6-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.6-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.6-eps-converted-to.pdf used o
+n input line 840.
+(pdftex.def)             Requested size: 416.83269pt x 189.03958pt.
+ [29]
+Package epstopdf Info: Source file: <NECO-07-16-2662R2-Figure.7.eps>
+(epstopdf)                    date: 2017-03-10 18:06:58
+(epstopdf)                    size: 207508 bytes
+(epstopdf)             Output file: <NECO-07-16-2662R2-Figure.7-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2017-03-13 13:08:12
+(epstopdf)                    size: 155632 bytes
+(epstopdf)             Command: <repstopdf --outfile=NECO-07-16-2662R2-Figure.7
+-eps-converted-to.pdf NECO-07-16-2662R2-Figure.7.eps>
+(epstopdf)             \includegraphics on input line 850.
+Package epstopdf Info: Output file is already uptodate.
+
+<NECO-07-16-2662R2-Figure.7-eps-converted-to.pdf, id=250, 310.15875pt x 248.93p
+t>
+File: NECO-07-16-2662R2-Figure.7-eps-converted-to.pdf Graphic file (type pdf)
+ <use NECO-07-16-2662R2-Figure.7-eps-converted-to.pdf>
+Package pdftex.def Info: NECO-07-16-2662R2-Figure.7-eps-converted-to.pdf used o
+n input line 850.
+(pdftex.def)             Requested size: 250.10214pt x 200.72818pt.
+ [30 <./NECO-07-16-2662R2-Figure.5-eps-converted-to.pdf>] [31 <./NECO-07-16-266
+2R2-Figure.6-eps-converted-to.pdf>] [32 <./NECO-07-16-2662R2-Figure.7-eps-conve
+rted-to.pdf>] [33] [34]
+Underfull \hbox (badness 10000) in paragraph at lines 940--943
+[]\OT1/ptm/m/n/12 Dai, Z. (2016).  GP-select Demo on Gaus-sian mix-ture mod-els
+.
+ []
+
+ [35] [36] [37]
+Underfull \hbox (badness 10000) in paragraph at lines 1077--1080
+[]\OT1/ptm/m/n/12 LeCun, Y. (NEC).  [] database of hand-writ-ten dig-its.
+ []
+
+ [38] [39] [40]
+Underfull \hbox (badness 1215) in paragraph at lines 1193--1198
+\OT1/ptm/m/n/12 M., Ali, M., Pat-wary, P., and Adams, R. (2015).  Scal-able bay
+esian op-ti-
+ []
+
+
+Underfull \hbox (badness 1168) in paragraph at lines 1193--1198
+\OT1/ptm/m/n/12 miza-tion us-ing deep neu-ral net-works.  Tech-ni-cal re-port, 
+Har-vard Uni-ver-sity.
+ []
+
+
+Package caption Warning: Unused \captionsetup[table] on input line 99.
+See the caption package documentation for explanation.
+
+ [41] (./NECO-07-16-2662R2-Source.aux) ) 
+Here is how much of TeX's memory you used:
+ 4808 strings out of 493103
+ 70924 string characters out of 6137676
+ 134802 words of memory out of 5000000
+ 8171 multiletter control sequences out of 15000+600000
+ 30641 words of font info for 81 fonts, out of 8000000 for 9000
+ 1137 hyphenation exceptions out of 8191
+ 38i,14n,41p,1007b,622s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/en
+c/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
+x8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on NECO-07-16-2662R2-Source.pdf (41 pages, 6033487 bytes).
+PDF statistics:
+ 404 PDF objects out of 1000 (max. 8388607)
+ 162 compressed objects within 2 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+

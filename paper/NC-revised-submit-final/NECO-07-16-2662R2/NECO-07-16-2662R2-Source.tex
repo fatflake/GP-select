@@ -1,0 +1,1234 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{setspace}
+%
+%\usepackage[authoryear]{natbib}
+%\usepackage{apacite}
+%\usepackage{cite}
+\usepackage[authoryear]{natbib}
+%
+\usepackage{rotating}
+\usepackage{bbm}
+\usepackage{latexsym}
+%\DeclareGraphicsExtensions{.eps,.png}
+
+\usepackage{subfigure} 
+\graphicspath{./figs/}
+
+% For algorithms
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% --------------- our stuff --
+\usepackage{amssymb}
+\usepackage{amsmath}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{caption}
+%%%%%\captionsetup[figure]{font={stretch=2}} 
+%%%%\setstretch{2}
+%\captionsetup{font={stretch=2}}
+\usepackage{natbib}
+\usepackage{url}
+
+% ---------- commands ----------
+\newcommand{\x}{\ensuremath{\times}}
+\newcommand{\disT}{\textstyle}
+\newcommand{\disS}{\displaystyle}
+\newcommand{\prob}[2]{p(#1 \, | \, #2)}  % nicely space p(1 | 2)
+\newcommand{\Prime}{\,'}  % nicely space p(1 | 2)
+\newcommand{\One}{I}
+\renewcommand{\vec}[1]{{\mathbf{#1}}}
+\newcommand{\Kn}{\mathcal{K}_{n}}
+\newcommand{\Ih}{\mathcal{I}_{n}}
+\newcommand{\Sh}{\mathcal{S}_{h}}
+\newcommand{\Ss}{\mathcal{S}}
+\newcommand{\E}[1]{\left\langle{}#1\right\rangle} % expectations
+\newcommand{\II}{{\cal I}}
+\usepackage{float}
+\newcommand{\pr}{\mathrm{pr}}
+% ------from GSC paper ------
+\newcommand{\sVec}{\vec{s}}
+\newcommand{\sVecN}{\vec{s}^{(n)}}
+\newcommand{\sVecPrime}{\vec{s}^{\,\prime}}
+\newcommand{\zVec}{\vec{z}}
+\newcommand{\zVecPrime}{\vec{z}^{\,\prime}}
+\newcommand{\yVec}{\vec{y}}
+\newcommand{\yVecN}{\vec{y}^{\,(n)}}
+\newcommand{\piVec}{\vec{\pi}}
+\newcommand{\Wt}{\tilde{W}}
+\newcommand{\SCal}{\mathcal{S}}
+\newcommand{\kappaVec}{\vec{\kappa}}
+\newcommand{\muVec}{\vec{\mu}}
+\newcommand{\kappaVecN}{\kappaVec^{(n)}}
+\newcommand{\muVecN}{\muVec^{(n)}}
+\newcommand{\HPrime}{H^{\prime}}
+\newcommand{\KK}{{\cal K}}
+\newcommand{\KKn}{\KK_n}
+\newcommand{\RRR}{\mathbb{R}}
+\newcommand{\ThetaGen}{\Theta^{\mathrm{gen}}}
+\newcommand{\ThetaOld}{\Theta^{\mathrm{old}}}
+\newcommand{\ThetaOLD}{\Theta^{\mathrm{old}}}
+\newcommand{\NGauss}{{\cal N}}
+\newcommand{\Bernoulli}{\mathcal{B}}
+\newcommand{\Scal}{{\cal S}}
+\newcommand{\sig}{\sigma}
+\newcommand{\dz}{\mathrm{d}\zVec}
+\newcommand{\TT}{\mathrm{T}}
+\newcommand{\refp}[1]{(\ref{#1})}
+\newcommand{\ssb}{\hspace{-2mm}}
+\newcommand{\nuv}{\vec \nu}
+\newcommand{\Sigmad}{\Sigma}
+\newcommand{\Sigmah}{\Psi}
+\newcommand{\BigO}{\mathcal{O}}
+\newcommand{\trace}{\mathrm{Tr}}
+\newcommand{\Qn}{Q^{(n)}}
+\newcommand{\DKL}{D_{KL}}
+
+
+%%% double space stuff %%%
+% -\usepackage{setspace}
+\usepackage[doublespacing]{setspace}
+% -\renewcommand{\baselinestretch}{2}
+%\renewcommand{\baselinestretch}{2}
+\captionsetup[table]{font=doublespacing}
+\captionsetup[figure]{font=doublespacing}
+
+\newcommand{\sumCond}[2]{\sum_{\mbox{\scriptsize{}$\begin{array}{c}#1\\#2\end{array}$}}}
+
+
+% As of 2011, we use the hyperref package to produce hyperlinks in the
+% resulting PDF.  If this breaks your system, please commend out the
+% following usepackage line and replace \usepackage{icml2015} with
+% \usepackage[nohyperref]{icml2015} above.
+%\usepackage{hyperref}
+
+% Packages hyperref and algorithmic misbehave sometimes.  We can fix
+% this with the following command.
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+
+%%% margins 
+\textheight 23.4cm
+\textwidth 14.65cm
+\oddsidemargin 0.375in
+\evensidemargin 0.375in
+\topmargin  -0.55in
+%
+\renewcommand{\baselinestretch}{2}
+%
+\interfootnotelinepenalty=10000
+%
+\renewcommand{\thesubsubsection}{\arabic{section}.\arabic{subsubsection}}
+\newcommand{\myparagraph}[1]{\ \\{\em #1}.\ \ }
+\newcommand{\citealtt}[1]{\citeauthor{#1},\citeyear{#1}}
+\newcommand{\myycite}[1]{\citep{#1}}
+
+% Different font in captions
+\newcommand{\captionfonts}{\normalsize}
+
+%%%%% WHY DOESN'T NC TEMPLATE ALREADY MEET THEIR OWN REQUIREMENT OF DOUBLE SPACED FIGURE CAPTIONS????
+%\iffalse
+%\makeatletter  
+%\long\def\@makecaption#1#2{%
+%  \vskip\abovecaptionskip
+%  \sbox\@tempboxa{{\captionfonts #1: #2}}%
+%  \ifdim \wd\@tempboxa >\hsize
+%    {\captionfonts #1: #2\par}
+%  \else
+%    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+%  \fi
+%  \vskip\belowcaptionskip}
+%\makeatother   
+%\fi
+%%%%%
+
+%\renewcommand{\thefootnote}{\normalsize \arabic{footnote}} 	
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
+\begin{document}
+\hspace{13.9cm}1
+
+\ \vspace{20mm}\\ 
+
+{\LARGE GP-select: Accelerating EM using adaptive \\subspace preselection}
+
+\ \\
+{\bf \large Jacquelyn A. Shelton$^{\displaystyle 1}$, Jan Gasthaus$^{\displaystyle 2,3}$, Zhenwen Dai$^{\displaystyle 3,4}$, J\"org L\"{u}cke$^{\displaystyle 5}$, and Arthur Gretton$^{\displaystyle 2}$}\\
+{$^{\displaystyle 1 \,}$Technical University Berlin, Marchstrasse 23, 10587 Berlin, Germany.}\\
+{$^{\displaystyle 2 \,}$University College London, Gatsby Unit, 25 Howland Street, London W1T 4JG, UK.}\\
+{$^{\displaystyle 3 \,}$Amazon Development Center, Karl-Liebknecht-Str. 5, 10178 Berlin, Germany.\footnote{This work
+was done prior to joining Amazon.}}\\
+{$^{\displaystyle 4 \,}$University of Sheffield, Western Bank, Sheffield, South Yorkshire S10 2TN, UK.}\\
+{$^{\displaystyle 5 \,}$University of Oldenburg, Ammerl\"ander Heerstr. 114, 26129 Oldenburg, Germany.}\\
+{\bf Keywords:} Approximate inference, generative graphical models, latent variable models, Expectation Maximization, EM acceleration, variable preselection
+
+\thispagestyle{empty}
+\markboth{}{NC instructions}
+%
+\ \vspace{-0mm}\\
+%
+%Abstract
+\begin{center} 
+{\bf Abstract} 
+\end{center}
+We propose a nonparametric procedure to achieve fast inference in generative graphical models when the number of latent states is very large.
+ The approach is based on iterative latent variable preselection, where we alternate between learning a 'selection function' to reveal the relevant latent variables, and using this to obtain a compact approximation of the posterior distribution for EM; this can make inference possible where the number of possible latent states is e.g. exponential in the number of latent variables, whereas an exact approach would be computationally infeasible.
+We learn the selection function entirely from the observed data and current EM state via Gaussian process regression. This is by contrast with earlier approaches, where selection functions were manually-designed for each problem setting.
+We show that our approach performs as well as these bespoke selection functions on a wide variety of inference problems: in particular, for the challenging case of a hierarchical model for object localization with occlusion, we achieve results that match a customized state-of-the-art selection method,  at a far lower computational cost.
+
+
+\graphicspath{{figs/}}
+
+\newcommand{\rev}[1]{\textcolor{black}{#1}} %blue
+\definecolor{Green}{rgb}{0,.80,0} 
+
+
+\section{Introduction}
+Inference in probabilistic graphical models can be challenging in situations where
+there are a large number of hidden variables, each of which may take on one of several
+state values. The Expectation Maximization (EM) algorithm is widely applied \rev{to learn model parameters} when hidden variables
+are present, however inference can quickly become intractable as the dimensionality of hidden states increases.
+%
+\rev{Consider, for instance, the floor of a nursery populated with different toys, and images of this floor large enough to contain a number
+of toys. A nursery easily contains a hundred different toys and any subset of these hundred toys may appear in any image. For one hundred toys there is therefore a combinatorics of $2^{100}$ different combinations of toys that can make up an image. An inference task may now be to infer, for any given image, the toys it contains. If we approached this task using a probabilistic graphical model, we would define a basic such model using a set of one hundred hidden variables (one for each toy). Given a specific image, inference would then take the form of computing the posterior probability for any combination of toys, and from this, e.g., the probability of each toy to be in the image can be computed.
+If done exactly, this process needs to evaluate all the $2^{100}$ different toy combinations which easily exceeds currently available computational resources.}
+
+\rev{While there are also many tasks for which graphical models with few latent variables are sufficient, the requirement for many hidden variables (as in the toy example) is typical for visual, auditory and many other types of data with very rich structure. 
+Graphical models for such data 
+ are often a central building block for tasks such as denoising \citep{EladAharon2006,TitsiasGredilla2011}, inpainting \citep{MairalEtAl2009, MairalEtAl2009b,TitsiasGredilla2011},  classification \citep{RainaEtAl2007}, or collaborative filtering \citep{TitsiasGredilla2011}. Typically, the performance in these tasks improves with the number of latent variables that can be used (and which is usually limited by computational demands).}
+
+Expectation truncation (ET) \citep{LuckeEggert2010} is an approximate EM algorithm for accelerating inference and learning 
+in graphical models \rev{with many latent variables}. Its basic idea is to restrict the inference performed during the E-step
+to an ``interesting'' subset of states of the latent variables, 
+chosen per data point according to a \emph{selection function}.
+This subspace reduction can lead to a significant decrease in computational demand with very little loss of accuracy
+(compared with the full model). \rev{To provide an intuition: For the toy example, we could for instance first analyze the colors contained in a given image. If the image did not contain the color "red", we could already assume red toys or partly red toys to be absent. Only in a second step would we then consider the combinatorics of the remaining toys. More features and more refined features would allow 
+for a reduction to still smaller sets of toys until the combinatorics of these selected toys becomes computationally tractable. The selection function of expectation truncation mathematically models the process of selecting the relevant hidden variables (the relevant toys); while truncated posterior distributions then models their remaining combinatorics (see further below).} 
+
+In previous work, functions to select states of high posterior mass were 
+derived individually for each graphical model of interest, e.g., by taking upper bounds or noiseless limits  
+\citep{LuckeEggert2010,SheltonEtAl2012,BornscheinEtAl2013,HennigesEtAl2014,SheikhEtAl2014}.
+The crucial underlying assumption remains that when EM has converged,
+the posterior mass is concentrated in small volumes of the latent state space \citep[see, e.g.,][for discussions]{LuckeEggert2010,SheikhEtAl2014}.
+\rev{We can expect the approximation to be accurate only if restricting the combinatorics (e.g., combinations of a restricted number of toys) does not miss large parts of posterior mass.}
+This property is observed to hold, however, for many types of data in the auditory, visual or general pattern recognition domains.
+
+\rev{The definition of appropriate selection functions for basic graphical models (such as the nursery floor example) is already non-trivial. For models incorporating more detailed data properties, the definition of selections functions becomes still more demanding. For visual data, e.g., models that also capture mutual object occlusions \citep{HennigesEtAl2014} and/or the object position \citep{DaiLucke2014},} the design of suitable selection functions is extremely challenging: it requires both expert knowledge
+on the problem domain and considerable computational resources to implement
+ (indeed, the design of such functions for  particular problems
+has been a major contribution in previous work on the topic).
+
+In the present work, we propose a generalization of the ET approach, where
+we completely avoid  the challenge of problem-specific selection function design.
+Instead, we learn selection functions  adaptively and non-parametrically
+from the data,
+ while learning the model
+parameters  simultaneously using EM.
+We emphasize that the selection function is  used only to "guide" the underlying
+base inference algorithm to regions of high posterior probability, but is not itself
+used as an approximation to the posterior distribution. 
+As such, the learned
+function does not have to be a completely accurate indication of latent
+variable predictivity,
+as long as the \emph{relative importance} of the \rev{latent states likely to contribute posterior probability mass} is preserved.
+We use  Gaussian process
+regression \citep{RasmussenGPbook} to learn the selection function \rev{-- by regressing the expected values of the latent variables onto the observed data --} though other regression techniques could
+also be applied. 
+The main advantage of GPs is that \rev{they do not need to be re-trained when only the output changes, as long as the inputs remain the same. 
+This makes adaptive learning of a changing target function (given fixed inputs) computationally trivial.}
+We term this part of our approach
+\textit{GP-select}.
+Our nonparametric generalization of  ET may be applied as a black-box
+meta algorithm for accelerating inference in  generative graphical models,
+with no expert knowledge required.
+
+Our approach is the first to make ET a general purpose algorithm for discrete latent variables,
+ whereas previously, ET had to be modified by hand for each latent variable model addressed. 
+For instance, in Section \ref{invec} we will show that preselection is crucial for efficient inference in complex models. 
+Although ET has already been successful in some models, this work shows that more complex models will crucially depend on an improved selection step and focuses on automating this step.
+
+For empirical evaluation, we have applied GP-select in a number of experimental settings.
+First, we considered the case of sparse coding models (binary sparse coding,
+spike-and-slab, nonlinear spike-and-slab), where the relationship between the
+observed and latent variables is known to be complex and nonlinear.\footnote{Note that
+ even when linear relations exist between the latents and outputs, a nonlinear
+regression may still be necessary in finding relevant variables,
+as a result of explaining away.}
+%
+We show that GP-select can produce results with equal performance to the respective manually-derived selection functions.
+%
+Interestingly, we find it can be essential to use nonlinear GP regression
+in the spike-and-slab case, and that simple linear regression is not
+sufficiently flexible in modeling the posterior shape.
+%
+Second, we illustrate GP-select on a simple Gaussian mixture model,
+where we can provide intuition and explicitly visualize the form of the learned regression function.
+We find that even for a simple model, it can be be essential to learn a nonlinear mapping.
+Finally, we present results
+for a recent hierarchical model for translation invariant occlusive components analysis
+\citep{DaiLucke2014}.
+The performance of our inference algorithm matches that of the complex
+hand-engineered selection function of the previous work, while being straightforward
+to implement and having a far lower computational cost.
+
+\section{Related work}
+
+The general idea of aiding inference in graphical models by
+learning a function that maps from the observed data to
+a property of the latent variables is quite old. Early work includes the
+Helmholtz machine \citep{Dayan95} and its bottom-up connections trained using the wake-sleep
+algorithm \citep{HintonEtAl1995}.
+More recently, the idea has surfaced in the context of learning variational distributions with neural networks~\citep{WellingICML2014}.
+A two-stage inference procedure has  been discussed in the context of
+computer vision \citep{YuilleKersten2006} and neural inference \citep{KoernerEtAl1999}.
+Recently, researchers~\citep{MnihGregor2014} 
+have generalized this idea to learning in arbitrary graphical models by training
+an ``inference network'' that efficiently implements sampling from the posterior
+distribution.
+
+ 
+GPs have recently been widely used to "learn" the results of complicated models in order to accelerate inference and parameter selection. 
+GP approximations have been used in lieu of solving complex partial differential equations \citep{SacksEtal1989, CurrinEtall1991}, to learn data-driven kernel functions for recommendation systems \citep{SchwaighoferEtAl2005}, and recently for quantum chemistry \citep{RuppEtAl2012}. 
+Other work has used GPs to simplify computations in approximate Bayesian computation (ABC) methods: namely to model the likelihood function for inference \citep{Wilkinsons2014}, to aid in making Metropolis-Hastings (MH) decisions \citep{MeedsWelling2014}, and to model the discrepancies between simulated/observed data in parameter space simplification \citep{GuttmanCorander2015}.
+Recently, instead of the typical choice of GPs for large scale Bayesian optimization, neural networks have been used to learn an adaptive set of basis functions for Bayesian linear regression \citep{SnoekEtAl2015}.
+
+
+Our work follows the same high level philosophy in that we use GPs to approximate complex/intractable probabilistic models. None of the cited prior work address our problem setting, namely the selection of relevant latent variables by learning a nonparametric relevance function, for use in expectation truncation (ET).
+
+\section{Variable selection for accelerated inference}
+\label{method}
+\textbf{Notation.}
+We denote the observed data by the $D\times N$ matrix $\vec{Y}=(\vec{y}^{(1)}, \dots, \vec{y}^{(N)})$, where each vector $\vec{y}^{(n)} = ( y_1^{(n)}, \dots, y_D^{(n)})^\mathrm{T}$ is the $n$th observation 
+in a $D$-dimensional space.
+Similarly we define corresponding 
+binary latent variables 
+by the matrix $\vec{S} = (\vec{s}^{(1)}, \dots, \vec{s}^{(N)})\in \{0,1\}^{H \times N}$ 
+where each $\vec{s}^{(n)}=(s_1^{(n)}\dots, s^{(n)}_H)^\mathrm{T} \in \{0,1\}^{H}$ is the $n$th vector in the $H$-dimensional latent space,
+and for each individual hidden variable $h=1,\dots,H$, the vector $\vec{s}_h=(s_h^{(1)}\dots, s^{(N)}_h)\in \{0,1\}^{N}$. 
+The number of dimensions in the reduced latent space is denoted by $H'$, where $H' \ll H$. 
+Note that although we restrict ourselves to binary latent variables here, 
+the procedure could in principle be generalized to variables with higher cardinality (e.g. see \citep{ExarchakisEtAl2012}).
+We denote the prior distribution over the latent variables as $p(\vec{s} | \theta)$ 
+and the likelihood of the data as $p(\vec{y} | \vec{s}, \theta)$.
+Using these expressions, the posterior distribution over latent variables is 
+%
+\vspace{-.1cm}
+\begin{equation}
+\label{eq:post}
+p(\vec{s}^{(n)}|\vec{y}^{(n)},\Theta)  = \frac{p(\vec{s}^{(n)} | \Theta) \, p(\vec{y}^{(n)} | \vec{s}^{(n)}, \Theta)}
+{\disS\hspace{-1.5mm}\sum_{\vec{s}\Prime} p(\vec{s}\Prime\ | \Theta) \, p(\vec{y}^{(n)} | \vec{s}\Prime, \Theta)}.
+\end{equation}
+\vspace{-.5cm}
+
+\subsection{Selection via Expectation Truncation in EM}
+Expectation Maximization (EM) is an iterative algorithm to optimize the model parameters of a given graphical model (see e.g. \citep{DempsterEtAl1977, NealHinton1998}).
+EM iteratively optimizes a lower bound on the data likelihood by inferring the
+posterior distribution over hidden variables given the current parameters (the
+E-step), and then adjusting the parameters to maximize the likelihood of the
+data averaged over this posterior (the M-step).
+%
+When the number of latent states to consider is large (e.g.\ exponential in the
+number of latent variables), the computation of the posterior distribution in
+the E-step becomes intractable and approximations are required.
+
+
+Expectation truncation (ET) is a meta algorithm, which improves convergence of the expectation maximization (EM) algorithm \citep{LuckeEggert2010}.
+%
+The main idea underlying ET is that the posterior probability mass is concentrated in a small subspace of the full latent space.
+This is the case, for instance, if for a given data point $\vec{y}^{(n)}$ 
+only a subset of the $H$ latent variables \rev{$s_1^{(n)},s_2^{(n)},\dots,s_H^{(n)}$} are relevant. 
+\rev{Even when the probability mass is supported everywhere, it may still be largely concentrated on a small number of the latents.}
+
+A \textit{selection function} can be used to identify a subset $I \subseteq \{1,2,\ldots,H\} $ of size $H'$ ($H' \ll H$)
+of salient variables, which in turn is used to define a subset $\mathcal{K}_n = \{\vec{s} \mid \vec{s} \in 2^H \land \forall h \notin I: s_h = 0 \} \subseteq \{0,1\}^H$ of the possible state configurations of the latent variables $\mathbf{s}^{(n)}$ for each data point. 
+This subset contains only state configurations where the values of the variables not identified to be relevant by the selection function are fixed to $0$. 
+% (assigned zero probability mass under the selection function).
+%
+The posterior distribution in Equation~\eqref{eq:post} can then be approximated by a truncated posterior distribution, computed on the reduced support,
+%
+\vspace{-.1cm}
+\begin{align}
+\label{eq:sel-post}
+p(&\vec{s}^{(n)}|\vec{y}^{(n)},\Theta) \nonumber\\
+&\approx q_n(\vec{s}^{(n)};\Theta) = \frac{p(\vec{s}^{(n)},\vec{y}^{(n)}|\,\Theta) \,\rev{\mathbb{I}}(\vec{s}^{(n)}\in\,\,\Kn)}
+{\disS\sum_{\vec{s} \Prime\in\mathcal{K}_n} \hspace{-1mm} p(\vec{s}\Prime,\vec{y}^{(n)}|\,\Theta)},
+\end{align}
+\normalsize
+%
+where $\mathbb{I}(\vec{s}\in\mathcal{K}_n)=1$ if $\vec{s}\in\mathcal{K}_n$ is true, and $0$ otherwise. 
+In other words, Equation~\eqref{eq:sel-post} is proportional to Equation~\eqref{eq:post} if $\vec{s}^{(n)} \in \Kn$ (and zero otherwise), so that the approximate posterior $q_n(\vec{s}^{(n)};\Theta)$ assigns zero mass
+to states $\vec{s}^{(n)} \notin \Kn$. The set $\Kn$ contains only states for which $s_h=0$ for all $h$ that are not selected, i.e. all states where $s_h=1$ for some non-selected $h$ are assigned zero probability.
+\rev{This means that there are fewer terms in the denominator of Equation~\eqref{eq:sel-post} compared with Equation~\eqref{eq:post}, thus reducing the computational complexity. Equation~\eqref{eq:sel-post} still remains proportional to Equation~\eqref{eq:post} for the remaining states $\vec{s} \in \Kn$, however.}
+% XXX
+As there are only $2^{H'}$ terms in the sum over $\Kn$, computing this posterior approximation is much more efficient than computing the exact normalizing constant for the full posterior (containing $2^H$ terms).
+%since it need only be computed over the reduced set of latent variable states deemed relevant: the state %configurations of the irrelevant variables are fixed to be zero.
+The number of latent dimensions to select, $H'$, is chosen based on the compute resources available: i.e. as large as resources allow in order to be closer to true EM, although empirically it has been shown that much smaller values suffice  \citep[see e.g.][App. B on complexity-accuracy trade-offs]{SheikhEtAl2014}.
+
+
+\subsection{ET with affinity} 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=.535\textwidth]{{NECO-07-16-2662R2-Figure.1}.eps}
+%\linespread{2}{
+\caption{Illustration of the affinity function for selection.
+The affinity approximates the marginal posterior probability of each $h=1,\dots,H$ latent variable (top), 
+which corresponds to the most relevant variables for a given data point $\vec{y}^{(n)}$ (bottom). 
+Here, \rev{the variables $s_1$ and $s_3$ yield high affinity and would thus be considered relevant for $\vec{y}^{(n)}$.} }
+%}
+\label{fig:graph-affinity}
+\end{center}
+\end{figure}
+One way of constructing a selection function 
+is by first ranking the latent variables according to an 
+\emph{affinity function} $f_h(\vec{y}^{(n)}) : \mathrm{R}^D \mapsto \mathrm{R}$ 
+which directly reflects the relevance of the latent variable $s^{(n)}_h$. 
+%
+A natural choice for such a function is the one that approximates the marginal posterior probability 
+of each variable, e.g.\ we try to learn $f$ as follows:
+%
+\begin{equation}
+\label{eq:affinity}
+f_h(\vec{y}^{(n)}) = \hat{p}_h^{(n)} \approx p^{(n)}_h \equiv p(s^{(n)}_h = 1|\vec{y}^{(n)}, \Theta),
+\end{equation}
+%
+\rev{meaning that the relevant variables will have greater marginal posterior probability $p_h^{(n)}$.}
+See Figure~\ref{fig:graph-affinity} for a simplified illustration. 
+%
+When the latent variables $s_{h=1}^{(n)}, \dots, s_H^{(n)}$ in the marginal posterior probability $\hat{\vec{p}}^{(n)} = \hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$ are conditionally independent given a data point $\vec{y}^{(n)}$, this affinity function correctly isolates the most relevant variables in the posterior.
+%
+\rev{To see this, consider the full joint $p(s_1,...s_h \,|\, \vec{y},\Theta)$ in the case when a subset of latents has values clamped to zero, i.e., $s_h=0$ for all $h\not\in I$ (compare Equation \eqref{eq:sel-post}). We can then ask what the overall joint posterior mass is in this case. If we suppose the latents to be conditionally independent, this total mass is given by a product of marginals as follows:
+%
+\begin{equation}
+\label{eq:marginals-product}
+\sum_{\vec{s}\; \text{with}\; s_h=0 \;\text{for all}\; h\not\in I} p(s_1,...s_H \, | \, \vec{y}, \Theta) = 1 - \prod_{h\not\in I}p(s_h=1 \,|\, \vec{y}, \Theta).
+\end{equation} 
+%
+We want this mass to be as large as possible as its complement is the posterior mass that we discard with our approximation. If the affinity function correctly estimates the marginals $p(s_h=1 \,|\, \vec{y}, \Theta)$, then discarding those $(H-H')$ marginal with lowest values is equivalent to discarding the space with the least posterior mass (compared to discarding w.r.t. all alternative choices with the same number of latents). }
+Even when this strong assumption does not hold in practice (which is often the case), however,
+the affinity can still correctly highlight relevant variables,
+and has been empirically shown to be quite effective when dependencies exist (see e.g. the source separation tasks in \citep{SheikhEtAl2014}).
+
+
+Next, using all $\hat{p}_{h=1}^{(n)},\dots, \hat{p}_H^{(n)}$  
+from the affinity function 
+$\vec{f}(\vec{y}^{(n)}) = (f_1(\vec{y}^{(n)}), \dots, f_H(\vec{y}^{(n)}))$, we define 
+ $\gamma\,(\hat{\vec{p}}^{(n)})$ to simultaneously sort the indices of the latent variables in descending order \rev{[of probability $\hat{p}^{(n)}$]} and \textit{reduce} the sorted set to the $H'$ highest (most relevant) variables' indices.
+ $\gamma(\hat{\vec{p}}^{(n)})$ thus returns the $H'$ selected variable indices $I$ chosen by the affinity to be relevant to the $n$th data point.
+To ensure that there is a non-zero probability of selecting each variable per EM iteration, $10\%$ of the $H'$ indices are uniformly chosen from $H$ at random. 
+This prevents the possible propagation of errors from $q_{(n)}$ continuously assigning small probabilities to a variable $s_h$ in early EM
+iterations. 
+\rev{\rev{The rationale for this is that the optimization of $q_{(n)}$ in early iterations of EM starts from randomly initialized $\vec{s}_h$. If the affinity function itself is based on the posterior approximation (as it will be in the algorithm described in Section \ref{gp-select}), it has a tendency
+to not select indices that were previously not selected. Thus in order for selection-based EM to not ``get stuck'', it is important to select a few extra hidden indices randomly, to give the algorithm an opportunity to evaluate possibly unused variables which might be relevant for $\vec{y}^{(n)}$.}}
+%
+
+Finally, using the indices $I$ from $\gamma$, we define $\mathcal{I}(I)$ to return an 
+$H'$-dimensional subset of selected relevant latent states $\Kn$ for each data point $\vec{y}^{(n)}$. 
+%
+All 'non-relevant' variable states $s_h$ for all variables $h\not\in I$ are effectively set to $0$ in Equation~\eqref{eq:sel-post} 
+by not being present in the state set $\Kn$.
+\rev{For example, let's say that there are five $s_h$, where $h\in \{1,...,5\}$. We consider the case where only $s_1$   and $s_2$   are selected.  The $\mathcal{I}$ function will then return zeros for $s_3$, $s_4$, and $s_5$, but will  return both allowed possibilities $0$ or $1$ for $s_1$ and $s_2$. Thus a valid setting for the entire vector $\vec{s}$ can be $\vec{s}=[0 1 0 0 0]$, but not $\vec{s}=[0 1 1 0 0]$.}
+
+
+Using $\vec{f}$, $\mathcal{I}$, and $\gamma$, we can define a 
+\emph{selection function} $\mathcal{S}: \mathrm{R}^D \mapsto 2^{ \{1,\dots,H \}}$ 
+to select subsets $\mathcal{K}_n$ per data point $\vec{y}^{(n)}$.   
+Again, the goal is for the states $\Kn$ to contain most of the probability mass
+$\prob{\vec{s}}{\vec{y}}$ and to be significantly smaller than the entire
+latent space.  
+%
+The \textit{affinity based selection function} to obtain the set of states $\Kn$ can be expressed as
+%
+\vspace{-.1cm}
+\begin{equation}\label{eq:sel-func}
+\mathcal{S}(\vec{y}^{(n)}) \;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] \;=\; \mathcal{K}_n.
+\end{equation}
+%
+\rev{To summarize, the main task is to formulate a general data-driven function to identify relevant latent variables and to select the corresponding set of states
+$\Kn$. 
+This is performed using GP regression in order to compute the truncated posterior Equation \eqref{eq:sel-post} on the reduced support $\Kn$.
+With the combined effort of the above utility functions, we have concisely defined the function $\mathcal{S}(\vec{y}^{(n)})$ in Equation \eqref{eq:sel-func} to perform this selection.}
+
+
+
+\subsection{Inference in EM with selection}
+In each iteration of EM, the following occurs: 
+prior to the E-step, the selection function $\Ss(\vec{y}^{(n)})$ in \eqref{eq:sel-func} is computed to select the most relevant states $\Kn$, 
+which are then used to compute the truncated posterior distribution $q_n(\vec{s})$ in \eqref{eq:sel-post}.
+The truncated posterior can be computed using any standard inference method, 
+such as exact inference or e.g. Gibbs sampling from $q(\vec{s})$  
+if inference is still intractable or further computational acceleration is desired.
+The result of the E-step is then used to update the model parameters \rev{with maximum likelihood} in the M-step. 
+
+
+\section{GP-Select}
+\label{gp-select}
+In previous work, the selection function $\mathcal{S}(\vec{y}^{(n)})$ 
+was a deterministic function derived  individually for each model 
+\citep[see e.g.][]{SheltonEtAl2011, SheltonEtAl2012, DaiLucke2012a, DaiLucke2012b,
+BornscheinEtAl2013, SheikhEtAl2014, SheltonEtAl2015}, \rev{specific examples of which will be shown in Section 5.1}.
+%
+We now generalize the selection approach:
+instead of predefining the form of $\Ss$ for variable selection, we want
+to learn it in a black-box and model-free way based on the data.
+%
+We learn $\Ss$  using Gaussian process (GP) regression
+\citep[e.g.][]{RasmussenGPbook}, which is a flexible nonparametric model 
+and scales cubicly\footnote{If the scaling with $N$ is still too expensive, an incomplete Cholesky approximation is used, with cost linear in $N$ and quadratic in the rank $Q$ of the approximation (see Section~\ref{invec} for details).} with the number of data points $N$ but linearly with the number of latent variables $H$.  
+We define the affinity function $f_h$ as being drawn from a Gaussian process model: 
+$f_h(\vec{y}^{(n)}) \sim \text{GP}\left(0, \, k(\cdot,\cdot) \right)$, where $k(\cdot, \cdot)$ is the covariance kernel, 
+which can be flexibly parameterized to represent the relationship between variables.
+Again, we use $f_h$ to approximate the marginal posterior probability $p_h$ that $s_h^{(n)}=1$.
+%
+A nice property of Gaussian processes is that the kernel matrix $K$ need only be computed once (until the kernel function hyperparameters are updated) 
+to approximate $p_h^{(n)}$ for the entire $H\times N$ set of latent variables $\vec{S}$. 
+
+Thus, prior to each E-step in each EM iteration, within each calculation of the selection function, we calculate the affinity  using a GP to regress the expected values of the latent variables $\langle \vec{S} \rangle$ from the observed data $\vec{Y}$.  
+Specifically, we train on $p_h$ from the previous EM iteration (where $p_h$ is equal to $\langle s_h \rangle$), for 
+training data of 
+$\mathcal{D} = \{ (\vec{y}^{(n)}, \langle\vec{s}^{(n)}\rangle_{q_n(\vec{s}^{(n)})} | n = 1,\dots, N \}$, 
+where we recall that $q_{n}(\vec{s}^{(n)})$ is the approximate posterior distribution for $\vec{s}^{(n)}$ in Equation~\eqref{eq:sel-post}.
+\rev{Note that we do not use a sigmoid link, hence this is clearly not a correct estimate of a probability (it can be negative, or greater than one). From the selection perspective, however, it is not necessary to avoid these pathologies, as we only want an ordering of the variables. A correct GP classification approach with a properly defined likelihood will no longer have a marginal Gaussian distribution, and we would no longer be able to trivially express the posterior means of different functions with the same inputs, without considerable extra computation.}
+
+In the first EM iteration, the expectations $\langle\vec{s}^{(n)}\rangle_{q}$ are initialized randomly;
+in each subsequent EM iteration, the 
+expectations w.r.t. the $\Kn$-truncated posterior $q(\vec{s})$ are used. 
+The EM algorithm is run for $T$ iterations and the hyperparameters of the kernel are optimized by maximum likelihood every $T^\ast$ EM iterations.
+
+For each data point $n$ and latent variable $s_h$ we compute the predicted mean of the GP by leaving 
+this data point out of the training set and considering all others, which is called leave-one-out (LOO) prediction.
+It can be shown that this can be implemented efficiently \citep[see Section 5.4.2 in ][]{RasmussenGPbook}, 
+and we use this result to update the predicted affinity as follows:
+\vspace{-.2cm}  
+\begin{equation}\label{eq:gp-loo}
+\hat{p}_{h}^{(n)} \leftarrow   
+\langle s_h^{(n)}\rangle_{q_n} - \frac{ [ K^{-1} \langle\vec{s}_{h}\rangle_{q_n} ]_{nn} }{ [ K^{-1} ]_{nn} }.
+\end{equation}
+Equation~\eqref{eq:gp-loo} can be efficiently implemented for all latent variables $h=1,\dots,H$ and all data points $n=1,\dots,N$ using matrix operations, thereby requiring only one kernel matrix inversion for the entire dataset.
+
+
+Substituting Equation~\eqref{eq:gp-loo} for $\vec{f}$ in the affinity based selection function~\eqref{eq:sel-func} 
+\rev{, $$\mathcal{S}(\vec{y}^{(n)}) \;=\;   \mathcal{I} \left[  \gamma \left[ \langle s_h^{(n)}\rangle_{q_n} - \frac{ [ K^{-1} \langle\vec{s}_{h}\rangle_{q_n} ]_{nn} }{ [ K^{-1} ]_{nn} } \right]  \right] 
+\;=\; \mathcal{I} \left[  \gamma \left[ \vec{f}(\vec{y}^{(n)}) \right]  \right] 
+\;=\; \mathcal{K}_n$$} 
+we call the entire process \textit{GP-select}. An outline is shown in Algorithm 1.
+
+
+\begin{algorithm}
+\caption{GP-Select to accelerate inference in Expectation Maximization}
+\label{alg:gp-select}
+\begin{algorithmic}
+
+\FOR{EM iterations $t=1,\dots,T$}\STATE{%\vspace{-.4cm}   
+\rev{initialize all latent variables expectations $\langle s_h^{(n)}\rangle_{q_{n,t}}$}
+    \FOR{data point $n=1,\dots, N$}
+    \STATE{
+    compute affinity of all latent variables $\hat{\vec{p}}_t^{(n)}$: Eq. \eqref{eq:gp-loo}\\
+%2. sort and reduce indices to $H'$\\
+ %   2.2. include uniformly chosen indices\\
+    compute subset of relevant states $\Ss$: Eq. \eqref{eq:sel-func}\\ % get $\Kn$ 
+%3. puke out reduced set of latent states $\Kn$ to use to calculate posterior distribution in E-step\\
+    compute truncated posterior $q_{n,t}(\vec{s}^{(n)})$ in E-step: Eq. \eqref{eq:sel-post}\\ % on reduced set $\Kn$
+    update model parameters \rev{in M-step, e.g. as in Sec. 5.1}\\ 
+    store $\langle s_h^{(n)}\rangle_{q_{n,t}}$ for $\vec{p}^{(n)}$ in EM iteration ${t+1}$\\
+%\langle \vec{s} \rangle^{(n)}_{q_{t}(\vec{s})}$ 
+    }\ENDFOR\\%\vspace{-.2cm}
+    optimize kernel hyperparams every $T\ast$ EM iterations
+}%\vspace{-.2cm}
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Experiments}
+\label{exps}
+We apply our GP-select inference approach to five different probabilistic generative models.
+%
+First, we considered three sparse coding models (binary sparse coding,
+spike-and-slab, nonlinear spike-and-slab), where the relationship between the
+observed and latent variables is known to be complex and nonlinear.
+%
+Second, we apply GP-select to a simple Gaussian mixture model,
+to both provide functional intuition of approach and to explicitly visualize the form of the learned regression function.
+Finally, we apply our approach to a recent hierarchical model for translation invariant occlusive components analysis
+\citep{DaiLucke2012a,DaiEtAl2013,DaiLucke2014}.
+
+
+\subsection{Sparse coding models}
+\label{sec:sparse-coding}
+%
+\rev{Many types of natural data are composed of potentially many component types, but any data point often only contains a very small number of this potentially large set of components. For the introductory example of toys on the nursery floor, for instance, there are many different toys that can {\em potentially} be in a given image but there is typically only a relatively small number of toys {\em actually} appearing in any one image.
+Another example is a sound played by a piano at a given time $t$. While the sound can contain waveforms generated by pressing any of the $88$ piano keys, there are only relatively few keys (typically much smaller than ten) that actually generated the sound. Sparse Coding algorithms model such data properties by providing a large number of hidden variables (potential data components) but assigning non-zero (or significantly different from zero) values only to a small subset of components (those actually appearing). 
+Sparse coding algorithms are typically used for tasks such as denoising \citep{EladAharon2006,MairalEtAl2009}, inpainting \citep{MairalEtAl2009, MairalEtAl2009b,TitsiasGredilla2011}, classification 
+\citep[][e.g. MNIST dataset \emph{http://yann.lecun.com/exdb/mnist/}, the flowers dataset \emph{http://www.robots.ox.ac.uk/$\sim$vgg/data/flowers/}]{MNIST,TitsiasGredilla2011,RainaEtAl2007}, transfer learning \citep{RainaEtAl2007}, collaborative filtering \citep{TitsiasGredilla2011} and are important models for neuro-sensory processing \citep[][and many more]{OlshausenField1997,ZylberbergEtAl2011,BornscheinEtAl2013,SheikhEtAl2014}.}
+A variety of sparse coding models have been successfully scaled to high-dimensional latent spaces with the use of selection~\citep{HennigesEtAl2010, BornscheinEtAl2013, SheikhEtAl2014} or selection combined with Gibbs sampling~\citep{SheltonEtAl2011, SheltonEtAl2012, SheltonEtAl2015} inference approaches. \rev{Latent variables were selected in these earlier works using selection functions that were individually defined for each model.}
+%
+In order to demonstrate our method \rev{of autonomously learned selection functions}, we consider three of these
+ sparse generative models, and perform inference in EM with our GP-select approach instead of a hand-crafted selection function.
+\rev{The models are relevant for different tasks such as classification (e.g., binary sparse coding), source separations and denoising (linear spike-and-slab sparse coding) or sparse encoding and extraction of interpretable image components (nonlinear sparse coding). 
+Note that when it is obvious from context, we drop the notation referring to each data point $n$ in order to make the equations more concise.}
+
+The models \rev{and their parameters} are:
+%
+\begin{description}
+%
+%%% BSC %%%
+\item[\textbf{A.}] \textit{Binary sparse coding}:
+%
+\vspace{-.1cm}
+\begin{align}
+\text{latents: } \,\,\,         \vec{s} &\sim \mathrm{Bern}(\vec{s} | \pi) = \disT\prod_{h=1}^H \pi^{s_h} \big( 1 - \pi \big)^{1-s_h}\nonumber \\
+\text{observations:  }\,\,\,    \vec{y} &\sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)\nonumber \\ 
+\rev{\text{parameters: }} \,\,\,  % W update
+\disT{}\rev{W} &= \big( \sum_{n=1}^{N} \vec{y}^{(n)} \E{\vec{s}\,}^T_{q_n} \big)\ \big( \sum_{n=1}^{N} \left< \vec{s}\,\vec{s}^{\,T}\right>_{q_n}\big)^{-1}\, \nonumber\\
+% sigma 
+\rev{\disT{}\sigma^2} &= \frac{1}{ND} \sum_{n} \left< \left|\left| \vec{y}^{(n)} - W \, \vec{s} \right|\right|^2 \right>_{q_n}\hspace{-2mm}\nonumber\\
+% pi
+\rev{\pi} &= \frac{1}{N} \sum_{n}\, |\big< \vec{s} \big>_{q_n}|,\:\:\mbox{\small where}\:|\vec{x}|=\frac{1}{H}\disS\sum_{h}x_h \nonumber
+\end{align}
+%
+where $W \in \mathrm{R}^{D \times H}$ denotes the components / dictionary elements and $\pi$ parameterizes the sparsity (see e.g.~\citep{HennigesEtAl2010}).
+%
+%%% spike and slab %%%
+\item[\textbf{B.}] \textit{Spike-and-slab sparse coding}:
+\vspace{-.2cm}
+\begin{align}
+\text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z}
+\text{\quad}\mathrm{where\;}\quad \vec{b}\sim \mathrm{Bern}(\vec{b} | \pi)
+\:\mathrm{and} \:
+\vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu} , \Sigma_h)\nonumber\\
+%\sim \odot 
+\text{\quad}\text{observations:} & \,\,\, \vec{y} \sim \mathcal{N}(\vec{y}; W\vec{s}, \sigma^2\One)\text{\quad}\text{\quad}\nonumber\\
+\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\rev{\text{\;\;parameters: }} \,\,\,   
+%%% GSC JMLR paper M-step eqjuations:
+% W update
+  &\rev{W} = \frac{\sum_{n=1}^{N} \yVecN \E{\sVec\odot\zVec}^{\TT}_n}
+  {\sum_{n=1}^{N} \E{(\sVec\odot\zVec)(\sVec\odot\zVec)^{\TT}}_n } \nonumber\\
+%
+% pi update
+&\rev{\piVec} =
+\frac{1}{N}\sum_{n=1}^{N}\E{\sVec}_n \nonumber\\
+%
+% sigma update
+&\rev{\sigma^2} =
+    \sum_{n=1}^{N} \Big[\E{(\sVec\odot\zVec)(\sVec\odot\zVec)^{\TT}}_n 
+    \ssb -  \E{\sVec\,\sVec^{\TT}}_n \ssb \odot \muVec\muVec^{\TT} \Big] 
+    \odot \Big(\sum_{n=1}^{N}\Big[\E{\sVec\,\sVec^{\TT}}_n \Big]\Big)^{-1} \nonumber\\
+%
+% mu prior update
+&\rev{\mu_{pr}}  = \frac{\sum_{n=1}^{N} \E{\sVec\odot\zVec}_n}{\sum_{n=1}^{N}\E{\sVec}_n}  \nonumber\\
+%
+% sigma prior update
+&\rev{\sigma^{2}_{pr}} = \frac{1}{N}\sum_{n=1}^{N}\Big[ \yVecN(\yVecN)^{\TT}
+        - W\big[\E{(\sVec\odot\zVec)}_n\E{(\sVec\odot\zVec)}_n^{\TT}\big]W^{\TT}\Big]  \nonumber
+\end{align}
+where the point-wise multiplication of the two latent vectors, i.e., $(\vec{s}\odot\vec{z})_h = s_h\,z_h$
+generates a `spike-and-slab' distributed variable ($\vec{s}\odot\vec{z}$), that has either continuous values or exact zero entries (e.g. \citep{TitsiasGredilla2011,GoodfellowEtAl2013,SheikhEtAl2014}).
+%
+%%% SSMCA %%%
+\item[\textbf{C.}] \textit{Nonlinear Spike-and-slab sparse coding}:
+\vspace{-.2cm}
+%
+\begin{align}\label{eq:ssmca}
+\text{latents: } & \,\,\,\vec{s} = \vec{b}\odot\vec{z} \nonumber
+\quad\mathrm{where}\quad \vec{b}\sim \mathrm{Bern}(\vec{b} | \pi)\nonumber\\
+\:&\mathrm{and} \:
+\vec{z} \sim \mathcal{N}(\vec{z};\,\vec{\mu_{pr}} , \sigma^2) \nonumber\\ 
+ \text{observations:}\,\,\, &\vec{y} \sim \mathcal{N}(\vec{y}; \max_{h}\{s_h\vec{W}_{h}\}, \sigma^2\One)\nonumber\\
+%
+\rev{\text{\quad parameters: }} \,\,\,\nonumber
+% m-step updates
+%
+% W 
+&\rev{\hat{W}_{hd}}   = \frac{\langle s_h y_d \rangle^*}{\langle s_d^2 \rangle^*} 
+ \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
+% pi%
+\text{\quad}\text{\quad}\rev{\hat{\pi}} = \langle \mathbb{I}(s) \rangle  \text{\quad}\nonumber\\
+%
+% sigma 
+&\rev{\hat{\sigma}^2} = \left\langle W_{dh} s_h - y_d^{(n)}\right\rangle^\ast \nonumber\\
+%
+% mu prior
+&\rev{\hat{\mu}_{\pr}} = \langle s_h \rangle^* 
+ \text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}\text{\quad}
+% sigma prior
+\rev{\hat{\sigma}^2_{\pr}} = \langle (s_h - \hat{\mu}_{\pr})^2 \rangle^* \nonumber\\
+&\rev{\text{Where expectations $\langle \,.\, \rangle^*$ mean:}}\nonumber\\
+%
+&\rev{\langle f(s) \rangle^\ast} = \sum_n \frac{ \int_s \, p(\vec{s}|\vec{y}^{(n)},\Theta) \, f(\vec{s}) \, \mathbb{I}(\text{h is max}) \, d\vec{s} }
+                                       { \int_s \, p(\vec{s}|\vec{y}^{(n)},\Theta) \, \mathbb{I}(\text{h is max}) \, d\vec{s} } \nonumber
+\end{align}
+%
+\rev{where $\mathbb{I}$ is the indicator function denoting the domain to integrate over, namely where $h$ is the maximum.
+Using $\langle f(s) \rangle^\ast$ allows for the condensed expression of the update equations shown above.}
+The mean of the Gaussian for each $\vec{y}^{(n)}$ is centered at $\max_{h}\{s_h\vec{W}_{h}\}$, where $\max_{h}$ is a nonlinearity that considers all $H$ latent components and takes the $h$ yielding the maximum value for $s_h\vec{W}_{h}$ \citep{LuckeSahani2008,SheltonEtAl2012,BornscheinEtAl2013,SheltonEtAl2015}, instead of centering the data at the linear combination of $\sum_h s_h\vec{W}_h=W\vec{s}$.
+%
+\end{description}
+
+In the above models, inference with the truncated posterior \rev{of Equation~\eqref{eq:sel-post} using hand-crafted selection functions} \rev{$\mathcal{S}_h(\vec{y}^{(n)})$} \rev{to obtain the subset of states} \rev{$\Kn$} \rev{[of selected relevant variables} \rev{$\vec{s}(\vec{y}^{(n)})$}\rev{], shown in Equation~\eqref{eq:sel-func},} has yielded results as good or more robust performance than exact inference (converging less frequently to local optima than exact inference; see earlier references for details).
+For models \textbf{A} and \textbf{C}, the \rev{hand-constructed function approximating} \rev{$\vec{f}(\vec{y}^{(n)})$}\rev{, for substitution in Equation~\eqref{eq:sel-func},} was the cosine similarity between the weights $\vec{W}_h$ (e.g. dictionary elements, components, etc.) associated with each latent variable $s_h$ and each data point $\vec{y}^{(n)}$: 
+%
+\rev{$\vec{f}(\vec{y}^{(n)})$} \rev{$ = (\vec{W}_{h}^{\mathrm{T}}\,/\,||\vec{W}_{h}||)\,\vec{y}^{(n)}$}.
+For model \textbf{B}, \rev{the constructed affinity function} was the data likelihood given a singleton state:
+%
+\rev{$\vec{f}(\vec{y}^{(n)})$} $= p(\vec{y}^{(n)} | \vec{s}=\vec{s}_h, \Theta)$, 
+%
+where $\vec{s}_h$ represents a singleton state in which only the entry $h$ is non-zero.
+\rev{The goal of these experiments is to demonstrate the performance of GP-select and the effects/benefits of using different selection functions. To do this, we consider artificial data generated according to each sparse coding model, and thus with known ground-truth parameters. As discussed above, we could also apply the sparse coding models using GP-select to other application domains listed, but that is not the focus of these experiments.} 
+We generate $N=2,000$ data points consisting of $D=5\times5=25$ observed dimensions and $H=10$ latent components according to each of the models \textbf{A-C}:
+$N$ images of randomly selected overlapping 'bars' with varying intensities for models \textbf{B} and \textbf{C}, and additive Gaussian noise parameterized by ground-truth $\sigma^2 = 2$ and we choose $H' = 5$, (e.g. following the spike-and-slab prior). 
+On average, each data point contains $2$ bars, i.e. ground-truth is $\pi H = 2$, and we choose $H'=5$. With this choice,
+we can select sufficiently many latents for virtually all data points.
+
+
+For each of the models considered, we run 10 repetitions of each of the following set of experiments: (1) selection using the respective hand-crafted selection function,
+(2) GP-select using a linear covariance kernel, (3) GP-select using an RBF covariance kernel, and (4) GP-select using a kernel composed by adding the following kernels: RBF, linear, bias and white noise kernels, which we will term the \emph{composition kernel}.
+As hyperparameters of kernels are learned, the composition kernel (4) can adapt itself to the data and only use the kernel components required. 
+See  \citet[Chapter 4, Section 4.2.4]{RasmussenGPbook}  for a discussion on  kernel adaptation.
+Kernel parameters were model-selected via maximum marginal likelihood every $10$ EM iterations.
+For models \textbf{A} and \textbf{B}, inference was performed exactly using the truncated posterior~\eqref{eq:sel-post}, but as exact inference is analytically intractable in model \textbf{C}, inference was performed by drawing Gibbs samples from the truncated space \citep{SheltonEtAl2011,SheltonEtAl2012,SheltonEtAl2015}.
+We run all models until convergence. 
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=.8\textwidth]{{NECO-07-16-2662R2-Figure.2}.eps}
+\caption{Sparse coding models results comparing GP-select with a successful hand-derived selection function.
+Results are shown on artificial ground-truth data with $H=10$ latent variables and $H'=5$ preselected variables for: \textbf{A} Binary sparse coding, \textbf{B} Spike-and-slab sparse coding, and \textbf{C} Nonlinear spike-and-slab sparse coding.
+First column: Example data points $\vec{y}^{(n)}$ generated by each of the models.
+Middle column: Converged dictionary elements $W$ learned by the hand-crafted selection functions.
+Third column: Converged dictionary elements $W$ learned by GP-select with $H'=5$ using the kernel with best performance (matching that of inference with hand-crafted selection function).
+In all cases, the model using the GP-select function converged to the ground-truth solution, just as the hand-crafted selection functions did.
+}\label{fig:sparse}
+\end{center}
+\end{figure}
+
+Results are shown in Figure~\ref{fig:sparse}.
+In all experiments, the GP-select approach was able to infer ground-truth parameters as well as the hand-crafted function.
+For models where the cosine similarity was used (in \textbf{A} and \textbf{C}), GP regression with a linear kernel quickly learned the ground-truth parameters, and hence fewer iterations of EM were necessary.
+In other words, even without providing GP-select explicit weights $W$ as required for the hand-crafted function, its affinity function using GP regression~\eqref{eq:gp-loo} learned a similar enough function to quickly yield identical results.
+Furthermore, in the model with a less straight-forward hand-crafted function (in the spike-and-slab model of \textbf{B}), only GP regression with an RBF kernel was able to recover ground-truth parameters.
+In this case (model \textbf{B}), GP-select using an RBF kernel recovered the ground-truth 'bars' in $7$ out of $10$ repetitions, whereas the hand-crafted function recovered the bases in $8$ instances.
+For the remaining models, GP-select converged to the ground-truth parameters with the same average frequency as the hand-crafted functions.
+ 
+Finally, we have observed empirically that the composition kernel is flexible enough to subsume all other kernels:
+the variance of the irrelevant kernels dropped to zero in simulations.
+This suggests the composition kernel is a good choice  for general use. 
+
+\subsection{Gaussian mixture model}
+Next, we apply GP-select to a simple example, a Gaussian mixture model, where the flexibility of the approach can be easily and intuitively visualized.  \rev{Furthermore, the GMMs flexibility allows us to explicitly visualize the effect of different selection functions.
+A demonstration and code for the GMM application is provided in \citep{GP-selectNotebook16}.}
+
+The model of the data likelihood is
+\vspace{-.2cm}
+\begin{equation}\label{eq:mog}
+p(\vec{y}^{(n)} | \vec{\mu_c}, \vec{\sigma_c}, \vec{\pi}) = \sum_{c=1}^{C} \mathcal{N}(\vec{y}^{(n)}; \vec{\mu_c}, \vec{\sigma_c}) \, \pi_c,
+\end{equation}
+where $C$ is the number of mixture components; the task is to assign each data point to its latent cluster.
+
+The training data used for GP regression was $\mathcal{D} = \{ (\vec{y}^{(n)}, \langle s_h^{(n)}\rangle_{q_n}) | n = 1, \dots, N \}$, where the targets were the expected cluster responsibilities (posterior probability distribution for each cluster) for all data points, $\langle s_h\rangle_{q}$, and we use one-hot encoding for cluster identity.
+With this, we apply our GP-select approach to this model, computing the selection function according to Equation~\eqref{eq:sel-func} with affinity $f$ defined by GP regression~\eqref{eq:gp-loo} 
+and following the approximate EM approach as in the previous experiments.
+In these experiments we consider two scenarios for EM learning of the data likelihood in Equation~\eqref{eq:mog}: GP-select with an RBF covariance kernel and a linear covariance kernel.  
+We do not include the composition kernel suggested (based on experiments) in Section 4.1, as the goal of the current experiments is to show the  effects of using the 'wrong' kernel. These effects would further support the use of the flexible composition kernel in general, as it can subsume both kernels considered in the current experiments (RBF and linear). 
+
+To easily visualize the output, we generate $2$-dimensional observed data ($\vec{y}^{(n)} \in \mathrm{R}^{D=2} $) from $C=3$ clusters -- first with randomly assigned cluster means, and second such that the means of the clusters lie roughly on a line.
+In the GP-select experiments, we select $C' = 2$ clusters from the full set,
+and run $40$ EM iterations for both kernel choices (linear and RBF).
+Note that for mixture models, the notation of $C'$ selected clusters of the $C$ set is analogous to the $H'$ selected latent variables from the $H$ full set, as described in the non-mixture model setting, and the GP-select algorithm proceeds unchanged.
+We randomly initialize the variance of the clusters $\vec{\sigma_c}$ and initialize the cluster means $\vec{\mu_c}$ at randomly selected data points.
+Results are shown in Figure~\ref{fig:mog}.
+
+\begin{figure*}[t]
+\begin{center}
+\includegraphics[width=1\textwidth]{{NECO-07-16-2662R2-Figure.3}.eps}
+\caption{Gaussian mixture model results using GP-select (selection of $C'=2$ in a $C=3$ class scenario) for inference.
+Progress of the inference is shown using (row one) an RBF covariance kernel in the regression, and (row two) a linear covariance kernel.
+For each iteration shown, we see (1) the observed data and their inferred cluster assignments and (2) the $C$ corresponding GP regression functions learned/used for GP-select in that iteration. Different iterations are pictured due to different convergence rates. As shown, inference with GP-select using a linear kernel is unable to assign the data points to the appropriate clusters, whereas GP-select with an RBF kernel succeeds.}\label{fig:mog}
+\end{center}
+\end{figure*}
+
+ on these data, the linear GP regression prediction cannot correctly assign the data to their clusters (as seen in Figure~\ref{fig:mog}\textbf{B}), but the nonlinear approach successfully and easily finds the ground-truth clusters (Figure~\ref{fig:mog}\textbf{A}).
+Furthermore, even when both approaches were initialized in the optimal solution, the cluster assignments from GP-select with a linear kernel quickly wandered away from the optimal solution and were identical to random initialization, converging to the same result shown in iteration 20 of Figure~\ref{fig:mog}\textbf{B}).
+The RBF kernel cluster assignments remained at the optimal solution even with number of selected clusters set to $C'=1$.
+
+These experiments demonstrate that the selection function needs to be flexible even
+for very simple models, and that nonlinear selection functions are an essential tool
+even in such apparently straightforward cases.
+
+
+\subsection{Translation Invariant Occlusive models}
+\label{invec}
+
+
+Now that we have verified that GP-select can be applied to various generative graphical models and converge to ground-truth parameters, we consider a more challenging model that addresses a problem in computer vision: \emph{translations of objects in a scene}.
+
+\textbf{Model.}
+%
+\rev{Translation invariant models address the problem that, e.g., visual objects can appear in any location of an image. Probabilistic models for translation invariance are particularly appealing as they allow to separately infer object positions and object type, making them very interpretable and powerful tools for image processing.}
+
+Translation invariant models are particularly difficult to optimize\rev{, however,} because they must consider a massive latent variable space: evaluating multiple objects and locations in a scene leads a \textit{latent space complexity of the number of locations exponentiated by the number of objects}.
+Inference in such a massive latent space heavily relies on the idea of variable selection to reduce the number of candidate objects and locations. In particular, hand-engineered selection functions that consider \emph{translational invariance} have been successfully applied to this type of model~\citep{DaiLucke2012b,DaiLucke2014,DaiEtAl2013}.
+%
+The selection function used so far for reducing latent space complexity in this model has been constructed as follows.
+First, the candidate locations of all the objects in the model are predicted.
+Then a subset of candidate objects that might appear in the image are selected according to those predicted locations.  
+Next, the subset of states $\Kn$ is constructed 
+\rev{according to the combinations of the possible locations and numbers of candidate objects}.
+The posterior distribution is then computed following Equation~\eqref{eq:sel-post}.
+
+This selection system is very costly: the selection function has parameters which need to be hand-tuned, e.g., the number of representative features, and 
+it needs to scan through the entire image, considering all possible locations, which becomes computationally demanding for large-scale experiments.
+To maximally exploit the capabilities of the GP-selection function, we directly use the GP regression model to \textit{predict the possible locations} of a component \textit{without introducing any knowledge of translation invariance} into the selection function. In this work, a GP regression model is fitted from the input image to marginal posterior probabilities of individual components appearing at all possible locations. Therefore, the input to the GP-selection function is the image to be inferred and the output is a score for each possible location of each component in the model.
+For example, when learning $10$ components in a $D=30\times 30$ pixel image patch, the output dimensionality of GP-select is $9000$.
+This task is computationally feasible, since GP models scale linearly with output dimensionality.
+The inference of components' locations with GP-select is significantly faster than the selection function in the original work, as it avoids explicitly scanning through the image.
+
+Although there are additional computations necessary for an automatic selection function like GP-select, for instance due to the adjustment of its parameters,
+there are many options to reduce computational costs.
+First, we may approximate the full $N \times N$ Gram matrix by an incomplete Cholesky approximation~\citep{FinSch01} 
+resulting in a cost of $O(N\times Q)$, where $Q << N$ is the rank of the Cholesky approximation.
+Second, we may reduce the update frequency of the kernel hyperparameters to be computed only every $T\ast$ EM iterations, where a $T\ast > 1$ represents a corresponding computation reduction.
+The combination of the Cholesky approximation plus infrequent updates will have the following benefits: a factor of five speedup for infrequent updates, and a factor of $(N-Q)^2$ speedup from incomplete Cholesky, where $Q$ is the rank of the Cholesky approximation and $N$ is the number of original data points. 
+
+\textbf{COIL Dataset.}
+%
+\begin{figure*}[t!]
+\includegraphics[width=1\textwidth]{{NECO-07-16-2662R2-Figure.4}.eps}
+\caption{COIL Dataset \citep{coil100}: 
+A handful of data points used in experiments with the Translation Invariant Occlusive (InvECA) model, showing the occluding objects to be learned. }
+\label{fig:inveca-data}
+\end{figure*}
+%
+We apply our GP-selection function to the \emph{Invariant Exclusive Component Analysis (InvECA) model}~\citep{DaiLucke2012b,DaiEtAl2013}.
+For our experiments, we consider an image dataset used in previous work: data were generated using objects from the COIL-100 image dataset \citep{coil100}, taking $16$ different objects, downscaled to $D=10 \times 10$ pixels and segmented out from the black background.
+A given image was generated by randomly selecting a subset of the $16$ objects, where each object has a probability of $0.2$ of appearing.
+The appearing objects were placed at random positions on a $30 \times 30$ black image.
+When the objects overlap, they occlude each other with a different random depth order for each image.
+In total, $N=2000$ images were generated in the dataset (examples shown in Figure~ \ref{fig:inveca-data}).
+The task of the InvECA model is to discover the visual components (i.e. the images of $16$ objects) from the image set without any label information. 
+We compare the visual components learned by using \emph{four different selection functions in the InvECA model}: the hand-crafted selection function used in the original work by ~\citet{DaiLucke2012b}, GP-select updated every iteration, GP-select updated every $T*=5$ iterations, and GP-select with incomplete Cholesky decomposition updated every iteration, or $T\ast=1$ (in this manner we isolate the improvements due to Cholesky from those due to infrequent updates). 
+In these experiments, the parameters of GP-select are optimized at the end of each $T*$ EM iteration(s), using a maximum of $20$ gradient updates.
+The number of objects to be learned is $H=20$ and the algorithm pre-selects $H'=5$ objects for each data point.
+The kernel used was the composition kernel, as suggested in Section 4.1, although after fitting the hyperparameters only the RBF kernel remained with large variance (i.e. a linear kernel alone would not have produced good variable selection, thus the flexible composition kernel was further shown to be a good choice).
+
+\textbf{Results.}
+%
+\begin{figure*}[t!]
+\centering
+\includegraphics[width=\textwidth]{{NECO-07-16-2662R2-Figure.5}.eps}
+\caption{Image components and their masks learned by GP-select with the Translation Invariant model. GP-select learned all objects in the dataset.
+The first row shows the mask of each component, 
+the second row shows the learned image components,  
+and the third row shows only the area of the learned components that had a mask $>0.5$.
+\rev{For the second three-row block of images, the same titles of the first three-row block hold.}
+}
+\label{fig:inveca-params}
+\end{figure*}
+%
+All four versions of the InvECA model using each of the selection functions considered successfully recover each individual objects in our modified COIL image set. 
+The learned object representations with GP-select are shown in Figure~\ref{fig:inveca-params}.
+Four additional components developed into representations, however these all had very low mask values, allowing them to easily be distinguished from other true components.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{{NECO-07-16-2662R2-Figure.6}.eps}
+\caption{Prediction accuracy of the four selection functions in the InvECA model.
+Functions depicted in the figures: GP-select with no modifications (GP, red), the incomplete Cholesky decomposition (GP IChol, blue), with updated kernel hyperparameters every $5$ EM iterations (GP every5, green), and with hand-crafted selection (hand-craft, cyan).
+Shown: the log-scale histogram of the prediction accuracy for the four selection functions, measured by the distance each function's predicted object location was to the ground-truth object location. 
+All bars of the selection functions show very similar accuracy for the various distances. 
+}
+\label{fig:inveca1}
+\end{figure}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=.6\textwidth]{{NECO-07-16-2662R2-Figure.7}.eps}
+\caption{Baseline comparison of the four selection functions in the InvECA model.
+Functions depicted in the figures are identical to those in Figure~\ref{fig:inveca1}.
+Shown: the convergence of the pseudo log marginal likelihood [of the model parameters learned at each EM iteration] for the four selection functions over all EM iterations. After about $40$ EM iterations, all selection function versions of the algorithm converge to the same likelihood solution.  
+Simultaneously, the GP-select approaches exhibit no loss of accuracy compared to the hand-crafted function,  and 
+'GP IChol' represents a factor of $100$ speedup vs. 'GP', and 'GP every5' represents a factor of $5$ speedup.
+}
+\label{fig:inveca2}
+\end{figure}
+%
+Next, we compare the accuracy of the four selection functions.
+For this, we collected the object locations (pixels) indicated by each selection function after all EM iterations, 
+applied the selection functions (for the GP selection functions, this was using the final function learned after all EM iterations) to the entire image dataset again, 
+then compared these results with the ground-truth location of all of the objects in the dataset.
+The accuracy of the predicted locations was then computed by comparing the distance of all ground-truth object location to the location of the top candidate locations from each selection function. 
+ See Figure~\ref{fig:inveca1} for a histogram of these distances and the corresponding accuracy for all selection functions. Note that the percentages in the histogram are plotted in log scale.
+%
+Also, as a baseline verification, 
+we computed and compared the pseudo log likelihood \citep{DaiEtAl2013} of the original selection function to the three GP-select based ones.
+The pseudo log likelihood for all selection functions is shown in Figure~\ref{fig:inveca2}.
+Figures~\ref{fig:inveca1}-\ref{fig:inveca2} show that all four selection functions can very accurately predict the locations of all the objects in the dataset -- 
+the GP-select selection functions yields no loss in inference performance in comparison to the original hand-engineered selection function. 
+Even those using speed-considerate approximations (incomplete Cholesky decomposition of the kernel matrix (GP IChol) and updating kernel hyperparameters only every 5 EM iterations (GP every5)) have indistinguishable prediction accuracy on the task.
+
+
+An analysis of the benefits indicate that, as GP-select avoids explicitly scanning through the image, the time to infer the location of an object is significantly reduced compared to the hand-crafted function. GP-select requires $22.1$ seconds on a single CPU core to infer the locations of objects across the whole image set, while the hand-crafted function requires $1830.9$ seconds. In the original work, the selection function was implemented with GPU acceleration and parallelization. 
+Although we must compute the kernel hyperparameters for GP-select, 
+it is important to note that the hyperparameters need not be fit perfectly each iteration -- for the purposes of our approach, a decent approximation suffices for excellent variable selection. 
+ In this experiment, updating the parameters of GP-select with $10$ gradient steps took about $390$ seconds for the full-rank kernel matrix. 
+When we compute the incomplete Cholesky decomposition while inverting the covariance matrix, compute time was reduced to $194$ seconds (corresponding to the $(N-Q)^2$ speedup, where $Q$ is the rank of the Cholesky approximation), with minimal loss in accuracy.
+Furthermore, when updating the GP-select hyperparameters only every 5 iterations, average compute time was reduced by another one fifth, again without loss in accuracy.
+
+\section{Discussion}
+\label{disc}
+We have proposed a means of achieving fast EM inference in Bayesian generative models, by
+learning an approximate selection function to determine relevant latent variables
+for each observed variable. The process of learning the relevance functions
+is interleaved with the EM steps, and these functions
+are used in obtaining an approximate posterior distribution in the subsequent EM iteration.
+The functions themselves are learned via Gaussian process regression,
+and do not require domain-specific engineering, unlike previous selection functions.
+In experiments on mixtures and sparse coding models with interpretable output,
+the learned selection functions behaved in accordance with our expectations for the posterior
+distribution over the latents.  
+
+The significant benefit we show empirically is that by learning the selection function in a general and flexible nonparametric way, we can avoid using potentially expensive hand-engineered selection functions.
+Cost reduction is both in terms of required expertise in the problem domain, and computation time in identifying the relevant latent variables.
+Inference using our approach required 22.1 seconds on a single CPU core, versus  1830.9 seconds with the original hand-crafted function 
+for the complex hierarchical model of \citep{DaiEtAl2013}.
+
+A major area where further performance gains might be expected is in
+improving computational performance, since we expect the greatest
+advantages of GP-select to occur for complex models at large scale. For instance,
+ kernel ridge regression may be parallelized \citep{zhang14divide},
+or the problem may be solved in the primal via random Fourier features \citep{LeSarSmo13}.
+Furthermore, there are many recent developments regarding the scaling up of GP inference to large-scale problems, e.g., sparse GP approximation
+~\citep{sparseGP}, stochastic variational inference \citep{HensmanEtAl2013,Hensman2012}, using parallelization techniques and GPU acceleration \citep{DaiEtAl2014}, or in combination with stochastic gradient descent~\citep{Bottou08thetradeoffs}. 
+For instance, for very large datasets where the main model is typically trained with mini-batch learning, stochastic variational inference can be used for GP fitting as in \citep{HensmanEtAl2013} and the kernel parameters can be efficiently updated each (or only every $T*$ few) iteration with respect to a mini-batch.
+
+
+\subsection*{Acknowledgments}
+We acknowledge funding by the German Research Foundation (DFG) under grants LU 1196/4-2 (JS), LU 1196/5-1 (JL), by the Cluster of Excellence EXC 1077/1 "Hearing4all" (JL), and by the RADIANT and WYSIWYD (EU FP7-ICT) projects (ZD).
+
+
+
+
+%\bibliographystyle{apa}
+%\bibliography{gp}
+\begin{thebibliography}{}
+
+\bibitem[\protect\astroncite{Bornschein et~al.}{2013}]{BornscheinEtAl2013}
+Bornschein, J., Henniges, M., and L\"ucke, J. (2013).
+\newblock Are {V}1 simple cells optimized for visual occlusions? {A}
+  comparative study.
+\newblock {\em PLoS Computational Biology}, 9(6):e1003062.
+
+\bibitem[\protect\astroncite{Bottou and Bousquet}{2008}]{Bottou08thetradeoffs}
+Bottou, L. and Bousquet, O. (2008).
+\newblock The tradeoffs of large scale learning.
+\newblock In Platt, J.~C., Koller, D., Singer, Y., and Roweis, S.~T., editors,
+  {\em Advances in Neural Information Processing Systems 20 ({NIPS}),
+  Vancouver, British Columbia, Canada}, pages 161--168. MIT Press.
+
+\bibitem[\protect\astroncite{Currin et~al.}{1991}]{CurrinEtall1991}
+Currin, C., Mitchell, T., Morris, M., and Ylvisaker, D. (1991).
+\newblock {Bayesian} prediction of deterministic functions, with applications
+  to the design and analysis of computer experiments.
+\newblock {\em J. American Statistical Association}, 86(416):953--963.
+
+\bibitem[\protect\astroncite{Dai}{2016}]{GP-selectNotebook16}
+Dai, Z. (2016).
+\newblock {GP}-select {D}emo on {G}aussian mixture models.
+\newblock https://github.com/fatflake/GP-select-Code/GMM\_demo.ipynb.
+
+\bibitem[\protect\astroncite{Dai et~al.}{2014}]{DaiEtAl2014}
+Dai, Z., Damianou, A., Hensman, J., and Lawrence, N. (2014).
+\newblock Gaussian process models with parallelization and gpu acceleration.
+  \textit{NIPS 2014, Workshop on Modern non-parametrics: automating the
+  learning pipeline}.
+\newblock In {\em NIPS Workshop on Modern non-parametrics: automating the
+  learning pipeline}.
+
+\bibitem[\protect\astroncite{Dai et~al.}{2013}]{DaiEtAl2013}
+Dai, Z., Exarchakis, G., and L{\"u}cke, J. (2013).
+\newblock What are the invariant occlusive components of image patches? a
+  probabilistic generative approach.
+\newblock In Burges, C., Bottou, L., Welling, M., Ghahramani, Z., and
+  Weinberger., K., editors, {\em Advances in Neural Information Processing
+  Systems}, pages 243--251.
+
+\bibitem[\protect\astroncite{Dai and L\"{u}cke}{2012a}]{DaiLucke2012a}
+Dai, Z. and L\"{u}cke, J. (2012a).
+\newblock Autonomous cleaning of corrupted scanned documents -- a generative
+  modeling approach.
+\newblock In {\em IEEE Conference on Computer Vision and Pattern Recognition},
+  pages 3338--3345.
+
+\bibitem[\protect\astroncite{Dai and L\"{u}cke}{2012b}]{DaiLucke2012b}
+Dai, Z. and L\"{u}cke, J. (2012b).
+\newblock Unsupervised learning of translation invariant occlusive components.
+\newblock In {\em IEEE Conference on Computer Vision and Pattern Recognition},
+  pages 2400--2407.
+
+\bibitem[\protect\astroncite{Dai and L\"{u}cke}{2014}]{DaiLucke2014}
+Dai, Z. and L\"{u}cke, J. (2014).
+\newblock Autonomous document cleaning -- a generative approach to reconstruct
+  strongly corrupted scanned texts.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  36(10):1950--1962.
+
+\bibitem[\protect\astroncite{Dayan et~al.}{1995}]{Dayan95}
+Dayan, P., Hinton, G.~E., Neal, R.~M., and Zemel, R.~S. (1995).
+\newblock The helmholtz machine.
+\newblock {\em Neural Computation}, 7:889--904.
+
+\bibitem[\protect\astroncite{Dempster et~al.}{1977}]{DempsterEtAl1977}
+Dempster, A.~P., Laird, N.~M., and Rubin, D.~B. (1977).
+\newblock Maximum likelihood from incomplete data via the {EM} algorithm (with
+  discussion).
+\newblock {\em Journal of the Royal Statistical Society B}, 39:1--38.
+
+\bibitem[\protect\astroncite{Elad and Aharon}{2006}]{EladAharon2006}
+Elad, M. and Aharon, M. (2006).
+\newblock Image denoising via sparse and redundant representations over learned
+  dictionaries.
+\newblock {\em Trans. Img. Proc.}, 15(12):3736--3745.
+
+\bibitem[\protect\astroncite{Exarchakis et~al.}{2012}]{ExarchakisEtAl2012}
+Exarchakis, G., Henniges, M., Eggert, J., and L{\"u}cke, J. (2012).
+\newblock Ternary sparse coding.
+\newblock In {\em LVA/ICA}, Lecture Notes in Computer Science, pages 204--212.
+  Springer.
+
+\bibitem[\protect\astroncite{Fine and Scheinberg}{2001}]{FinSch01}
+Fine, S. and Scheinberg, K. (2001).
+\newblock Efficient {SVM} training using low-rank kernel representations.
+\newblock {\em Journal of Machine Learning Research}, 2:243--264.
+
+\bibitem[\protect\astroncite{Goodfellow et~al.}{2013}]{GoodfellowEtAl2013}
+Goodfellow, I.~J., Courville, A., and Bengio, Y. (2013).
+\newblock Scaling up spike-and-slab models for unsupervised feature learning.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  35(8):1902--1914.
+
+\bibitem[\protect\astroncite{Gutmann and Corander}{2015}]{GuttmanCorander2015}
+Gutmann, M.~U. and Corander, J. (2015).
+\newblock {Bayesian Optimization for Likelihood-Free Inference of
+  Simulator-Based Statistical Models}.
+\newblock Technical report, University of Helsinki.
+\newblock \emph{http://arxiv.org/abs/1501.03291}.
+
+\bibitem[\protect\astroncite{Henniges et~al.}{2010}]{HennigesEtAl2010}
+Henniges, M., Puertas, G., Bornschein, J., Eggert, J., and L\"ucke, J. (2010).
+\newblock {Binary Sparse Coding}.
+\newblock In {\em Proceedings LVA/ICA}, LNCS 6365, pages 450--57. Springer.
+
+\bibitem[\protect\astroncite{Henniges et~al.}{2014}]{HennigesEtAl2014}
+Henniges, M., Turner, R.~E., Sahani, M., Eggert, J., and L{{\"u}}cke, J.
+  (2014).
+\newblock Efficient occlusive components analysis.
+\newblock {\em JMLR}, 15:2689--2722.
+
+\bibitem[\protect\astroncite{Hensman et~al.}{2013}]{HensmanEtAl2013}
+Hensman, J., Fusi, N., and Lawrence, N. (2013).
+\newblock {Gaussian processes for big data}.
+\newblock In {\em Proceedings of the Twenty-Ninth Conference on Uncertainty in
+  Artificial Intelligence, {UAI} 2013, Bellevue, WA, USA, August 11-15, 2013}.
+
+\bibitem[\protect\astroncite{Hensman et~al.}{2012}]{Hensman2012}
+Hensman, J., Rattray, M., and Lawrence, N.~D. (2012).
+\newblock {Fast Variational Inference in the Conjugate Exponential Family}.
+\newblock In Bartlett, P.~L., Pereira, F. C.~N., Burges, C. J.~C., Bottou, L.,
+  and Weinberger, K.~Q., editors, {\em Advances in Neural Information
+  Processing Systems 25 ({NIPS}), Lake Tahoe, Nevada, United States}, pages
+  2897--2905.
+
+\bibitem[\protect\astroncite{Hinton et~al.}{1995}]{HintonEtAl1995}
+Hinton, G.~E., Dayan, P., Frey, B.~J., and Neal, R.~M. (1995).
+\newblock The `wake-sleep' algorithm for unsupervised neural networks.
+\newblock {\em Science}, 268:1158 -- 1161.
+
+\bibitem[\protect\astroncite{Kingma and Welling}{2014}]{WellingICML2014}
+Kingma, D.~P. and Welling, M. (2014).
+\newblock Efficient gradient-based inference through transformations between
+  bayes nets and neural nets.
+\newblock In {\em Proceedings of the 31th International Conference on Machine
+  Learning, {ICML} 2014, Beijing, China, 21-26 June 2014}, pages 1782--1790.
+
+\bibitem[\protect\astroncite{K\"orner et~al.}{1999}]{KoernerEtAl1999}
+K\"orner, E., Gewaltig, M.~O., K\"orner, U., Richter, A., and Rodemann, T.
+  (1999).
+\newblock A model of computation in neocortical architecture.
+\newblock {\em Neural Networks}, 12:989 -- 1005.
+
+\bibitem[\protect\astroncite{Lawrence et~al.}{2002}]{sparseGP}
+Lawrence, N., Seeger, M., and Herbrich, R. (2002).
+\newblock Fast sparse gaussian process methods: The informative vector machine.
+\newblock In {\em Advances in Neural Information Processing Systems 15
+  ({NIPS}), Vancouver, British Columbia, Canada}, pages 609--616. MIT Press.
+
+\bibitem[\protect\astroncite{Le et~al.}{2013}]{LeSarSmo13}
+Le, Q., Sarlos, T., and Smola, A.~J. (2013).
+\newblock Fastfood --- computing hilbert space expansions in loglinear time.
+\newblock In {\em Proceedings of the 30th International Conference on Machine
+  Learning, {ICML} 2013, Atlanta, GA, USA, 16-21 June 2013}, pages 244--252.
+
+\bibitem[\protect\astroncite{LeCun}{NEC}]{MNIST}
+LeCun, Y. (NEC).
+\newblock \mbox{MNIST} database of handwritten digits.
+\newblock http://yann.lecun.com/exdb/mnist/.
+
+\bibitem[\protect\astroncite{L\"ucke and Eggert}{2010}]{LuckeEggert2010}
+L\"ucke, J. and Eggert, J. (2010).
+\newblock Expectation truncation and the benefits of preselection in training
+  generative models.
+\newblock {\em Journal of Machine Learning Research}, 11:2855--900.
+
+\bibitem[\protect\astroncite{L\"ucke and Sahani}{2008}]{LuckeSahani2008}
+L\"ucke, J. and Sahani, M. (2008).
+\newblock Maximal causes for non-linear component extraction.
+\newblock {\em Journal of Machine Learning Research}, 9:1227--67.
+
+\bibitem[\protect\astroncite{Mairal et~al.}{2009a}]{MairalEtAl2009b}
+Mairal, J., Bach, F., Ponce, J., and Sapiro, G. (2009a).
+\newblock Online dictionary learning for sparse coding.
+\newblock In {\em Proceedings of the 26th Annual International Conference on
+  Machine Learning, {ICML} 2009, Montreal, Quebec, Canada, June 14-18, 2009},
+  volume~25, pages 689--696.
+
+\bibitem[\protect\astroncite{Mairal et~al.}{2009b}]{MairalEtAl2009}
+Mairal, J., Bach, F., Ponce, J., Sapiro, G., and Zisserman, A. (2009b).
+\newblock Non-local sparse models for image restoration.
+\newblock In {\em {IEEE} 12th International Conference on Computer Vision,
+  {ICCV} 2009, Kyoto, Japan, September 27 - October 4, 2009}, volume~25, pages
+  2272--2279.
+
+\bibitem[\protect\astroncite{Meeds and Welling}{2014}]{MeedsWelling2014}
+Meeds, E. and Welling, M. (2014).
+\newblock {GPS-ABC:} gaussian process surrogate approximate bayesian
+  computation.
+\newblock In {\em Proceedings of the Thirtieth Conference on Uncertainty in
+  Artificial Intelligence ({UAI}), Quebec City, Quebec, Canada, July 23-27,
+  2014}, pages 593--602.
+
+\bibitem[\protect\astroncite{Mnih and Gregor}{2014}]{MnihGregor2014}
+Mnih, A. and Gregor, K. (2014).
+\newblock Neural variational inference and learning in belief networks.
+\newblock In {\em Proceedings of the 31th International Conference on Machine
+  Learning, {ICML} 2014, Beijing, China, 21-26 June 2014}, pages 1791--1799.
+
+\bibitem[\protect\astroncite{Neal and Hinton}{1998}]{NealHinton1998}
+Neal, R. and Hinton, G. (1998).
+\newblock A view of the {EM} algorithm that justifies incremental, sparse, and
+  other variants.
+\newblock In Jordan, M.~I., editor, {\em Learning in Graphical Models}. Kluwer.
+
+\bibitem[\protect\astroncite{Nene et~al.}{1996}]{coil100}
+Nene, S.~A., Nayar, S.~K., and Murase, H. (1996).
+\newblock Columbia object image library (coil-100).
+\newblock Technical report, CUCS-006-96.
+
+\bibitem[\protect\astroncite{Olshausen and Field}{1997}]{OlshausenField1997}
+Olshausen, B. and Field, D. (1997).
+\newblock {Sparse coding with an overcomplete basis set: A strategy employed by
+  V1?}
+\newblock {\em Vision Research}, 37(23):3311--3325.
+
+\bibitem[\protect\astroncite{Raina et~al.}{2007}]{RainaEtAl2007}
+Raina, R., Battle, A., Lee, H., Packer, B., and Ng, A.~Y. (2007).
+\newblock Self-taught learning: Transfer learning from unlabeled data.
+\newblock In {\em Proceedings of the 24th International Conference on Machine
+  Learning}, ICML '07, pages 759--766, New York, NY, USA. ACM.
+
+\bibitem[\protect\astroncite{Rasmussen and Williams}{2005}]{RasmussenGPbook}
+Rasmussen, C.~E. and Williams, C. K.~I. (2005).
+\newblock {\em Gaussian Processes for Machine Learning (Adaptive Computation
+  and Machine Learning)}.
+\newblock The MIT Press.
+
+\bibitem[\protect\astroncite{Rupp et~al.}{2012}]{RuppEtAl2012}
+Rupp, M., Tkatchenko, A., M\"uller, K.-R., and von Lilienfeld, O.~A. (2012).
+\newblock Fast and accurate modeling of molecular atomization energies with
+  machine learning.
+\newblock {\em Phys. Rev. Lett.}, 108:058301.
+
+\bibitem[\protect\astroncite{Sacks et~al.}{1989}]{SacksEtal1989}
+Sacks, J., Welch, W.~J., Mitchell, T.~J., and Wynn, H.~P. (1989).
+\newblock Design and analysis of computer experiments.
+\newblock {\em Statist. Sci.}, 4(4):433--435.
+
+\bibitem[\protect\astroncite{Schwaighofer et~al.}{2004}]{SchwaighoferEtAl2005}
+Schwaighofer, A., Tresp, V., and Yu, K. (2004).
+\newblock Learning gaussian process kernels via hierarchical bayes.
+\newblock In {\em Advances in Neural Information Processing Systems 17
+  ({NIPS}), Vancouver, British Columbia, Canada}, pages 1209--1216. MIT Press.
+
+\bibitem[\protect\astroncite{Sheikh et~al.}{2014}]{SheikhEtAl2014}
+Sheikh, A.-S., Shelton, J., and L\"ucke, J. (2014).
+\newblock A truncated {EM} approach for spike-and-slab sparse coding.
+\newblock {\em Journal of Machine Learning Research}, 15:2653--2687.
+
+\bibitem[\protect\astroncite{Shelton et~al.}{2011}]{SheltonEtAl2011}
+Shelton, J., Bornschein, J., Sheikh, A.-S., Berkes, P., and L\"ucke, J. (2011).
+\newblock Select and sample - {A} model of efficient neural inference and
+  learning.
+\newblock In {\em Advances in Neural Information Processing Systems 24
+  ({NIPS}), Granada, Spain.}, pages 2618--2626.
+
+\bibitem[\protect\astroncite{Shelton et~al.}{2012}]{SheltonEtAl2012}
+Shelton, J., Sterne, P., Bornschein, J., Sheikh, A.-S., and L\"ucke, J. (2012).
+\newblock Why {MCA}? nonlinear sparse coding with spike-and-slab prior for
+  neurally plausible image encoding.
+\newblock In {\em Advances in Neural Information Processing Systems 25
+  ({NIPS}), Lake Tahoe, Nevada, United States}, pages 2285--2293.
+
+\bibitem[\protect\astroncite{Shelton et~al.}{2015}]{SheltonEtAl2015}
+Shelton, J.~A., Sheikh, A.-S., Bornschein, J., Sterne, P., and L\"ucke, J.
+  (2015).
+\newblock Nonlinear spike-and-slab sparse coding for interpretable image
+  encoding.
+\newblock {\em PLoS ONE}, 10(5):1--25.
+
+\bibitem[\protect\astroncite{Snoek et~al.}{2015}]{SnoekEtAl2015}
+Snoek, J., Rippel, O., Swersky, K., Kiros, R., Satish, N., Narayanan~Sundaram,
+  M., Ali, M., Patwary, P., and Adams, R. (2015).
+\newblock Scalable bayesian optimization using deep neural networks.
+\newblock Technical report, Harvard University.
+\newblock \emph{http://arxiv.org/abs/1502.05700}.
+
+\bibitem[\protect\astroncite{Titsias and
+  L{\'a}zaro-Gredilla}{2011}]{TitsiasGredilla2011}
+Titsias, M. and L{\'a}zaro-Gredilla, M. (2011).
+\newblock Spike and slab variational inference for multi-task and multiple
+  kernel learning.
+\newblock In {\em Advances in Neural Information Processing Systems 24
+  ({NIPS}), Granada, Spain}, pages 2510--2518.
+
+\bibitem[\protect\astroncite{Wilkinson}{2014}]{Wilkinsons2014}
+Wilkinson, R.~D. (2014).
+\newblock Accelerating {ABC} methods using gaussian processes.
+\newblock Technical report, University of Sheffield.
+\newblock \emph{http://arxiv.org/abs/1401.1436}.
+
+\bibitem[\protect\astroncite{Yuille and Kersten}{2006}]{YuilleKersten2006}
+Yuille, A. and Kersten, D. (2006).
+\newblock Vision as {Bayesian} inference: analysis by synthesis?
+\newblock {\em Trends in Cognitive Sciences}, 10(7):301--308.
+
+\bibitem[\protect\astroncite{Zhang et~al.}{2014}]{zhang14divide}
+Zhang, Y., Duchi, J.~C., and Wainwright, M.~J. (2014).
+\newblock Divide and conquer kernel ridge regression: A distributed algorithm
+  with minimax optimal rates.
+\newblock Technical report, University of California, Berkeley.
+\newblock \emph{http://arxiv.org/abs/1305.5029}.
+
+\bibitem[\protect\astroncite{Zylberberg et~al.}{2011}]{ZylberbergEtAl2011}
+Zylberberg, J., Murphy, J., and Deweese, M. (2011).
+\newblock {A Sparse Coding Model with Synaptically Local Plasticity and Spiking
+  Neurons Can Account for the Diverse Shapes of V1 Simple Cell Receptive
+  Fields}.
+\newblock {\em PLoS Computational Biology}, 7(10):e1002250.
+
+\end{thebibliography}
+
+\end{document}
